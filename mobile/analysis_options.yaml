@@ -1,0 +1,9 @@
+include: package:leancode_lint/analysis_options.yaml
+
+analyzer:
+  exclude:
+    - lib/l10n/localizations*.dart
+    - lib/firebase_options.dart
+    - lib/**/*.freezed.dart
+    - lib/**/*.g.dart
+    - lib/**/*.gen.dart
