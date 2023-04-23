@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
+import 'components/colorShadowedWidget.dart';
 
 void main() {
   runApp(const MainApp());
@@ -21,7 +22,14 @@ class MainApp extends StatelessWidget {
         body: Center(
           child: ColoredBox(
             color: context.colors.primary,
-            child: const Text('hello world'),
+            child: ColorShadowedWidget(
+              shadowColor: Colors.green,
+              child: Container(
+                color: Colors.amber,
+                padding: const EdgeInsets.all(20),
+                child: const Text('hello world'),
+              ),
+            ),
           ),
         ),
       ),
