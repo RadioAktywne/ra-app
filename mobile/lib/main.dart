@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:radioaktywne/components/color_shadowed_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
+
+// TODO: Change this when color palette is added (akcent 4)
+const TextStyle temporaryTextStyle = TextStyle(color: Color(0xFF6DB79B), fontWeight: FontWeight.bold);
 
 void main() {
   runApp(const MainApp());
@@ -18,10 +22,134 @@ class MainApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       onGenerateTitle: (context) => context.l10n.hello,
       home: Scaffold(
-        body: Center(
-          child: ColoredBox(
-            color: context.colors.highlight_yellow,
-            child: const Text('hello world'),
+        backgroundColor: const Color(0xFFFFF4DB), // TODO: Change this when color palette is added (tlo jasne)
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: ColorShadowedCard(
+                    shadowColor: Colors.amber,
+                    header: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 2),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 2),
+                        child: Text('Ramówka na dziś', style: temporaryTextStyle.merge(const TextStyle(fontSize: 16))),
+                      ),
+                    ),
+                    footer: Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              decoration: const BoxDecoration(
+                                color: Colors.grey,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              decoration: const BoxDecoration(
+                                color: Colors.grey,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      child: const Text(
+                        'Lorem ipsum',
+                        style: temporaryTextStyle,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: ColorShadowedCard(
+                            shadowColor: Colors.green,
+                            header: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 2),
+                              child: Text('Nagłówek', style: temporaryTextStyle.merge(const TextStyle(fontSize: 12))),
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.all(20),
+                              child: const Text(
+                                'Lorem ipsum',
+                                style: temporaryTextStyle,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: ColorShadowedCard(
+                            shadowColor: Colors.blue,
+                            footer: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 2),
+                              child: Text('Stopka', style: temporaryTextStyle.merge(const TextStyle(fontSize: 12))),
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.all(20),
+                              child: const Text(
+                                'Lorem ipsum',
+                                style: temporaryTextStyle,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: ColorShadowedCard(
+                    shadowColor: Colors.red,
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      child: const Text(
+                        'hello world',
+                        style: temporaryTextStyle,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
