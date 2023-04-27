@@ -20,7 +20,7 @@ class MainApp extends StatelessWidget {
       home: Scaffold(
         body: Center(
           child: ColoredBox(
-            color: context.colors.primary,
+            color: context.colors.highlight_yellow,
             child: const Text('hello world'),
           ),
         ),
