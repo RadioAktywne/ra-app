@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:radioaktywne/components/color_shadowed_widget.dart';
+import 'package:radioaktywne/extensions/build_context.dart';
 
 class ColorShadowedCard extends StatelessWidget {
   const ColorShadowedCard({
@@ -20,21 +21,21 @@ class ColorShadowedCard extends StatelessWidget {
     return ColorShadowedWidget(
         shadowColor: shadowColor,
         child: Container(
-          color: const Color(0xFF302318), // TODO: Change this when color palette is added (ciemne ciemne)
+          color: context.colors.background_dark,
           padding: const EdgeInsets.all(4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               if (header != null) Container(
-                color: const Color(0xFF302318), // TODO: Change this when color palette is added (ciemne ciemne)
+                color: context.colors.background_dark,
                 child: header,
               ),
               Container(
-                color: const Color(0xFF584E40), // TODO: Change this when color palette is added (ciemne jasne)
+                color: context.colors.background_dark_secondary,
                 child: child,
               ),
               if (footer != null) Container(
-                color: const Color(0xFF302318), // TODO: Change this when color palette is added (ciemne ciemne)
+                color: context.colors.background_dark,
                 child: footer,
               ),
             ],
