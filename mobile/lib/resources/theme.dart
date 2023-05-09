@@ -5,14 +5,14 @@ class RATheme {
   static ThemeData light(BuildContext context) {
     return _build(
       context: context,
-      primary: RAColors.of(context).background_dark,
-      secondary: RAColors.of(context).background_dark_secondary,
-      lighterText: RAColors.of(context).highlight_green,
-      darkerText: RAColors.of(context).highlight_green,
-      surface: RAColors.of(context).background_dark_secondary,
-      background: RAColors.of(context).background_light,
-      error: RAColors.of(context).highlight_red,
-      onError: RAColors.of(context).highlight_green,
+      primary: RAColors.of(context).backgroundDark,
+      secondary: RAColors.of(context).backgroundDarkSecondary,
+      lighterText: RAColors.of(context).highlightGreen,
+      darkerText: RAColors.of(context).highlightGreen,
+      surface: RAColors.of(context).backgroundDarkSecondary,
+      background: RAColors.of(context).backgroundLight,
+      error: RAColors.of(context).highlightRed,
+      onError: RAColors.of(context).highlightGreen,
       brightness: Brightness.light,
     );
   }
@@ -20,14 +20,14 @@ class RATheme {
   static ThemeData dark(BuildContext context) {
     return _build(
       context: context,
-      primary: RAColors.of(context).background_dark,
-      secondary: RAColors.of(context).background_dark_secondary,
-      lighterText: RAColors.of(context).highlight_green,
-      darkerText: RAColors.of(context).highlight_green,
-      surface: RAColors.of(context).background_dark_secondary,
-      background: RAColors.of(context).background_light,
-      error: RAColors.of(context).highlight_red,
-      onError: RAColors.of(context).highlight_green,
+      primary: RAColors.of(context).backgroundDark,
+      secondary: RAColors.of(context).backgroundDarkSecondary,
+      lighterText: RAColors.of(context).highlightGreen,
+      darkerText: RAColors.of(context).highlightGreen,
+      surface: RAColors.of(context).backgroundDarkSecondary,
+      background: RAColors.of(context).backgroundLight,
+      error: RAColors.of(context).highlightRed,
+      onError: RAColors.of(context).highlightGreen,
       brightness: Brightness.light,
     );
   }
@@ -69,7 +69,7 @@ class RATheme {
       splashFactory: NoSplash.splashFactory,
       textTheme: TextTheme(
         displayLarge: TextStyle(
-          color: RAColors.of(context).background_light,
+          color: RAColors.of(context).backgroundLight,
           fontSize: 48,
           fontWeight: FontWeight.bold,
         ),

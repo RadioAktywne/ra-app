@@ -37,35 +37,45 @@ abstract class RAColors {
     }
   }
 
-  RAColor get background_light;
-  RAColor get background_light_secondary;
-  RAColor get background_dark;
-  RAColor get background_dark_secondary;
+  RAColor get backgroundLight;
+  RAColor get backgroundLightSecondary;
+  RAColor get backgroundDark;
+  RAColor get backgroundDarkSecondary;
 
-  RAColor get highlight_red;
-  RAColor get highlight_blue;
-  RAColor get highlight_yellow;
-  RAColor get highlight_green;
-  RAColor get highlight_purple;
-  RAColor get highlight_orange;
-  RAColor get highlight_magenta;
+  RAColor get highlightRed;
+  RAColor get highlightBlue;
+  RAColor get highlightYellow;
+  RAColor get highlightGreen;
+  RAColor get highlightPurple;
+  RAColor get highlightOrange;
+  RAColor get highlightMagenta;
 }
 
 class _ColorsLight extends RAColors {
   const _ColorsLight() : super._();
-  @override
   // backgrounds
-  RAColor get background_light => const RAColor._(0xFFFFF4DB);
-  RAColor get background_light_secondary => const RAColor._(0xFFEADFC8);
-  RAColor get background_dark => const RAColor._(0xFF302318);
-  RAColor get background_dark_secondary => const RAColor._(0xFF584E40);
+  @override
+  RAColor get backgroundLight => const RAColor._(0xFFFFF4DB);
+  @override
+  RAColor get backgroundLightSecondary => const RAColor._(0xFFEADFC8);
+  @override
+  RAColor get backgroundDark => const RAColor._(0xFF302318);
+  @override
+  RAColor get backgroundDarkSecondary => const RAColor._(0xFF584E40);
 
   // highlights
-  RAColor get highlight_red => const RAColor._(0xFFE15B58);
-  RAColor get highlight_blue => const RAColor._(0xFF7690B6);
-  RAColor get highlight_yellow => const RAColor._(0xFFDED93D);
-  RAColor get highlight_green => const RAColor._(0xFF6DB79B);
-  RAColor get highlight_purple => const RAColor._(0xFFD198FE);
-  RAColor get highlight_orange => const RAColor._(0xFFFFA573);
-  RAColor get highlight_magenta => const RAColor._(0xFFFD95FF);
+  @override
+  RAColor get highlightRed => const RAColor._(0xFFE15B58);
+  @override
+  RAColor get highlightBlue => const RAColor._(0xFF7690B6);
+  @override
+  RAColor get highlightYellow => const RAColor._(0xFFDED93D);
+  @override
+  RAColor get highlightGreen => const RAColor._(0xFF6DB79B);
+  @override
+  RAColor get highlightPurple => const RAColor._(0xFFD198FE);
+  @override
+  RAColor get highlightOrange => const RAColor._(0xFFFFA573);
+  @override
+  RAColor get highlightMagenta => const RAColor._(0xFFFD95FF);
 }

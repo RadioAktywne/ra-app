@@ -21,21 +21,21 @@ class ColorShadowedCard extends StatelessWidget {
     return ColorShadowedWidget(
         shadowColor: shadowColor,
         child: Container(
-          color: context.colors.background_dark,
+          color: context.colors.backgroundDark,
           padding: const EdgeInsets.all(4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               if (header != null) Container(
-                color: context.colors.background_dark,
+                color: context.colors.backgroundDark,
                 child: header,
               ),
               Container(
-                color: context.colors.background_dark_secondary,
+                color: context.colors.backgroundDarkSecondary,
                 child: child,
               ),
               if (footer != null) Container(
-                color: context.colors.background_dark,
+                color: context.colors.backgroundDark,
                 child: footer,
               ),
             ],
