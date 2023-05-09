@@ -48,6 +48,7 @@ abstract class RAColors {
   RAColor get highlight_green;
   RAColor get highlight_purple;
   RAColor get highlight_orange;
+  RAColor get highlight_magenta;
 }
 
 class _ColorsLight extends RAColors {
