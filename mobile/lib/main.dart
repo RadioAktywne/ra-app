@@ -12,7 +12,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final temporaryTextStyle = TextStyle(color: context.colors.highlight_green, fontWeight: FontWeight.bold);
+    final temporaryTextStyle = TextStyle(color: context.colors.highlightGreen, fontWeight: FontWeight.bold);
 
     return MaterialApp(
       theme: context.theme,
@@ -21,7 +21,7 @@ class MainApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       onGenerateTitle: (context) => context.l10n.hello,
       home: Scaffold(
-        backgroundColor: context.colors.background_light,
+        backgroundColor: context.colors.backgroundLight,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
@@ -31,7 +31,7 @@ class MainApp extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: ColorShadowedCard(
-                    shadowColor: context.colors.highlight_yellow,
+                    shadowColor: context.colors.highlightYellow,
                     header: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 2),
                       child: Padding(
@@ -97,7 +97,7 @@ class MainApp extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: ColorShadowedCard(
-                            shadowColor: context.colors.highlight_purple,
+                            shadowColor: context.colors.highlightPurple,
                             header: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 2),
                               child: Text('Nagłówek', style: temporaryTextStyle.merge(const TextStyle(fontSize: 12))),
@@ -116,7 +116,7 @@ class MainApp extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: ColorShadowedCard(
-                            shadowColor: context.colors.highlight_blue,
+                            shadowColor: context.colors.highlightBlue,
                             footer: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 2),
                               child: Text('Stopka', style: temporaryTextStyle.merge(const TextStyle(fontSize: 12))),
@@ -137,7 +137,7 @@ class MainApp extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: ColorShadowedCard(
-                    shadowColor: context.colors.highlight_red,
+                    shadowColor: context.colors.highlightRed,
                     child: Container(
                       padding: const EdgeInsets.all(20),
                       child: Text(
