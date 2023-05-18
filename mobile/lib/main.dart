@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:radioaktywne/components/color_shadowed_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
+import 'package:radioaktywne/resources/colors.dart';
 
 void main() {
   runApp(const MainApp());
@@ -21,6 +22,52 @@ class MainApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       onGenerateTitle: (context) => context.l10n.hello,
       home: Scaffold(
+        appBar: AppBar(
+          bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(20.0),
+              child: Container(
+                width: 400, //MediaQuery.of(context).size.width,
+                color: context.colors.highlightGreen,
+                height: 10,
+              ),
+          ),
+          actions: <Widget>[
+            IconButton(onPressed: () {}, icon: Icon(
+              Icons.menu,
+              color: context.colors.highlightGreen,
+              size: 32,
+              semanticLabel: 'RA AppBar with menu button',
+            ),)
+          ],
+          backgroundColor: context.colors.backgroundDark,
+          title: SizedBox(
+            width: 140,
+            height: 124,
+            child: Row(
+              children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Container(
+                  width: 27,
+                  height: 22,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/temp.png'),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+              ),
+              Text(
+                'Radio\nAktywne',
+                style: TextStyle(
+                  color: context.colors.highlightGreen,
+                ),
+              ),
+            ],
+            ),
+          ),
+        ),
         backgroundColor: context.colors.backgroundLight,
         body: SafeArea(
           child: Padding(
