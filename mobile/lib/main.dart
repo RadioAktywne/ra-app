@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:radioaktywne/components/color_shadowed_card.dart';
+import 'package:radioaktywne/components/ra_appbar.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
-import 'package:radioaktywne/resources/colors.dart';
 
 void main() {
   runApp(const MainApp());
@@ -21,56 +21,31 @@ class MainApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       onGenerateTitle: (context) => context.l10n.hello,
-      home: Scaffold(
-        appBar: AppBar(
-          bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(20.0),
-              child: Container(
-                width: 400, //MediaQuery.of(context).size.width,
-                color: context.colors.highlightGreen,
-                height: 10,
-              ),
-          ),
-          actions: <Widget>[
-            IconButton(onPressed: () {}, icon: Icon(
+      home: SafeArea(
+        child: Scaffold(
+          appBar: RaAppBar(
+            height: 75,
+            icon: Icon(
               Icons.menu,
               color: context.colors.highlightGreen,
               size: 32,
-              semanticLabel: 'RA AppBar with menu button',
-            ),)
-          ],
-          backgroundColor: context.colors.backgroundDark,
-          title: SizedBox(
-            width: 140,
-            height: 124,
-            child: Row(
-              children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Container(
-                  width: 27,
-                  height: 22,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/temp.png'),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-              ),
-              Text(
-                'Radio\nAktywne',
-                style: TextStyle(
-                  color: context.colors.highlightGreen,
-                ),
-              ),
-            ],
+              semanticLabel: 'RA AppBar menu button',
             ),
+            bottomSize: 8,
+            mainColor: context.colors.backgroundDark,
+            accentColor: context.colors.highlightGreen,
+            iconButton: IconButton(onPressed: () {}, icon: Icon(
+              Icons.menu,
+              color: context.colors.highlightGreen,
+              size: 32,
+              semanticLabel: 'RA AppBar menu button',
+            ),),
+            text: 'Radio Aktywne',
+            iconPath: 'assets/RA_logo.svg',
+            titlePadding: const EdgeInsets.only(left: 4, top: 8, bottom: 16),
+            imageHeight: 40,
           ),
-        ),
-        backgroundColor: context.colors.backgroundLight,
-        body: SafeArea(
-          child: Padding(
+          body: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
