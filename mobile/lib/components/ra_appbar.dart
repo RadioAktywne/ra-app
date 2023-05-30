@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 class RaAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -16,40 +17,45 @@ class RaAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.imageHeight,
 });
 
-  final int height;
+  final double height;
   final Icon icon;
-  final int bottomSize;
+  final double bottomSize;
   final Color mainColor;
   final Color accentColor;
   final IconButton? iconButton;
   final String text;
   final String? iconPath;
   final EdgeInsets? titlePadding;
-  final int imageHeight;
+  final double imageHeight;
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: mainColor,
+      ),
+    );
     return AppBar(
-      toolbarHeight: height.toDouble(),
+      toolbarHeight: height,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(0),
         child: Container(
           color: accentColor,
-          height: bottomSize.toDouble(),
+          height: bottomSize,
         ),
       ),
       actions: <Widget>[
-        iconButton!
+        iconButton ?? Container()
       ],
       backgroundColor: mainColor,
       title: Padding(
-        padding: titlePadding!,
+        padding: titlePadding
+            ?? const EdgeInsets.only(left: 4, top: 8, bottom: 16),
         child: Row(
           children: [
-            SvgPicture.asset(
-              height: imageHeight.toDouble(),
+            if (iconPath != null) SvgPicture.asset(
+              height: imageHeight,
               iconPath!,
-            ),
+            ) else Container(),
             const SizedBox(
               width: 14,
             ),
@@ -67,6 +73,6 @@ class RaAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize {
-    return Size.fromHeight(height.toDouble());
+    return Size.fromHeight(height);
   }
 }
