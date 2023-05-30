@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:radioaktywne/resources/colors.dart';
-import '../resources/text_styles.dart';
+import 'package:radioaktywne/resources/text_styles.dart';
 
 extension BuildContextTheme on BuildContext {
   RAColors get colors => RAColors.of(this);
