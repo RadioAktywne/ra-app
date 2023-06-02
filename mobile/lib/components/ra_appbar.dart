@@ -48,6 +48,7 @@ class RaAppBar extends StatelessWidget implements PreferredSizeWidget {
         iconButton ?? Container()
       ],
       backgroundColor: mainColor,
+      elevation: 0,
       title: Padding(
         padding: titlePadding
             ?? const EdgeInsets.only(left: 4, top: 8, bottom: 16),
