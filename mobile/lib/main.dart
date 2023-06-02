@@ -38,7 +38,7 @@ class MainApp extends StatelessWidget {
               size: 32,
               semanticLabel: 'RA AppBar menu button',
             ),),
-            text: 'Radio Aktywne',
+            text: 'Radio\nAktywne',
             iconPath: 'assets/RA_logo.svg',
             titlePadding: const EdgeInsets.only(left: 4, top: 8, bottom: 16),
             imageHeight: 40,

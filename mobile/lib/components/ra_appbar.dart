@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:radioaktywne/extensions/build_context.dart';
 
 class RaAppBar extends StatelessWidget implements PreferredSizeWidget {
   const RaAppBar({
@@ -61,9 +62,7 @@ class RaAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             Text(
               text,
-              style: TextStyle(
-                color: accentColor,
-              ),
+              style: context.textStyles.polibudzka,
             ),
           ],
         ),
