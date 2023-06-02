@@ -13,8 +13,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final temporaryTextStyle = TextStyle(color: context.colors.highlightGreen, fontWeight: FontWeight.bold);
-
     return MaterialApp(
       theme: context.theme,
       locale: const Locale('pl'),
@@ -58,7 +56,7 @@ class MainApp extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 2),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 2),
-                        child: Text('Ramówka na dziś', style: temporaryTextStyle.merge(const TextStyle(fontSize: 16))),
+                        child: Text('Ramówka na dziś', style: context.textStyles.textMedium),
                       ),
                     ),
                     footer: Padding(
@@ -106,7 +104,7 @@ class MainApp extends StatelessWidget {
                       padding: const EdgeInsets.all(20),
                       child: Text(
                         'Lorem ipsum',
-                        style: temporaryTextStyle,
+                        style: context.textStyles.textSmall,
                       ),
                     ),
                   ),
@@ -122,13 +120,13 @@ class MainApp extends StatelessWidget {
                             shadowColor: context.colors.highlightPurple,
                             header: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 2),
-                              child: Text('Nagłówek', style: temporaryTextStyle.merge(const TextStyle(fontSize: 12))),
+                              child: Text('Nagłówek', style: context.textStyles.textMedium),
                             ),
                             child: Container(
                               padding: const EdgeInsets.all(20),
                               child: Text(
                                 'Lorem ipsum',
-                                style: temporaryTextStyle,
+                                style: context.textStyles.textSmall,
                               ),
                             ),
                           ),
@@ -141,13 +139,13 @@ class MainApp extends StatelessWidget {
                             shadowColor: context.colors.highlightBlue,
                             footer: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 2),
-                              child: Text('Stopka', style: temporaryTextStyle.merge(const TextStyle(fontSize: 12))),
+                              child: Text('Stopka', style: context.textStyles.textSmall),
                             ),
                             child: Container(
                               padding: const EdgeInsets.all(20),
                               child: Text(
                                 'Lorem ipsum',
-                                style: temporaryTextStyle,
+                                style: context.textStyles.textSmall,
                               ),
                             ),
                           ),
@@ -164,7 +162,7 @@ class MainApp extends StatelessWidget {
                       padding: const EdgeInsets.all(20),
                       child: Text(
                         'hello world',
-                        style: temporaryTextStyle,
+                        style: context.textStyles.textSmall,
                       ),
                     ),
                   ),
