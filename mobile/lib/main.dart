@@ -4,12 +4,16 @@ import 'package:radioaktywne/components/ra_appbar.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 
+import 'components/frp_player.dart';
+
 void main() {
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  MainApp({super.key});
+
+  final flutterRadioPlayer = FlutterRadioPlayer();
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +36,15 @@ class MainApp extends StatelessWidget {
             bottomSize: 8,
             mainColor: context.colors.backgroundDark,
             accentColor: context.colors.highlightGreen,
-            iconButton: IconButton(onPressed: () {}, icon: Icon(
-              Icons.menu,
-              color: context.colors.highlightGreen,
-              size: 32,
-              semanticLabel: 'RA AppBar menu button',
-            ),),
+            iconButton: IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.menu,
+                color: context.colors.highlightGreen,
+                size: 32,
+                semanticLabel: 'RA AppBar menu button',
+              ),
+            ),
             text: 'Radio\nAktywne',
             iconPath: 'assets/RA_logo.svg',
             titlePadding: const EdgeInsets.only(left: 4, top: 8, bottom: 16),
@@ -166,6 +173,10 @@ class MainApp extends StatelessWidget {
                       ),
                     ),
                   ),
+                ),
+                FRPlayer(
+                  flutterRadioPlayer: flutterRadioPlayer,
+                  useIcyData: true,
                 ),
               ],
             ),
