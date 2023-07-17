@@ -7,9 +7,11 @@ class RaBottomNavigationBar extends StatelessWidget {
   const RaBottomNavigationBar({
     super.key,
     required this.currentIndex,
+    required this.routeNames,
   });
 
   final int currentIndex;
+  final List<String> routeNames;
 
   // icons
   static final home = SizedBox(
@@ -68,17 +70,14 @@ class RaBottomNavigationBar extends StatelessWidget {
         selectedItemColor: RAColors.of(context).highlightGreen,
         unselectedItemColor: RAColors.of(context).highlightGreen,
         currentIndex: currentIndex,
-        onTap: (index) {
-          // todo: navigation
-          switch (index) {
-            case 1:
-              break;
-            case 2:
-              break;
-            case 3:
-              break;
-          }
-        },
+        onTap: (index) {},
+        // todo: implement navigation
+        // example navigation:
+        //   Navigator.pushNamedAndRemoveUntil(
+        // context,
+        // routeNames[index],
+        // (route) => !Navigator.canPop(context),
+        //),
         items: [
           BottomNavigationBarItem(
             icon: homeOutline,
