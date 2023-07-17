@@ -52,6 +52,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/fonts/
+    - assets/ra_playbutton/
+    - assets/ra_bottom_navbar/
   fonts:
     - family: RadikalWUT
       fonts:

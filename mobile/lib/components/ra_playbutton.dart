@@ -1,16 +1,16 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:leancode_hooks/leancode_hooks.dart';
+import 'package:radioaktywne/resources/assets.gen.dart';
 import 'package:simple_animations/simple_animations.dart';
 
-class PlayButton extends HookWidget {
-  const PlayButton({
+class RaPlayButton extends HookWidget {
+  const RaPlayButton({
     super.key,
     required this.size,
     required this.onPressed,
-    this.shrinkAnimationDuration = const Duration(milliseconds: 100),
+    this.shrinkAnimationDuration = const Duration(milliseconds: 150),
   });
 
   final double size;
@@ -22,16 +22,18 @@ class PlayButton extends HookWidget {
     final playing = useState(false);
     final sizeSlider = useState(size);
 
-    return GestureDetector(
-      onTap: () async {
-        onPressed();
-        sizeSlider.value = 0.0;
-        await Future<int>.delayed(shrinkAnimationDuration);
-        playing.value = !playing.value;
-        sizeSlider.value = size;
-      },
-      child: ColoredBox(
-        color: const Color(0x00000000),
+    return Container(
+      width: size + 1,
+      height: size + 1,
+      alignment: Alignment.center,
+      child: GestureDetector(
+        onTap: () async {
+          onPressed();
+          sizeSlider.value = 0.0;
+          await Future<dynamic>.delayed(shrinkAnimationDuration);
+          playing.value = !playing.value;
+          sizeSlider.value = size;
+        },
         child: AnimatedContainer(
           curve: Curves.easeIn,
           duration: shrinkAnimationDuration,
@@ -40,10 +42,6 @@ class PlayButton extends HookWidget {
           child: _PlayButtonImage(
             playing: playing.value,
           ),
-          // child: _PlayButtonImage(
-          //   size: sizeSlider.value,
-          //   playing: playing.value,
-          // ),
         ),
       ),
     );
@@ -58,30 +56,27 @@ class _PlayButtonImage extends HookWidget {
 
   final tween = Tween<double>(begin: 0, end: 2);
 
-  final playIcon = SvgPicture.asset(
-    'assets/ra_playbutton/play_icon.svg',
-    allowDrawingOutsideViewBox: true,
-  );
-  final stopIcon = SvgPicture.asset(
-    'assets/ra_playbutton/stop_icon.svg',
-    allowDrawingOutsideViewBox: true,
-  );
+  // icons
+  static final stop = const SvgGenImage('assets/ra_playbutton/stop.svg').svg();
+  static final play = const SvgGenImage('assets/ra_playbutton/play.svg').svg();
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: playing
-          ? LoopAnimationBuilder(
-              builder: (context, value, child) {
-                return Transform.rotate(
-                  angle: pi * value,
-                  child: playIcon,
-                );
-              },
-              duration: const Duration(seconds: 6),
-              tween: tween,
-            )
-          : stopIcon,
+    return FittedBox(
+      child: Center(
+        child: playing
+            ? LoopAnimationBuilder(
+                builder: (context, value, child) {
+                  return Transform.rotate(
+                    angle: pi * value,
+                    child: play,
+                  );
+                },
+                duration: const Duration(seconds: 6),
+                tween: tween,
+              )
+            : stop,
+      ),
     );
   }
 }
