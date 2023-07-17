@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
-class MainPagePlayer extends StatelessWidget implements PreferredSizeWidget {
+class MainPagePlayer extends StatelessWidget {
   const MainPagePlayer({
     super.key,
     required this.height,
@@ -28,10 +27,6 @@ class MainPagePlayer extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: mainColor,
-    ),
-    );
     return Container(
       color: mainColor,
      child: Row(
@@ -63,10 +58,5 @@ class MainPagePlayer extends StatelessWidget implements PreferredSizeWidget {
     // ),
       ),
     );
-  }
-
-  @override
-  Size get preferredSize {
-    return Size.fromHeight(height);
   }
 }
