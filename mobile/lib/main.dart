@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:radioaktywne/components/back_to_radio_label.dart';
 import 'package:radioaktywne/components/color_shadowed_card.dart';
 import 'package:radioaktywne/components/main_page_player.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
@@ -41,7 +42,7 @@ class MainApp extends StatelessWidget {
               size: 32,
               semanticLabel: 'RA AppBar menu button',
             ),),
-            text: 'Radio Aktywne',
+            text: 'Radio\nAktywne',
             iconPath: 'assets/RA_logo.svg',
             titlePadding: const EdgeInsets.only(left: 4, top: 8, bottom: 16),
             imageHeight: 40,
@@ -177,20 +178,31 @@ class MainApp extends StatelessWidget {
                   ),
                 ),
                 Padding(
+                    padding: const EdgeInsets.only(right: 180), //.symmetric(horizontal: 8),
+                    child: BackToRadioLabel(
+                      height: 22,
+                      width: 133,
+                      mainColor: context.colors.backgroundDark,
+                      textColor: context.colors.highlightGreen,
+                      text: 'Wróć do radia',
+                    ),
+                ),
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: MainPagePlayer(
                     height: 75,
                     iconPath: 'assets/play_button.svg',
                     bottomSize: 8,
-                    mainColor: context.colors.backgroundDark,
+                    mainColor: context.colors.backgroundDarkSecondary,
                     accentColor: context.colors.highlightGreen,
                     title: 'Loituma - Ievan polkka',
                     imageHeight: 38,
                     paddingHorizontal: 5,
                     paddingVertical: 6,
+                    onClick: () { print('Clicked play'); },
                   ),
                 )
-              ]
+              ],
             ),
           ),
         ),

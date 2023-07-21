@@ -13,6 +13,7 @@ class MainPagePlayer extends StatelessWidget {
     required this.imageHeight,
     this.paddingVertical,
     this.paddingHorizontal,
+    required this.onClick,
   });
 
   final double height;
@@ -24,6 +25,18 @@ class MainPagePlayer extends StatelessWidget {
   final double imageHeight;
   final int? paddingVertical;
   final int? paddingHorizontal;
+  final void Function() onClick;
+
+  Widget _getIcon(String? iconPath) {
+  if (iconPath != null) {
+    return SvgPicture.asset(
+    height: imageHeight,
+    iconPath,
+    );
+  } else {
+    return Container();
+  }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +50,10 @@ class MainPagePlayer extends StatelessWidget {
           ),
           child: Row(
           children: [
-            if (iconPath != null) SvgPicture.asset(
-              height: imageHeight,
-              iconPath!,
-              ) else Container(),
+            GestureDetector(
+                onTap: onClick,
+                child: _getIcon(iconPath),
+              ),
             ],
           ),
         ),
@@ -52,6 +65,7 @@ class MainPagePlayer extends StatelessWidget {
           style: TextStyle(
             color: accentColor,
             fontSize: 24,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ],
