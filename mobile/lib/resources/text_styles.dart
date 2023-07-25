@@ -33,4 +33,11 @@ class RATextStyles {
         fontWeight: FontWeight.bold,
         color: context.colors.highlightGreen,
       );
+
+  TextStyle get textSidebar => TextStyle(
+        fontSize: 16,
+        fontFamily: 'Arial',
+        fontWeight: FontWeight.bold,
+        color: context.colors.backgroundLight,
+      );
 }
