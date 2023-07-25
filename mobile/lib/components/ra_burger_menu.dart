@@ -9,8 +9,11 @@ class RaBurgerMenu extends StatelessWidget {
     this.borderWidth = 8.0,
   });
 
+  // ? Item titles
   final List<String> titles;
+  // ? Navigation links
   final List<void Function()> links;
+  // ? Burger menu border width
   final double borderWidth;
 
   List<RaBurgerMenuItem> _makeList(
