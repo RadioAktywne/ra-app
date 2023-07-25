@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:radioaktywne/components/color_shadowed_card.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
+import 'package:radioaktywne/components/ra_bottomnavbar.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 
@@ -32,12 +33,15 @@ class MainApp extends StatelessWidget {
             bottomSize: 8,
             mainColor: context.colors.backgroundDark,
             accentColor: context.colors.highlightGreen,
-            iconButton: IconButton(onPressed: () {}, icon: Icon(
-              Icons.menu,
-              color: context.colors.highlightGreen,
-              size: 32,
-              semanticLabel: 'RA AppBar menu button',
-            ),),
+            iconButton: IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.menu,
+                color: context.colors.highlightGreen,
+                size: 32,
+                semanticLabel: 'RA AppBar menu button',
+              ),
+            ),
             text: 'Radio\nAktywne',
             iconPath: 'assets/RA_logo.svg',
             titlePadding: const EdgeInsets.only(left: 4, top: 8, bottom: 16),
@@ -49,14 +53,16 @@ class MainApp extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: ColorShadowedCard(
                     shadowColor: context.colors.highlightYellow,
                     header: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 2),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 2),
-                        child: Text('Ramówka na dziś', style: context.textStyles.textMedium),
+                        child: Text('Ramówka na dziś',
+                            style: context.textStyles.textMedium),
                       ),
                     ),
                     footer: Padding(
@@ -110,7 +116,8 @@ class MainApp extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                   child: Row(
                     children: [
                       Expanded(
@@ -120,7 +127,8 @@ class MainApp extends StatelessWidget {
                             shadowColor: context.colors.highlightPurple,
                             header: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 2),
-                              child: Text('Nagłówek', style: context.textStyles.textMedium),
+                              child: Text('Nagłówek',
+                                  style: context.textStyles.textMedium),
                             ),
                             child: Container(
                               padding: const EdgeInsets.all(20),
@@ -139,7 +147,8 @@ class MainApp extends StatelessWidget {
                             shadowColor: context.colors.highlightBlue,
                             footer: Padding(
                               padding: const EdgeInsets.symmetric(vertical: 2),
-                              child: Text('Stopka', style: context.textStyles.textSmall),
+                              child: Text('Stopka',
+                                  style: context.textStyles.textSmall),
                             ),
                             child: Container(
                               padding: const EdgeInsets.all(20),
@@ -155,7 +164,8 @@ class MainApp extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: ColorShadowedCard(
                     shadowColor: context.colors.highlightRed,
                     child: Container(
@@ -170,6 +180,7 @@ class MainApp extends StatelessWidget {
               ],
             ),
           ),
+          bottomNavigationBar: const RaBottomNavigationBar(currentIndex: 0),
         ),
       ),
     );
