@@ -6,7 +6,7 @@ class RaBurgerMenu extends StatelessWidget {
     super.key,
     required this.titles,
     required this.links,
-    this.borderWidth = 8.0,
+    this.borderWidth = 5.0,
   });
 
   // ? Item titles
@@ -23,7 +23,7 @@ class RaBurgerMenu extends StatelessWidget {
   ) {
     if (titles.length != links.length) {
       throw Exception(
-        'List of titles and list of predicates should have the same length!',
+        'List of titles and list of links should have the same length!',
       );
     }
     final list = <RaBurgerMenuItem>[];
@@ -53,7 +53,7 @@ class RaBurgerMenu extends StatelessWidget {
     return Container(
       color: context.colors.highlightGreen,
       padding: EdgeInsets.only(left: borderWidth),
-      width: MediaQuery.of(context).size.width * 0.65,
+      width: 226,
       child: Drawer(
         shadowColor: Colors.transparent,
         backgroundColor: context.colors.backgroundDark,

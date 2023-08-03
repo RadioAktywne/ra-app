@@ -32,7 +32,7 @@ class MainApp extends StatelessWidget {
               size: 32,
               semanticLabel: 'RA AppBar menu button',
             ),
-            bottomSize: 8,
+            bottomSize: 5,
             mainColor: context.colors.backgroundDark,
             accentColor: context.colors.highlightGreen,
             iconButton: IconButton(
