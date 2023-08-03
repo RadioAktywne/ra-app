@@ -180,7 +180,7 @@ class MainApp extends StatelessWidget {
               ],
             ),
           ),
-          bottomNavigationBar: const RaBottomNavigationBar(currentIndex: 0),
+          bottomNavigationBar: const RaBottomNavigationBar(),
         ),
       ),
     );

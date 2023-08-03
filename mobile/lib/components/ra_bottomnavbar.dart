@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 
-class RaBottomNavigationBar extends StatelessWidget {
+class RaBottomNavigationBar extends HookWidget {
   const RaBottomNavigationBar({
     super.key,
-    required this.currentIndex,
+    this.startIndex = 0,
     this.borderWidth = 5,
   });
 
-  final int currentIndex;
+  final int startIndex;
   final double borderWidth;
 
   // ? Leaving this as a reminder...
@@ -18,6 +19,7 @@ class RaBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentIndex = useState(startIndex);
     return Container(
       padding: EdgeInsets.only(top: borderWidth),
       height: 50,
@@ -35,8 +37,9 @@ class RaBottomNavigationBar extends StatelessWidget {
           backgroundColor: context.colors.backgroundDark,
           selectedItemColor: context.colors.highlightGreen,
           unselectedItemColor: context.colors.highlightGreen,
-          currentIndex: currentIndex,
+          currentIndex: currentIndex.value,
           onTap: (index) {
+            currentIndex.value = index;
             // TODO: Implement navigation
           },
           items: const [
