@@ -34,10 +34,8 @@ class RATextStyles {
         color: context.colors.highlightGreen,
       );
 
-  TextStyle get textSidebar => TextStyle(
-        fontSize: 16,
-        fontFamily: 'Arial',
-        fontWeight: FontWeight.bold,
-        color: context.colors.backgroundLight,
-      );
+  TextStyle get textBurgerMenuItem =>
+      textMedium.copyWith(color: context.colors.backgroundLight);
+  TextStyle get textBurgerMenuItemSelected =>
+      textMedium.copyWith(color: context.colors.backgroundDark);
 }
