@@ -27,6 +27,7 @@ dependencies:
   oktoast: ^3.3.1
   provider: ^6.0.5
   rxdart: ^0.27.7
+  simple_animations: ^5.0.2
   uuid: ^3.0.7
 
 dev_dependencies:
@@ -51,6 +52,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/icons/
   fonts:
     - family: RadikalWUT
       fonts:
