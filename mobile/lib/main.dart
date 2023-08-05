@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/color_shadowed_card.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
@@ -9,13 +10,17 @@ void main() {
   runApp(MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends HookWidget {
   MainApp({super.key});
 
   final _scaffoldKey = GlobalKey<ScaffoldState>(debugLabel: 'Inner scaffold');
 
   @override
   Widget build(BuildContext context) {
+    final burgerMenuIconController = useAnimationController(
+      duration: const Duration(milliseconds: 450),
+      reverseDuration: const Duration(milliseconds: 250),
+    );
     return MaterialApp(
       theme: context.theme,
       locale: const Locale('pl'),
@@ -36,17 +41,12 @@ class MainApp extends StatelessWidget {
             mainColor: context.colors.backgroundDark,
             accentColor: context.colors.highlightGreen,
             iconButton: IconButton(
-              onPressed: () {
-                if (_scaffoldKey.currentState!.isEndDrawerOpen) {
-                  _scaffoldKey.currentState!.closeEndDrawer();
-                  //close drawer, if drawer is open
-                } else {
-                  _scaffoldKey.currentState!.openEndDrawer();
-                  //open drawer, if drawer is closed
-                }
-              },
-              icon: Icon(
-                Icons.menu,
+              onPressed: () => _scaffoldKey.currentState!.isEndDrawerOpen
+                  ? _scaffoldKey.currentState!.closeEndDrawer()
+                  : _scaffoldKey.currentState!.openEndDrawer(),
+              icon: AnimatedIcon(
+                icon: AnimatedIcons.menu_close,
+                progress: burgerMenuIconController,
                 color: context.colors.highlightGreen,
                 size: 32,
                 semanticLabel: 'RA AppBar menu button',
@@ -60,6 +60,9 @@ class MainApp extends StatelessWidget {
           body: Scaffold(
             key: _scaffoldKey,
             drawerScrimColor: Colors.transparent,
+            onEndDrawerChanged: (isOpened) => isOpened
+                ? burgerMenuIconController.forward()
+                : burgerMenuIconController.reverse(),
             endDrawer: RaBurgerMenu(
               titles: const [
                 'Radio Aktywne',
