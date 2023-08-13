@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radioaktywne/components/color_shadowed_card.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
+import 'package:radioaktywne/state/audio_handler_cubit.dart';
+
+import 'components/just_audio/radio_audio_service.dart';
 
 void main() {
   runApp(const MainApp());
@@ -14,160 +18,168 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // debugShowCheckedModeBanner: false,
       theme: context.theme,
       locale: const Locale('pl'),
       supportedLocales: context.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       onGenerateTitle: (context) => context.l10n.hello,
-      home: SafeArea(
-        child: Scaffold(
-          appBar: RaAppBar(
-            height: 75,
-            icon: Icon(
-              Icons.menu,
-              color: context.colors.highlightGreen,
-              size: 32,
-              semanticLabel: 'RA AppBar menu button',
+      home: BlocProvider(
+        create: (_) => AudioHandlerCubit(),
+        child: SafeArea(
+          child: Scaffold(
+            appBar: RaAppBar(
+              height: 75,
+              icon: Icon(
+                Icons.menu,
+                color: context.colors.highlightGreen,
+                size: 32,
+                semanticLabel: 'RA AppBar menu button',
+              ),
+              bottomSize: 8,
+              mainColor: context.colors.backgroundDark,
+              accentColor: context.colors.highlightGreen,
+              iconButton: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.menu,
+                  color: context.colors.highlightGreen,
+                  size: 32,
+                  semanticLabel: 'RA AppBar menu button',
+                ),
+              ),
+              text: 'Radio\nAktywne',
+              iconPath: 'assets/RA_logo.svg',
+              titlePadding: const EdgeInsets.only(left: 4, top: 8, bottom: 16),
+              imageHeight: 40,
             ),
-            bottomSize: 8,
-            mainColor: context.colors.backgroundDark,
-            accentColor: context.colors.highlightGreen,
-            iconButton: IconButton(onPressed: () {}, icon: Icon(
-              Icons.menu,
-              color: context.colors.highlightGreen,
-              size: 32,
-              semanticLabel: 'RA AppBar menu button',
-            ),),
-            text: 'Radio\nAktywne',
-            iconPath: 'assets/RA_logo.svg',
-            titlePadding: const EdgeInsets.only(left: 4, top: 8, bottom: 16),
-            imageHeight: 40,
-          ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: ColorShadowedCard(
-                    shadowColor: context.colors.highlightYellow,
-                    header: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
-                      child: Padding(
+            body: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: ColorShadowedCard(
+                      shadowColor: context.colors.highlightYellow,
+                      header: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 2),
-                        child: Text('Ramówka na dziś', style: context.textStyles.textMedium),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2),
+                          child: Text('Ramówka na dziś', style: context.textStyles.textMedium),
+                        ),
                       ),
-                    ),
-                    footer: Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: const BoxDecoration(
-                                color: Colors.grey,
-                                shape: BoxShape.circle,
+                      footer: Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 2),
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: Colors.grey,
+                                  shape: BoxShape.circle,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 2),
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: const BoxDecoration(
-                                color: Colors.grey,
-                                shape: BoxShape.circle,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 2),
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: Colors.grey,
+                                  shape: BoxShape.circle,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      child: Text(
-                        'Lorem ipsum',
-                        style: context.textStyles.textSmall,
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Text(
+                          'Lorem ipsum',
+                          style: context.textStyles.textSmall,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: ColorShadowedCard(
-                            shadowColor: context.colors.highlightPurple,
-                            header: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2),
-                              child: Text('Nagłówek', style: context.textStyles.textMedium),
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.all(20),
-                              child: Text(
-                                'Lorem ipsum',
-                                style: context.textStyles.textSmall,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: ColorShadowedCard(
+                              shadowColor: context.colors.highlightPurple,
+                              header: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 2),
+                                child: Text('Nagłówek', style: context.textStyles.textMedium),
+                              ),
+                              child: Container(
+                                padding: const EdgeInsets.all(20),
+                                child: Text(
+                                  'Lorem ipsum',
+                                  style: context.textStyles.textSmall,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: ColorShadowedCard(
-                            shadowColor: context.colors.highlightBlue,
-                            footer: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2),
-                              child: Text('Stopka', style: context.textStyles.textSmall),
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.all(20),
-                              child: Text(
-                                'Lorem ipsum',
-                                style: context.textStyles.textSmall,
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: ColorShadowedCard(
+                              shadowColor: context.colors.highlightBlue,
+                              footer: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 2),
+                                child: Text('Stopka', style: context.textStyles.textSmall),
+                              ),
+                              child: Container(
+                                padding: const EdgeInsets.all(20),
+                                child: Text(
+                                  'Lorem ipsum',
+                                  style: context.textStyles.textSmall,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: ColorShadowedCard(
-                    shadowColor: context.colors.highlightRed,
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      child: Text(
-                        'hello world',
-                        style: context.textStyles.textSmall,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: ColorShadowedCard(
+                      shadowColor: context.colors.highlightRed,
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Text(
+                          'hello world',
+                          style: context.textStyles.textSmall,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  const RadioAudioService(),
+                ],
+              ),
             ),
           ),
         ),
