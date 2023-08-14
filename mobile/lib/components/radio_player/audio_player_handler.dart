@@ -2,7 +2,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:radioaktywne/components/just_audio/stream_title_workaround.dart';
+import 'package:radioaktywne/components/radio_player/stream_title_workaround.dart';
 
 /// An [AudioHandler] for playing a single item.
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {

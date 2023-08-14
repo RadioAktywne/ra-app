@@ -54,9 +54,9 @@ flutter_gen:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/RA_logo_dark.png"
+  image_path: "assets/RA_logo/RA_logo_dark.png"
   adaptive_icon_background: "#302318"
-  adaptive_icon_foreground: "assets/RA_logo_transparent_108px.png"
+  adaptive_icon_foreground: "assets/RA_logo/RA_logo_transparent_108px.png"
   remove_alpha_ios: true
 flutter:
   uses-material-design: true

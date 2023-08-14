@@ -6,7 +6,7 @@ import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
-import 'components/just_audio/radio_audio_service.dart';
+import 'components/radio_player/radio_audio_service.dart';
 
 void main() {
   runApp(const MainApp());
