@@ -8,7 +8,7 @@
 
     <application
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/launcher_icon"
         android:label="radioaktywne">
         <!-- The name below has to be like this for audio playback to work -->
         <activity

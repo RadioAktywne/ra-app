@@ -59,9 +59,6 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
         return;
       }
 
-      if (kDebugMode) {
-        print('Stream title changed');
-      }
       final mediaItemValue = mediaItem.value ??
           const MediaItem(
             id: 'https://listen.radioaktywne.pl:8443/raogg',
@@ -134,7 +131,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
       //   MediaAction.seekForward,
       //   MediaAction.seekBackward,
       // },
-      androidCompactActionIndices: const [0, 1, 3],
+      androidCompactActionIndices: const [0],
 
       processingState: const {
         ProcessingState.idle: AudioProcessingState.idle,

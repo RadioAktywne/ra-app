@@ -1,7 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../components/just_audio/AudioPlayerHandler.dart';
+import '../components/just_audio/audio_player_handler.dart';
 
 class AudioHandlerCubit extends Cubit<AudioHandler?> {
   /*
