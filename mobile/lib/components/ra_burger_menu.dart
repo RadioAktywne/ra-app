@@ -37,32 +37,16 @@ class RaBurgerMenu extends HookWidget {
       context.colors.highlightBlue,
     ];
 
-    var counter = 0;
     titles.forEachIndexed((index, title) {
-      final TextStyle textStyle;
-      final Color color, backgroundColor;
-
-      if (index == selectedIndex.value) {
-        textStyle = context.textStyles.textBurgerMenuItemSelected;
-        backgroundColor = context.colors.backgroundLight;
-        color = context.colors.backgroundDark;
-      } else {
-        textStyle = context.textStyles.textBurgerMenuItem;
-        backgroundColor = context.colors.backgroundDark;
-        color = colors[counter % colors.length];
-        counter += 1;
-      }
-
       list.add(
         RaBurgerMenuItem(
           title: title,
-          color: color,
-          backgroundColor: backgroundColor,
+          color: colors[index % colors.length],
           onPressed: () {
             selectedIndex.value = index;
             links[index]();
           },
-          textStyle: textStyle,
+          chosen: selectedIndex.value == index,
         ),
       );
     });
@@ -94,22 +78,20 @@ class RaBurgerMenuItem extends StatelessWidget {
     super.key,
     required this.title,
     required this.color,
-    required this.backgroundColor,
     required this.onPressed,
-    required this.textStyle,
+    required this.chosen,
   });
 
   final String title;
   final Color color;
-  final Color backgroundColor;
   final void Function()? onPressed;
-  final TextStyle textStyle;
+  final bool chosen;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 5),
-      color: backgroundColor,
+      color: context.colors.backgroundDark,
       child: TextButton(
         onPressed: onPressed,
         style: ButtonStyle(
@@ -123,15 +105,19 @@ class RaBurgerMenuItem extends StatelessWidget {
           children: [
             Text(
               title,
-              style: textStyle,
+              style: context.textStyles.textBurgerMenuItem,
             ),
             const SizedBox(
               width: 10,
             ),
-            Container(
-              width: 6,
+            AnimatedContainer(
+              width: chosen ? 18 : 6,
               height: 38,
               color: color,
+              // Define how long the animation should take.
+              duration: const Duration(milliseconds: 200),
+              // Provide an optional curve to make the animation feel smoother.
+              curve: Curves.fastOutSlowIn,
             ),
           ],
         ),

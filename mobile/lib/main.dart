@@ -59,7 +59,7 @@ class MainApp extends HookWidget {
           ),
           body: Scaffold(
             key: _scaffoldKey,
-            drawerScrimColor: Colors.transparent,
+            drawerScrimColor: const Color.fromRGBO(19, 9, 0, 0.354),
             onEndDrawerChanged: (isOpened) => isOpened
                 ? burgerMenuIconController.forward()
                 : burgerMenuIconController.reverse(),
