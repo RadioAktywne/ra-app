@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:radioaktywne/components/progress_bar.dart';
+import 'back_to_radio_label.dart';
 
 class MainPagePlayer extends StatelessWidget {
   const MainPagePlayer({
@@ -40,37 +42,55 @@ class MainPagePlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: mainColor,
-     child: Row(
+    return Column(
       children: [
-        Padding(padding: EdgeInsets.symmetric(
-            horizontal: paddingHorizontal?.toDouble() ?? 0,
-            vertical: paddingVertical?.toDouble() ?? 0,
-          ),
-          child: Row(
-          children: [
-            GestureDetector(
-                onTap: onClick,
-                child: _getIcon(iconPath),
-              ),
-            ],
+        const Padding(
+          padding: EdgeInsets.only(right: 180), //.symmetric(horizontal: 8),
+          child: BackToRadioLabel(
+            height: 22,
+            width: 133,
+            text: 'Wróć do radia',
           ),
         ),
-        const SizedBox(
-          width: 14,
-        ),
-        Text(
-          title,
-          style: TextStyle(
-            color: accentColor,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Container(
+            color: mainColor,
+            child: Row(
+             children: [
+               Padding(padding: EdgeInsets.symmetric(
+                   horizontal: paddingHorizontal?.toDouble() ?? 0,
+                   vertical: paddingVertical?.toDouble() ?? 0,
+                 ),
+                 child: Row(
+                 children: [
+                   GestureDetector(
+                       onTap: onClick,
+                       child: _getIcon(iconPath),
+                     ),
+                   ],
+                 ),
+               ),
+               const SizedBox(
+                 width: 14,
+               ),
+               Text(
+                 title,
+                 style: TextStyle(
+                   color: accentColor,
+                   fontSize: 24,
+                   fontWeight: FontWeight.bold,
+                 ),
+               ),
+             ],
+             ),
           ),
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          child: RaProgressBar(totalLength: Duration(milliseconds: 50000)),
         ),
       ],
-    // ),
-      ),
     );
   }
 }

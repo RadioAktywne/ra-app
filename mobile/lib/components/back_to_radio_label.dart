@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:radioaktywne/extensions/build_context.dart';
 
 class BackToRadioLabel extends StatelessWidget {
   const BackToRadioLabel({
@@ -7,27 +7,23 @@ class BackToRadioLabel extends StatelessWidget {
     required this.height,
     required this.width,
     required this.text,
-    required this.mainColor,
-    required this.textColor,
   });
 
   final double height;
   final double width;
   final String text;
-  final Color mainColor;
-  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: mainColor,
+      color: context.colors.backgroundDark,
       width: width,
       height: height,
       alignment: Alignment.center,
       child: Text(
             text,
             style: TextStyle(
-              color: textColor,
+              color: context.colors.highlightGreen,
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),

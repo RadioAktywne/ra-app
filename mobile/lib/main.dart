@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:radioaktywne/components/back_to_radio_label.dart';
 import 'package:radioaktywne/components/color_shadowed_card.dart';
 import 'package:radioaktywne/components/main_page_player.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
@@ -177,31 +176,18 @@ class MainApp extends StatelessWidget {
                     ],
                   ),
                 ),
-                Padding(
-                    padding: const EdgeInsets.only(right: 180), //.symmetric(horizontal: 8),
-                    child: BackToRadioLabel(
-                      height: 22,
-                      width: 133,
-                      mainColor: context.colors.backgroundDark,
-                      textColor: context.colors.highlightGreen,
-                      text: 'Wróć do radia',
-                    ),
+                MainPagePlayer(
+                  height: 75,
+                  iconPath: 'assets/play_button.svg',
+                  bottomSize: 8,
+                  mainColor: context.colors.backgroundDarkSecondary,
+                  accentColor: context.colors.highlightGreen,
+                  title: 'Loituma - Ievan polkka',
+                  imageHeight: 38,
+                  paddingHorizontal: 5,
+                  paddingVertical: 6,
+                  onClick: () { print('Clicked play'); },
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: MainPagePlayer(
-                    height: 75,
-                    iconPath: 'assets/play_button.svg',
-                    bottomSize: 8,
-                    mainColor: context.colors.backgroundDarkSecondary,
-                    accentColor: context.colors.highlightGreen,
-                    title: 'Loituma - Ievan polkka',
-                    imageHeight: 38,
-                    paddingHorizontal: 5,
-                    paddingVertical: 6,
-                    onClick: () { print('Clicked play'); },
-                  ),
-                )
               ],
             ),
           ),
