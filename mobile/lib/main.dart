@@ -59,6 +59,8 @@ class MainApp extends HookWidget {
           ),
           body: Scaffold(
             key: _scaffoldKey,
+            // Special color to match background color from Figma
+            // while not making everything else look so yellow at the same time.
             drawerScrimColor: const Color.fromRGBO(19, 9, 0, 0.354),
             onEndDrawerChanged: (isOpened) => isOpened
                 ? burgerMenuIconController.forward()
