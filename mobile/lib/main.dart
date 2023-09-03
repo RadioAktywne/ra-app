@@ -49,7 +49,7 @@ class MainApp extends StatelessWidget {
                 ),
               ),
               text: 'Radio\nAktywne',
-              iconPath: 'assets/RA_logo.svg',
+              iconPath: 'assets/ra_logo/RA_logo.svg',
               titlePadding: const EdgeInsets.only(left: 4, top: 8, bottom: 16),
               imageHeight: 40,
             ),

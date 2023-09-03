@@ -74,7 +74,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     title: 'Radio Aktywne',
     album: 'Radio Aktywne',
     artUri: Uri.parse(
-      'https://radioaktywne.pl/static/images/studio-d3cb8ada0833489ee904fff9987e2b03.jpg',
+      'https://cdn-profiles.tunein.com/s10187/images/logod.png',
     ),
   );
 

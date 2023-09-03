@@ -91,7 +91,8 @@ class RadioAudioService extends StatelessWidget {
                   final processingState =
                       snapshot.data ?? AudioProcessingState.idle;
                   return Text(
-                      'Processing state: ${describeEnum(processingState)}');
+                    'Processing state: ${describeEnum(processingState)}',
+                  );
                 },
               ),
             ],
