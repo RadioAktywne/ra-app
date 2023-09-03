@@ -1,4 +1,3 @@
-
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
@@ -7,16 +6,16 @@ import 'package:radioaktywne/components/radio_player/stream_title_workaround.dar
 /// An [AudioHandler] for playing a single item.
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   /// Initialise the audio handler.
-  AudioPlayerHandler() {
+  AudioPlayerHandler():
+    _player = AudioPlayer(),
+    streamTitleWorkaround = StreamTitleWorkaround()
+  {
     // So that our clients (the Flutter UI and the system notification) know
     // what state to display, here we set up our audio handler to broadcast all
     // playback state changes as they happen via playbackState...
     _player.playbackEventStream.map(_transformEvent).pipe(playbackState);
     // ... and also the current media item via mediaItem.
     mediaItem.add(_item);
-
-    // Load the player.
-    _player.setAudioSource(AudioSource.uri(Uri.parse(_item.id)));
 
     // Change stream title and subtitle based on IcyMetadata
     _player.icyMetadataStream.listen((event) {
@@ -78,22 +77,25 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     ),
   );
 
-  final _player = AudioPlayer();
-
+  final AudioPlayer _player;
   /// Workaround for stream title fetching
-  final streamTitleWorkaround = StreamTitleWorkaround();
+  final StreamTitleWorkaround streamTitleWorkaround;
 
   /// export icyMetadata (may become handy at some point)
   // Stream<IcyMetadata?> get icyMetadata => _player.icyMetadataStream;
 
-  // In this simple example, we handle only 4 actions: play, pause, seek and
-  // stop. Any button press from the Flutter UI, notification, lock screen or
-  // headset will be routed through to these 4 methods so that you can handle
-  // your audio playback logic in one place.
+  // We handle 4 actions: play, pause, seek and stop. Any button press from the
+  // Flutter UI, notification, lock screen or headset will be routed through to
+  // these 4 methods so that we can handle audio playback logic in one place.
 
   @override
-  Future<void> play() {
+  Future<void> play() async {
     streamTitleWorkaround.playerStarted();
+    // Forces player to start playing live when 'play' is pressed. Otherwise,
+    // when user would press 'play' for the first time, he would hear the
+    // stream starting from the moment he launched the app, not when he pressed
+    // 'play'.
+    await _player.setAudioSource(AudioSource.uri(Uri.parse(_item.id)));
     return _player.play();
   }
 
