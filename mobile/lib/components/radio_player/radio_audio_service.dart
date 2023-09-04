@@ -2,6 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:radioaktywne/components/ra_playbutton.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
 String? streamName;
@@ -59,11 +60,10 @@ class RadioAudioService extends StatelessWidget {
                     .distinct(),
                 builder: (context, snapshot) {
                   final playing = snapshot.data ?? false;
-                  if (playing) {
-                    return _button(Icons.stop, audioHandler.stop);
-                  } else {
-                    return _button(Icons.play_arrow, audioHandler.play);
-                  }
+                  return RaPlayButton(
+                    size: 64,
+                    onPressed: playing ? audioHandler.stop : audioHandler.play,
+                  );
                 },
               ),
 
@@ -82,7 +82,8 @@ class RadioAudioService extends StatelessWidget {
               //     );
               //   },
               // ),
-              /// Display the processing state. Leaving this for now for debugging reasons.
+              /// Display the stream processing state. Leaving this for help
+              /// with future development.
               StreamBuilder<AudioProcessingState>(
                 stream: audioHandler.playbackState
                     .map((state) => state.processingState)
@@ -119,9 +120,11 @@ class RadioAudioService extends StatelessWidget {
 //   final Duration position;
 // }
 
-  IconButton _button(IconData iconData, VoidCallback onPressed) => IconButton(
-        icon: Icon(iconData),
-        iconSize: 64,
-        onPressed: onPressed,
-      );
+/// Very basic button used in development, provided in library example of use.
+/// Leaving it for potential use in future development.
+// IconButton _button(IconData iconData, VoidCallback onPressed) => IconButton(
+//       icon: Icon(iconData),
+//       iconSize: 64,
+//       onPressed: onPressed,
+//     );
 }
