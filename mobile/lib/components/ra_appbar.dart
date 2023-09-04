@@ -16,7 +16,7 @@ class RaAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.iconPath,
     this.titlePadding,
     required this.imageHeight,
-});
+  });
 
   final double height;
   final Icon icon;
@@ -31,11 +31,13 @@ class RaAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
         statusBarColor: mainColor,
       ),
     );
     return AppBar(
+      automaticallyImplyLeading: false,
       toolbarHeight: height,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(0),
@@ -44,20 +46,21 @@ class RaAppBar extends StatelessWidget implements PreferredSizeWidget {
           height: bottomSize,
         ),
       ),
-      actions: <Widget>[
-        iconButton ?? Container()
-      ],
+      actions: <Widget>[iconButton ?? Container()],
       backgroundColor: mainColor,
       elevation: 0,
       title: Padding(
-        padding: titlePadding
-            ?? const EdgeInsets.only(left: 4, top: 8, bottom: 16),
+        padding:
+            titlePadding ?? const EdgeInsets.only(left: 4, top: 8, bottom: 16),
         child: Row(
           children: [
-            if (iconPath != null) SvgPicture.asset(
-              height: imageHeight,
-              iconPath!,
-            ) else Container(),
+            if (iconPath != null)
+              SvgPicture.asset(
+                height: imageHeight,
+                iconPath!,
+              )
+            else
+              Container(),
             const SizedBox(
               width: 14,
             ),

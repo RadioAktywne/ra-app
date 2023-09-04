@@ -49,6 +49,8 @@ abstract class RAColors {
   RAColor get highlightPurple;
   RAColor get highlightOrange;
   RAColor get highlightMagenta;
+
+  RAColor get drawerBackgroundOverlay;
 }
 
 class _ColorsLight extends RAColors {
@@ -78,4 +80,10 @@ class _ColorsLight extends RAColors {
   RAColor get highlightOrange => const RAColor._(0xFFFFA573);
   @override
   RAColor get highlightMagenta => const RAColor._(0xFFFD95FF);
+
+  @override
+  RAColor get drawerBackgroundOverlay => const RAColor._(0x5A130900);
+  // Special color to match background color from Figma when opening drawer
+  // while not making everything else look so yellow at the same time.
+  // Approved by RA on Discord.
 }

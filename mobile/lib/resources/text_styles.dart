@@ -33,4 +33,9 @@ class RATextStyles {
         fontWeight: FontWeight.bold,
         color: context.colors.highlightGreen,
       );
+
+  TextStyle get textBurgerMenuItem =>
+      textMedium.copyWith(color: context.colors.backgroundLight);
+  TextStyle get textBurgerMenuItemSelected =>
+      textMedium.copyWith(color: context.colors.backgroundDark);
 }
