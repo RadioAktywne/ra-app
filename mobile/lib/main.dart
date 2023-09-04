@@ -22,6 +22,7 @@ class MainApp extends HookWidget {
       duration: const Duration(milliseconds: 450),
       reverseDuration: const Duration(milliseconds: 250),
     );
+    
     return MaterialApp(
       theme: context.theme,
       locale: const Locale('pl'),
