@@ -5,9 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radioaktywne/components/ra_playbutton.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
-String? streamName;
-String? streamTitle;
-
 class RadioAudioService extends StatelessWidget {
   const RadioAudioService({super.key});
 

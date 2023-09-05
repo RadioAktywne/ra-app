@@ -19,6 +19,10 @@ class RaPlayButton extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Refactor RAPlayButton state so that it depends on (listens to)
+    // TODO: radio stream processing state
+    // hint: check implementation of processing state in RadioAudioService
+    // widget with BlockBuilder and StreamBuilder.
     final playing = useState(false);
     final sizeSlider = useState(size);
 
@@ -48,10 +52,16 @@ class RaPlayButton extends HookWidget {
   }
 }
 
+// TODO: Rethink RAPlayButton with loading animation in mind. Stream is loading
+// TODO: for 1s after 'play' is pressed, the app lacks visual feedback of this.
+// TODO: Loading indication of some kind is needed.
 class _PlayButtonImage extends HookWidget {
   _PlayButtonImage({
     this.playing = false,
   });
+
+  // TODO: use some sort of enum instead of bool for describing state.
+  // Could use AudioProcessingState from audio_service directly.
   final bool playing;
 
   final tween = Tween<double>(begin: 0, end: 2);
