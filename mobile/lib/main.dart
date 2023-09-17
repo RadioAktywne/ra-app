@@ -4,6 +4,7 @@ import 'package:radioaktywne/components/color_shadowed_card.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
 import 'package:radioaktywne/components/ra_bottomnavbar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
+import 'package:radioaktywne/components/ramowka.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 
@@ -22,7 +23,7 @@ class MainApp extends HookWidget {
       duration: const Duration(milliseconds: 450),
       reverseDuration: const Duration(milliseconds: 250),
     );
-    
+
     return MaterialApp(
       theme: context.theme,
       locale: const Locale('pl'),
@@ -92,19 +93,20 @@ class MainApp extends HookWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  /// Ramówka widget
+                  const RamowkaWidget(),
+
+                  /// Old Ramowka
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     child: ColorShadowedCard(
                       shadowColor: context.colors.highlightYellow,
                       header: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 2),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 2),
-                          child: Text(
-                            'Ramówka na dziś',
-                            style: context.textStyles.textMedium,
-                          ),
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Text(
+                          'Ramówka na dziś',
+                          style: context.textStyles.textMedium,
                         ),
                       ),
                       footer: Padding(
