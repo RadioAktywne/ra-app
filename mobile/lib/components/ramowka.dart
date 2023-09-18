@@ -114,6 +114,8 @@ class _RamowkaListState extends State<RamowkaList>
           .where((e) => e.day == Day.current())
           .toList(),
     );
+
+    print("_ramowka = {$_ramowka}");
   }
 
   @override
@@ -209,9 +211,14 @@ class RamowkaInfo {
         day = Day.fromString('none');
 
   RamowkaInfo.fromJson(Map<String, dynamic> jsonData)
-      : title = parseTitle(jsonData['title']['rendered'].toString()),
-        startTime = jsonData['acf']['start_time'].toString(),
-        day = Day.fromString(jsonData['acf']['day'].toString());
+      : title = parseTitle(
+          (jsonData['title'] as Map<String, dynamic>)['rendered'].toString(),
+        ),
+        startTime =
+            (jsonData['acf'] as Map<String, dynamic>)['start_time'].toString(),
+        day = Day.fromString(
+          (jsonData['acf'] as Map<String, dynamic>)['day'].toString(),
+        );
 
   final String title;
   final String startTime;
@@ -229,7 +236,7 @@ class RamowkaInfo {
 
   @override
   String toString() {
-    return title; //'RamowkaInfo(title: $title, startTime: $startTime)';
+    return 'Ramowka(title: `$title`, startTime: `$startTime`, day: `$day`)'; //'RamowkaInfo(title: $title, startTime: $startTime)';
   }
 }
 
