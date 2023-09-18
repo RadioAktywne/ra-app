@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:leancode_hooks/leancode_hooks.dart';
+import 'package:intl/intl.dart';
 import 'package:radioaktywne/components/color_shadowed_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 
@@ -43,21 +44,17 @@ class RamowkaWidget extends StatelessWidget {
             ],
           ),
         ),
-        child: RamowkaList(),
+        child: const RamowkaList(),
       ),
     );
   }
 }
 
-class RamowkaList extends HookWidget {
+class RamowkaList extends StatefulWidget {
   const RamowkaList({
     super.key,
     this.rows = 7,
   });
-
-  static Uri url = Uri.parse(
-    'https://radioaktywne.pl/wp-json/wp/v2/event?_embed=true&page=1&per_page=100',
-  );
 
   /// Number of rows
   final int rows;
@@ -70,46 +67,87 @@ class RamowkaList extends HookWidget {
   static double aspectRatio(BuildContext context) =>
       MediaQuery.of(context).size.width / _rowHeight;
 
-  Future<List<RamowkaInfo>> updateRamowka() async {
-    // TODO: add empty elements to fill the list to 7 *rows* elements
+  @override
+  State<RamowkaList> createState() => _RamowkaListState();
+}
 
+class _RamowkaListState extends State<RamowkaList>
+    with AutomaticKeepAliveClientMixin {
+  late Future<void> _ramowkaFuture;
+  var _ramowka = <RamowkaInfo>[];
+  final Uri _url = Uri.parse(
+    'https://radioaktywne.pl/wp-json/wp/v2/event?_embed=true&page=1&per_page=100',
+  );
+
+  @override
+  void initState() {
+    _ramowkaFuture = Future<void>(_updateRamowka);
+    super.initState();
+  }
+
+  // Must include
+  @override
+  bool get wantKeepAlive => true;
+
+  Future _updateRamowka() async {
+    // TODO: + add empty elements to fill the list to 7 *rows* elements
+    // TODO: + parse data for entries from current day only
+    // TODO: + try switching code to hooks
     final response =
-        await http.get(url, headers: {'Content-Type': 'application/json'});
+        await http.get(_url, headers: {'Content-Type': 'application/json'});
     final jsonData = jsonDecode(response.body) as List<dynamic>;
-    final ramowka = <RamowkaInfo>[];
-    for (final data in jsonData) {
-      ramowka.add(RamowkaInfo.fromJson(data as Map<String, dynamic>));
-    }
 
-    print(ramowka);
-
-    return Future<List<RamowkaInfo>>(
-      () => jsonData
+    setState(
+      () => _ramowka = jsonData
           .map(
             (dynamic data) =>
                 RamowkaInfo.fromJson(data as Map<String, dynamic>),
           )
+          .sorted((a, b) => a.startTime.compareTo(b.startTime))
+          .map(
+            (element) => RamowkaInfo(
+              title: element.title,
+              startTime: RamowkaInfo.parseTime(element.startTime),
+              day: element.day,
+            ),
+          )
+          .where((e) => e.day == Day.current())
           .toList(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final ramowka = useState(List<RamowkaInfo>.empty());
+    super.build(context);
     return SizedBox(
-      height: rows * _rowHeight,
-      child: RefreshIndicator(
-        color: context.colors.highlightGreen,
-        backgroundColor: context.colors.backgroundDark,
-        displacement: 0,
-        onRefresh: () async {
-          ramowka.value = await updateRamowka();
-        },
-        child: ListView.builder(
-          itemCount: ramowka.value.length,
-          itemBuilder: (context, index) =>
-              _RamowkaListItem(index: index, info: ramowka.value[index]),
-        ),
+      height: widget.rows * RamowkaList._rowHeight,
+      child: FutureBuilder(
+        future: _ramowkaFuture,
+        builder: (context, snapshot) =>
+            snapshot.connectionState == ConnectionState.done
+                ? RefreshIndicator(
+                    color: context.colors.highlightGreen,
+                    backgroundColor: context.colors.backgroundDark,
+                    displacement: 0,
+                    onRefresh: () async => _ramowkaFuture,
+                    child: ListView.builder(
+                      itemCount: _ramowka.length,
+                      itemBuilder: (context, index) => _RamowkaListItem(
+                        index: index,
+                        info: _ramowka[index],
+                      ),
+                    ),
+                  )
+                : Center(
+                    child: SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: CircularProgressIndicator(
+                        color: context.colors.highlightGreen,
+                        backgroundColor: context.colors.backgroundDark,
+                      ),
+                    ),
+                  ),
       ),
     );
   }
@@ -161,20 +199,23 @@ class RamowkaInfo {
   const RamowkaInfo({
     required this.title,
     required this.startTime,
+    required this.day,
   });
 
   /// Creates empty RamowkaInfo object
   RamowkaInfo.empty()
       : title = '',
-        startTime = '';
+        startTime = '',
+        day = Day.fromString('none');
 
-  // TODO: add JSON parsing
   RamowkaInfo.fromJson(Map<String, dynamic> jsonData)
       : title = parseTitle(jsonData['title']['rendered'].toString()),
-        startTime = parseTime(jsonData['acf']['start_time'].toString());
+        startTime = jsonData['acf']['start_time'].toString(),
+        day = Day.fromString(jsonData['acf']['day'].toString());
 
   final String title;
   final String startTime;
+  final Day day;
 
   static String parseTime(String time) {
     final start = time[0] == '0' ? 1 : 0;
@@ -189,5 +230,34 @@ class RamowkaInfo {
   @override
   String toString() {
     return title; //'RamowkaInfo(title: $title, startTime: $startTime)';
+  }
+}
+
+enum Day {
+  monday,
+  tuesday,
+  wednesday,
+  thursday,
+  friday,
+  saturday,
+  sunday,
+  none;
+
+  static Day fromString(String s) {
+    try {
+      return Day.values.byName(s);
+    } catch (e) {
+      return Day.none;
+    }
+  }
+
+  static Day current() {
+    try {
+      return Day.fromString(
+        DateFormat('EEEE').format(DateTime.now()).toLowerCase(),
+      );
+    } catch (e) {
+      return none;
+    }
   }
 }
