@@ -12,7 +12,7 @@ class RaBottomNavigationBar extends HookWidget {
   final int startIndex;
   final double borderWidth;
 
-  // ? Leaving this as a reminder...
+  // Leaving this as a reminder...
   // static const labels = <String>['home', 'mic', 'album', 'article'];
   // static const widths = <double>[30, 21, 32.5, 27];
   // static const heights = <double>[26, 28.5, 32.5, 27];
