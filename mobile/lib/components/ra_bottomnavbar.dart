@@ -12,6 +12,9 @@ class RaBottomNavigationBar extends HookWidget {
 
   /// Specifies the index of the icon
   /// that should be selected at first.
+  ///
+  /// This has to be a value between 0 and
+  /// the number of icons.
   final int startIndex;
 
   /// Specifies the width of the green border
@@ -25,7 +28,7 @@ class RaBottomNavigationBar extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    assert(startIndex > 0 && startIndex < 4);
+    assert(startIndex >= 0 && startIndex < 4);
     final currentIndex = useState(startIndex);
     return Container(
       padding: EdgeInsets.only(top: borderWidth),

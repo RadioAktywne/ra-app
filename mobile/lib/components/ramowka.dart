@@ -13,13 +13,20 @@ import 'package:radioaktywne/extensions/extensions.dart';
 /// Consists of a [ColorShadowedCard] with a header and
 /// a list of entries in Ramowka.
 class RamowkaWidget extends StatelessWidget {
-  const RamowkaWidget({super.key, this.dataSource});
+  const RamowkaWidget({
+    super.key,
+    this.dataSource,
+    this.timeout = const Duration(seconds: 7),
+  });
 
   /// Asynchronous source of data in the widget.
   ///
   /// On default, the data is pulled from the radioaktywne.pl api.
   /// If specified, the data will be pulled from the specified source.
   final Future<void>? dataSource;
+
+  /// Timeout for the fetching function.
+  final Duration timeout;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +79,10 @@ class RamowkaWidget extends StatelessWidget {
             ),
           ),
         ),
-        child: RamowkaList(dataSource: dataSource),
+        child: RamowkaList(
+          timeout: timeout,
+          dataSource: dataSource,
+        ),
       ),
     );
   }
@@ -82,10 +92,14 @@ class RamowkaWidget extends StatelessWidget {
 class RamowkaList extends StatefulWidget {
   const RamowkaList({
     super.key,
+    required this.timeout,
     this.rows = 7,
     this.rowHeight = 22.0,
     this.dataSource,
   });
+
+  /// Timeout for the fetching function.
+  final Duration timeout;
 
   /// Number of rows
   final int rows;
@@ -127,7 +141,7 @@ class _RamowkaListState extends State<RamowkaList>
     final response = await http.get(
       _RamowkaListState._url,
       headers: {'Content-Type': 'application/json'},
-    );
+    ).timeout(widget.timeout);
     final jsonData = jsonDecode(response.body) as List<dynamic>;
     final currentTime =
         DateFormat(DateFormat.HOUR24_MINUTE).format(DateTime.now());
@@ -214,11 +228,17 @@ class _RamowkaNoData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Ups! Wygląda na to, że nie znaleziono ramówki :(',
-        style: context.textStyles.textSmall,
-      ),
+    return ListView(
+      children: [
+        const SizedBox(height: 50),
+        Center(
+          child: Text(
+            // TODO: Ask RA for better substitute text
+            'Ups! Wygląda na to, że nie udało się znaleźć ramówki :(',
+            style: context.textStyles.textSmall,
+          ),
+        ),
+      ],
     );
   }
 }
