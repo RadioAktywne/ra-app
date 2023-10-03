@@ -9,10 +9,17 @@ import 'package:radioaktywne/components/color_shadowed_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 
 /// Widget representing Ramówka
+///
+/// Consists of a [ColorShadowedCard] with a header and
+/// a list of entries in Ramowka.
 class RamowkaWidget extends StatelessWidget {
-  const RamowkaWidget({
-    super.key,
-  });
+  const RamowkaWidget({super.key, this.dataSource});
+
+  /// Asynchronous source of data in the widget.
+  ///
+  /// On default, the data is pulled from the radioaktywne.pl api.
+  /// If specified, the data will be pulled from the specified source.
+  final Future<void>? dataSource;
 
   @override
   Widget build(BuildContext context) {
@@ -23,38 +30,61 @@ class RamowkaWidget extends StatelessWidget {
       ),
       child: ColorShadowedCard(
         shadowColor: context.colors.highlightBlue,
-        header: SizedBox(
-          height: 31,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Ramówka',
-                style: context.textStyles.textMedium,
+        header: Padding(
+          padding: const EdgeInsets.only(left: 3),
+          child: SizedBox(
+            height: 31,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                // TODO: (optional) nagivation to Ramowka page
+                onTap: () {},
+                highlightColor: Colors.transparent,
+                splashColor: context.colors.highlightGreen.withOpacity(0.3),
+                radius: 100,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      // TODO: nagivation to Ramowka page
+                      onTap: () {
+                        // print("Tapped Ramowka");
+                      },
+                      child: Text(
+                        'Ramówka',
+                        style: context.textStyles.textMedium,
+                      ),
+                    ),
+                    GestureDetector(
+                      // TODO: nagivation to Ramowka page
+                      onTap: () {
+                        // print("Clicked button");
+                      },
+                      child: Icon(
+                        Icons.menu,
+                        size: 28,
+                        color: context.colors.highlightGreen,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              IconButton(
-                // TODO: nagivation to Ramowka page
-                onPressed: () {},
-                padding: EdgeInsets.zero,
-                icon: const Icon(Icons.menu),
-                iconSize: 28,
-                color: context.colors.highlightGreen,
-                splashColor: context.colors.highlightGreen,
-              ),
-            ],
+            ),
           ),
         ),
-        child: const RamowkaList(),
+        child: RamowkaList(dataSource: dataSource),
       ),
     );
   }
 }
 
+/// List of Ramowka entries.
 class RamowkaList extends StatefulWidget {
   const RamowkaList({
     super.key,
     this.rows = 7,
     this.rowHeight = 22.0,
+    this.dataSource,
   });
 
   /// Number of rows
@@ -62,6 +92,10 @@ class RamowkaList extends StatefulWidget {
 
   /// Single row's height
   final double rowHeight;
+
+  /// Optional source of the data to fill
+  /// the list, pulled from the radioaktywne.pl api on default.
+  final Future<void>? dataSource;
 
   @override
   State<RamowkaList> createState() => _RamowkaListState();
@@ -80,43 +114,60 @@ class _RamowkaListState extends State<RamowkaList>
 
   @override
   void initState() {
-    _ramowkaFuture = Future<void>(_updateRamowka);
+    _ramowkaFuture = widget.dataSource ?? Future<void>(_updateRamowka);
     super.initState();
   }
 
   Future _updateRamowka() async {
-    // TODO: + parse data for entries from current day only
-    // TODO: + try switching code to hooks
+    /// Debug: you can plug external data source in to test the widget
+    if (widget.dataSource != null) {
+      return;
+    }
+
     final response = await http.get(
       _RamowkaListState._url,
       headers: {'Content-Type': 'application/json'},
     );
-
-    //! PROD
     final jsonData = jsonDecode(response.body) as List<dynamic>;
+    final currentTime =
+        DateFormat(DateFormat.HOUR24_MINUTE).format(DateTime.now());
 
-    //! DEBUG
-    // final jsonData = jsonDecode(_MockJson.audycjeData(10)) as List<dynamic>;
+    final data = jsonData.map(
+      (dynamic data) => RamowkaInfo.fromJson(data as Map<String, dynamic>),
+    );
 
     setState(
       () {
-        _ramowka = jsonData
-            .map(
-              (dynamic data) =>
-                  RamowkaInfo.fromJson(data as Map<String, dynamic>),
+        _ramowka = data
+            .where(
+              (e) =>
+                  e.day == Day.today() &&
+                  e.day == Day.today() &&
+                  (currentTime.compareTo(e.endTime) <= 0 ||
+                      currentTime.compareTo(e.startTime) <= 0),
             )
             .sorted((a, b) => a.startTime.compareTo(b.startTime))
-            .map(
-              (element) => RamowkaInfo(
-                title: element.title,
-                startTime: RamowkaInfo.parseTime(element.startTime),
-                day: element.day,
-              ),
-            )
-            .where((e) => e.day == Day.today())
             .toList();
 
-        /// Adds empty elements to fill the list up to the number of rows
+        /// Display Ramowka from the next day if current
+        /// list's length is less than [rows] and it's
+        /// past 20:00.
+        if (_ramowka.length < widget.rows &&
+            currentTime.compareTo('20:00') >= 0) {
+          final ramowkaTomorrow = data
+              .where(
+                (e) =>
+                    e.day == Day.tomorrow() &&
+                    (currentTime.compareTo(e.endTime) <= 0 ||
+                        currentTime.compareTo(e.startTime) <= 0),
+              )
+              .sorted((a, b) => a.startTime.compareTo(b.startTime));
+          for (var i = 0; i <= widget.rows - _ramowka.length; i++) {
+            _ramowka.add(ramowkaTomorrow[i]);
+          }
+        }
+
+        /// Add empty fields to fill Ramowka to [rows] number of items
         for (var i = _ramowka.length; i < widget.rows; i++) {
           _ramowka.add(RamowkaInfo.empty());
         }
@@ -131,14 +182,15 @@ class _RamowkaListState extends State<RamowkaList>
       height: widget.rows * widget.rowHeight,
       child: FutureBuilder(
         future: _ramowkaFuture,
-        builder: (context, snapshot) =>
-            snapshot.connectionState == ConnectionState.done
-                ? RefreshIndicator(
-                    color: context.colors.highlightGreen,
-                    backgroundColor: context.colors.backgroundDark,
-                    displacement: 0,
-                    onRefresh: _updateRamowka,
-                    child: ListView.builder(
+        builder: (context, snapshot) => RefreshIndicator(
+          color: context.colors.highlightGreen,
+          backgroundColor: context.colors.backgroundDark,
+          displacement: 0,
+          onRefresh: _updateRamowka,
+          child: snapshot.hasError
+              ? const _RamowkaNoData()
+              : switch (snapshot.connectionState) {
+                  ConnectionState.done => ListView.builder(
                       itemCount: _ramowka.length,
                       itemBuilder: (context, index) => _RamowkaListItem(
                         index: index,
@@ -146,22 +198,52 @@ class _RamowkaListState extends State<RamowkaList>
                         rowHeight: widget.rowHeight,
                       ),
                     ),
-                  )
-                : Center(
-                    child: SizedBox(
-                      width: 30,
-                      height: 30,
-                      child: CircularProgressIndicator(
-                        color: context.colors.highlightGreen,
-                        backgroundColor: context.colors.backgroundDark,
-                      ),
-                    ),
-                  ),
+                  ConnectionState.active => const _RamowkaNoData(),
+                  ConnectionState.waiting => const _RamowkaWaiting(),
+                  ConnectionState.none => const _RamowkaNoData(),
+                },
+        ),
       ),
     );
   }
 }
 
+/// Empty variant of the [RamowkaWidget]
+class _RamowkaNoData extends StatelessWidget {
+  const _RamowkaNoData();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        'Ups! Wygląda na to, że nie znaleziono ramówki :(',
+        style: context.textStyles.textSmall,
+      ),
+    );
+  }
+}
+
+/// Variant of the [RamowkaWidget] containing
+/// a waiting animation
+class _RamowkaWaiting extends StatelessWidget {
+  const _RamowkaWaiting();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        width: 30,
+        height: 30,
+        child: CircularProgressIndicator(
+          color: context.colors.highlightGreen,
+          backgroundColor: context.colors.backgroundDark,
+        ),
+      ),
+    );
+  }
+}
+
+/// Represents a single [RamowkaList] entry.
 class _RamowkaListItem extends StatelessWidget {
   const _RamowkaListItem({
     required this.index,
@@ -210,43 +292,51 @@ class _RamowkaListItem extends StatelessWidget {
   }
 }
 
-/// Information about single Ramowka entry
+/// Information about single [RamowkaList] entry.
 class RamowkaInfo {
   const RamowkaInfo({
     required this.title,
     required this.startTime,
+    required this.endTime,
     required this.day,
   });
 
-  /// Creates empty RamowkaInfo object
+  /// Creates an empty [RamowkaInfo] object.
   RamowkaInfo.empty()
       : title = '',
         startTime = '',
-        day = Day.none;
+        endTime = '',
+        day = Day.today();
 
+  /// Creates a [RamowkaInfo] object from a given Json map.
   RamowkaInfo.fromJson(Map<String, dynamic> jsonData)
       : title = parseTitle(
           (jsonData['title'] as Map<String, dynamic>)['rendered'].toString(),
         ),
-        startTime =
-            (jsonData['acf'] as Map<String, dynamic>)['start_time'].toString(),
+        startTime = parseTime(
+          (jsonData['acf'] as Map<String, dynamic>)['start_time'].toString(),
+        ),
+        endTime = parseTime(
+          (jsonData['acf'] as Map<String, dynamic>)['end_time'].toString(),
+        ),
         day = Day.fromString(
           (jsonData['acf'] as Map<String, dynamic>)['day'].toString(),
         );
 
   final String title;
   final String startTime;
+  final String endTime;
   final Day day;
 
-  static String parseTime(String time) {
-    final start = time[0] == '0' ? 1 : 0;
-    final end = time.length - 3;
-    return time.substring(start, end);
-  }
+  /// Parses time string to the required format
+  static String parseTime(String time) =>
+      time.removeTrailing('0').removeTrailing(':');
 
-  static String parseTitle(String title) {
-    return title.replaceAll('&#8217;', "'");
-  }
+  /// Parses title string to the required format
+  static String parseTitle(String title) => title
+      .replaceAll('&#8217;', "'")
+      .replaceFirst('(Replay)', ' - powtórka')
+      .replaceFirst('(Live)', '');
 
   @override
   String toString() {
@@ -254,12 +344,14 @@ class RamowkaInfo {
     Ramowka(
       title: `$title`, 
       startTime: `$startTime`, 
+      endTime: `$endTime`,
       day: `$day`
     )
     ''';
   }
 }
 
+/// Days of the week
 enum Day {
   monday,
   tuesday,
@@ -267,53 +359,25 @@ enum Day {
   thursday,
   friday,
   saturday,
-  sunday,
-  none;
+  sunday;
 
-  static Day fromString(String s) {
-    try {
-      return Day.values.byName(s);
-    } catch (e) {
-      return Day.none;
-    }
-  }
+  static Day fromString(String s) => Day.values.byName(s);
 
-  static Day today() {
-    try {
-      return Day.fromString(
-        DateFormat('EEEE').format(DateTime.now()).toLowerCase(),
-      );
-    } catch (e) {
-      return none;
-    }
-  }
+  static Day today() =>
+      fromString(DateFormat.EEEE().format(DateTime.now()).toLowerCase());
+
+  static Day tomorrow() => Day.values[(today().index + 1) % 7];
 }
 
-abstract class _MockJson {
-  static String audycjeData(int times) {
-    assert(times >= 0 && times <= 24);
-    final res = StringBuffer('[');
-    for (var i = 0; i < times; ++i) {
-      res.write(
-        '''
-        {
-          "title": {
-            "rendered": "Audycja $i"
-          },
-          "acf": {
-            "start_time": "$i:00:00",
-            "day": "${Day.today().name}"
-          }
-        }
-        ''',
-      );
-      if (i != times - 1) {
-        res.write(',');
-      }
+/// Adds methods to remove all trailing
+/// occurrences of a provided character from the String
+extension RemoveTrailing on String {
+  String removeTrailing(String char) {
+    assert(char.length == 1);
+    var index = length - 1;
+    while (this[index] == char && index > 0) {
+      index--;
     }
-    res.write(']');
-
-    // print("res=$res");
-    return res.toString();
+    return substring(0, index + 1);
   }
 }
