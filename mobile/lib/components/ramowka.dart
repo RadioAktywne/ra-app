@@ -192,6 +192,7 @@ class _RamowkaListState extends State<RamowkaList>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final height = widget.rows * widget.rowHeight;
     return SizedBox(
       height: widget.rows * widget.rowHeight,
       child: FutureBuilder(
@@ -202,7 +203,7 @@ class _RamowkaListState extends State<RamowkaList>
           displacement: 0,
           onRefresh: _updateRamowka,
           child: snapshot.hasError
-              ? const _RamowkaNoData()
+              ? _RamowkaNoData(height: height)
               : switch (snapshot.connectionState) {
                   ConnectionState.done => ListView.builder(
                       itemCount: _ramowka.length,
@@ -212,9 +213,9 @@ class _RamowkaListState extends State<RamowkaList>
                         rowHeight: widget.rowHeight,
                       ),
                     ),
-                  ConnectionState.active => const _RamowkaNoData(),
+                  ConnectionState.active => _RamowkaNoData(height: height),
                   ConnectionState.waiting => const _RamowkaWaiting(),
-                  ConnectionState.none => const _RamowkaNoData(),
+                  ConnectionState.none => _RamowkaNoData(height: height),
                 },
         ),
       ),
@@ -224,14 +225,17 @@ class _RamowkaListState extends State<RamowkaList>
 
 /// Empty variant of the [RamowkaWidget]
 class _RamowkaNoData extends StatelessWidget {
-  const _RamowkaNoData();
+  const _RamowkaNoData({required this.height});
+
+  final double height;
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        const SizedBox(height: 50),
-        Center(
+        Container(
+          alignment: Alignment.center,
+          height: height,
           child: Text(
             // TODO: Ask RA for better substitute text
             'Ups! Wygląda na to, że nie udało się znaleźć ramówki :(',
