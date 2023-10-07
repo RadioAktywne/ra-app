@@ -194,7 +194,7 @@ class _RamowkaListState extends State<RamowkaList>
     super.build(context);
     final height = widget.rows * widget.rowHeight;
     return SizedBox(
-      height: widget.rows * widget.rowHeight,
+      height: height,
       child: FutureBuilder(
         future: _ramowkaFuture,
         builder: (context, snapshot) => RefreshIndicator(
