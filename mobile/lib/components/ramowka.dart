@@ -115,16 +115,15 @@ class RamowkaList extends StatefulWidget {
   State<RamowkaList> createState() => _RamowkaListState();
 }
 
-class _RamowkaListState extends State<RamowkaList>
-    with AutomaticKeepAliveClientMixin {
+class _RamowkaListState extends State<RamowkaList> {
   Future<void>? _ramowkaFuture;
   var _ramowka = <RamowkaInfo>[];
   static final Uri _url = Uri.parse(
     'https://radioaktywne.pl/wp-json/wp/v2/event?_embed=true&page=1&per_page=100',
   );
 
-  @override
-  bool get wantKeepAlive => true;
+  // @override
+  // bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -155,7 +154,6 @@ class _RamowkaListState extends State<RamowkaList>
         _ramowka = data
             .where(
               (e) =>
-                  e.day == Day.today() &&
                   e.day == Day.today() &&
                   (currentTime.compareTo(e.endTime) <= 0 ||
                       currentTime.compareTo(e.startTime) <= 0),
@@ -191,7 +189,7 @@ class _RamowkaListState extends State<RamowkaList>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    // super.build(context);
     final height = widget.rows * widget.rowHeight;
     return SizedBox(
       height: height,
@@ -202,22 +200,32 @@ class _RamowkaListState extends State<RamowkaList>
           backgroundColor: context.colors.backgroundDark,
           displacement: 0,
           onRefresh: _updateRamowka,
-          child: snapshot.hasError
-              ? _RamowkaNoData(height: height)
-              : switch (snapshot.connectionState) {
-                  ConnectionState.done => ListView.builder(
-                      itemCount: _ramowka.length,
-                      itemBuilder: (context, index) => _RamowkaListItem(
-                        index: index,
-                        info: _ramowka[index],
-                        rowHeight: widget.rowHeight,
-                      ),
-                    ),
-                  ConnectionState.active => _RamowkaNoData(height: height),
-                  ConnectionState.waiting => const _RamowkaWaiting(),
-                  ConnectionState.none => _RamowkaNoData(height: height),
-                },
+          child: snapshot.connectionState == ConnectionState.waiting
+              ? const _RamowkaWaiting()
+              : _decideRamowkaVariant(height),
         ),
+      ),
+    );
+  }
+
+  /// Decides, which variant of [RamowkaList] to render
+  /// based on the contents of [_ramowka].
+  Widget _decideRamowkaVariant(double height) {
+    if (_ramowka.isNotEmpty) {
+      return _ramowkaHasData();
+    } else {
+      return _RamowkaNoData(height: height);
+    }
+  }
+
+  /// Constructs a [ListView] of [_RamowkaListItem]s.
+  ListView _ramowkaHasData() {
+    return ListView.builder(
+      itemCount: _ramowka.length,
+      itemBuilder: (context, index) => _RamowkaListItem(
+        index: index,
+        info: _ramowka[index],
+        rowHeight: widget.rowHeight,
       ),
     );
   }
@@ -238,7 +246,7 @@ class _RamowkaNoData extends StatelessWidget {
           height: height,
           child: Text(
             // TODO: Ask RA for better substitute text
-            'Ups! Wygląda na to, że nie udało się znaleźć ramówki :(',
+            'Wystąpił błąd podczas pobierania danych',
             style: context.textStyles.textSmall,
           ),
         ),
@@ -385,7 +393,7 @@ enum Day {
   saturday,
   sunday;
 
-  static Day fromString(String s) => Day.values.byName(s);
+  static Day fromString(String s) => values.byName(s);
 
   static Day today() =>
       fromString(DateFormat.EEEE().format(DateTime.now()).toLowerCase());
@@ -399,9 +407,10 @@ extension RemoveTrailing on String {
   String removeTrailing(String char) {
     assert(char.length == 1);
     var index = length - 1;
-    while (this[index] == char && index > 0) {
-      index--;
+    while (index >= 0 && this[index] == char) {
+      --index;
     }
+
     return substring(0, index + 1);
   }
 }
