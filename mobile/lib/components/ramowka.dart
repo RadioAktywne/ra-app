@@ -122,9 +122,6 @@ class _RamowkaListState extends State<RamowkaList> {
     'https://radioaktywne.pl/wp-json/wp/v2/event?_embed=true&page=1&per_page=100',
   );
 
-  // @override
-  // bool get wantKeepAlive => true;
-
   @override
   void initState() {
     _ramowkaFuture = widget.dataSource ?? Future<void>(_updateRamowka);
@@ -189,7 +186,6 @@ class _RamowkaListState extends State<RamowkaList> {
 
   @override
   Widget build(BuildContext context) {
-    // super.build(context);
     final height = widget.rows * widget.rowHeight;
     return SizedBox(
       height: height,
