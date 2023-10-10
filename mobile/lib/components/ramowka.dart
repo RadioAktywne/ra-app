@@ -227,7 +227,7 @@ class _RamowkaListState extends State<RamowkaList> {
   }
 }
 
-/// Empty variant of the [RamowkaWidget]
+/// Empty variant of [RamowkaList]
 class _RamowkaNoData extends StatelessWidget {
   const _RamowkaNoData({required this.height});
 
@@ -241,7 +241,6 @@ class _RamowkaNoData extends StatelessWidget {
           alignment: Alignment.center,
           height: height,
           child: Text(
-            // TODO: Ask RA for better substitute text
             'Wystąpił błąd podczas pobierania danych',
             style: context.textStyles.textSmall,
           ),
@@ -296,7 +295,7 @@ class _RamowkaListItem extends StatelessWidget {
           ? context.colors.backgroundDarkSecondary
           : context.colors.backgroundDark.withOpacity(0.5),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+        padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -389,7 +388,7 @@ enum Day {
   saturday,
   sunday;
 
-  static Day fromString(String s) => values.byName(s);
+  static Day fromString(String s) => values.byName(s.toLowerCase());
 
   static Day today() =>
       fromString(DateFormat.EEEE().format(DateTime.now()).toLowerCase());
