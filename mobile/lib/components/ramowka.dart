@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:radioaktywne/components/color_shadowed_card.dart';
+import 'package:radioaktywne/components/ra_list_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 
 /// Widget representing Ramówka
@@ -187,19 +188,16 @@ class _RamowkaListState extends State<RamowkaList> {
   @override
   Widget build(BuildContext context) {
     final height = widget.rows * widget.rowHeight;
-    return SizedBox(
-      height: height,
-      child: FutureBuilder(
-        future: _ramowkaFuture,
-        builder: (context, snapshot) => RefreshIndicator(
-          color: context.colors.highlightGreen,
-          backgroundColor: context.colors.backgroundDark,
-          displacement: 0,
-          onRefresh: _updateRamowka,
-          child: snapshot.connectionState == ConnectionState.waiting
-              ? const _RamowkaWaiting()
-              : _decideRamowkaVariant(height),
-        ),
+    return FutureBuilder(
+      future: _ramowkaFuture,
+      builder: (context, snapshot) => RefreshIndicator(
+        color: context.colors.highlightGreen,
+        backgroundColor: context.colors.backgroundDark,
+        displacement: 0,
+        onRefresh: _updateRamowka,
+        child: snapshot.connectionState == ConnectionState.waiting
+            ? _RamowkaWaiting(height: height)
+            : _decideRamowkaVariant(height),
       ),
     );
   }
@@ -214,15 +212,52 @@ class _RamowkaListState extends State<RamowkaList> {
     }
   }
 
-  /// Constructs a [ListView] of [_RamowkaListItem]s.
-  ListView _ramowkaHasData() {
-    return ListView.builder(
-      itemCount: _ramowka.length,
-      itemBuilder: (context, index) => _RamowkaListItem(
-        index: index,
-        info: _ramowka[index],
-        rowHeight: widget.rowHeight,
-      ),
+  /// Constructs a [RaListWidget] of [_RamowkaListItem]s.
+  Widget _ramowkaHasData() {
+    return RaListWidget(
+      items: _ramowka
+          .map((e) => _RamowkaListItem(info: e, rowHeight: widget.rowHeight))
+          .toList(),
+      rows: widget.rows,
+      rowHeight: widget.rowHeight,
+    );
+  }
+}
+
+/// Represents a single [RamowkaList] entry.
+class _RamowkaListItem extends StatelessWidget {
+  const _RamowkaListItem({
+    required this.info,
+    required this.rowHeight,
+  });
+
+  final RamowkaInfo info;
+  final double rowHeight;
+
+  /// Calculates aspect ratio from screen width and
+  /// this widget's single row height
+  double aspectRatio(BuildContext context) =>
+      MediaQuery.of(context).size.width / rowHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        AspectRatio(
+          aspectRatio: aspectRatio(context),
+          child: Text(
+            info.title,
+            style: context.textStyles.textSmall,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        ),
+        Text(
+          info.startTime,
+          style: context.textStyles.textSmall,
+        ),
+      ],
     );
   }
 }
@@ -235,11 +270,11 @@ class _RamowkaNoData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Container(
-          alignment: Alignment.center,
-          height: height,
+    return RaListWidget(
+      rows: 1,
+      rowHeight: height,
+      items: [
+        Center(
           child: Text(
             'Wystąpił błąd podczas pobierania danych',
             style: context.textStyles.textSmall,
@@ -253,68 +288,27 @@ class _RamowkaNoData extends StatelessWidget {
 /// Variant of the [RamowkaWidget] containing
 /// a waiting animation
 class _RamowkaWaiting extends StatelessWidget {
-  const _RamowkaWaiting();
+  const _RamowkaWaiting({required this.height});
+
+  final double height;
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: 30,
-        height: 30,
-        child: CircularProgressIndicator(
-          color: context.colors.highlightGreen,
-          backgroundColor: context.colors.backgroundDark,
-        ),
-      ),
-    );
-  }
-}
-
-/// Represents a single [RamowkaList] entry.
-class _RamowkaListItem extends StatelessWidget {
-  const _RamowkaListItem({
-    required this.index,
-    required this.info,
-    required this.rowHeight,
-  });
-
-  final int index;
-  final double rowHeight;
-  final RamowkaInfo info;
-
-  /// Calculates aspect ratio from screen width and
-  /// this widget's single row height
-  double aspectRatio(BuildContext context) =>
-      MediaQuery.of(context).size.width / rowHeight;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: rowHeight,
-      color: index.isEven
-          ? context.colors.backgroundDarkSecondary
-          : context.colors.backgroundDark.withOpacity(0.5),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            AspectRatio(
-              aspectRatio: aspectRatio(context),
-              child: Text(
-                info.title,
-                style: context.textStyles.textSmall,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
+    return RaListWidget(
+      rows: 1,
+      rowHeight: height,
+      items: [
+        Center(
+          child: SizedBox(
+            width: 30,
+            height: 30,
+            child: CircularProgressIndicator(
+              color: context.colors.highlightGreen,
+              backgroundColor: context.colors.backgroundDark,
             ),
-            Text(
-              info.startTime,
-              style: context.textStyles.textSmall,
-            ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
@@ -394,18 +388,4 @@ enum Day {
       fromString(DateFormat.EEEE().format(DateTime.now()).toLowerCase());
 
   static Day tomorrow() => Day.values[(today().index + 1) % 7];
-}
-
-/// Adds methods to remove all trailing
-/// occurrences of a provided character from the String
-extension RemoveTrailing on String {
-  String removeTrailing(String char) {
-    assert(char.length == 1);
-    var index = length - 1;
-    while (index >= 0 && this[index] == char) {
-      --index;
-    }
-
-    return substring(0, index + 1);
-  }
 }

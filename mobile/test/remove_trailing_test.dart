@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:radioaktywne/components/ramowka.dart';
+import 'package:radioaktywne/extensions/extensions.dart';
 
 void main() {
   test("Test 1: removing bunch of trailing `0`'s", () {
