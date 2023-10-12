@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 
 /// A scrollable list widget with alternating-colored items
+///
+/// Can be reused for static ramowka widgets for
+/// different days of the week
 class RaListWidget extends StatelessWidget {
   const RaListWidget({
     super.key,
