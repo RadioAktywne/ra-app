@@ -176,11 +176,6 @@ class _RamowkaListState extends State<RamowkaList> {
             _ramowka.add(ramowkaTomorrow[i]);
           }
         }
-
-        /// Add empty fields to fill Ramowka to [rows] number of items
-        for (var i = _ramowka.length; i < widget.rows; i++) {
-          _ramowka.add(RamowkaInfo.empty());
-        }
       },
     );
   }
@@ -206,21 +201,21 @@ class _RamowkaListState extends State<RamowkaList> {
   /// based on the contents of [_ramowka].
   Widget _decideRamowkaVariant(double height) {
     if (_ramowka.isNotEmpty) {
-      return _ramowkaHasData();
+      return RaListWidget(
+        rows: widget.rows,
+        rowHeight: widget.rowHeight,
+        items: _ramowka
+            .map(
+              (ramowkaInfo) => _RamowkaListItem(
+                info: ramowkaInfo,
+                rowHeight: widget.rowHeight,
+              ),
+            )
+            .toList(),
+      );
     } else {
       return _RamowkaNoData(height: height);
     }
-  }
-
-  /// Constructs a [RaListWidget] of [_RamowkaListItem]s.
-  Widget _ramowkaHasData() {
-    return RaListWidget(
-      items: _ramowka
-          .map((e) => _RamowkaListItem(info: e, rowHeight: widget.rowHeight))
-          .toList(),
-      rows: widget.rows,
-      rowHeight: widget.rowHeight,
-    );
   }
 }
 
