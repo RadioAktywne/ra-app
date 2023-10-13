@@ -229,30 +229,42 @@ class _RamowkaListItem extends StatelessWidget {
   final RamowkaInfo info;
   final double rowHeight;
 
-  /// Calculates aspect ratio from screen width and
-  /// this widget's single row height
+  /// Calculates aspect ratio from screen width and this
+  /// widget's single row height used for max text length.
   double aspectRatio(BuildContext context) =>
       MediaQuery.of(context).size.width / rowHeight;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        AspectRatio(
-          aspectRatio: aspectRatio(context),
-          child: Text(
-            info.title,
-            style: context.textStyles.textSmall,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
+    return Padding(
+      padding: const EdgeInsets.only(left: 3),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              // TODO: Navigation to this Audycja
+              onTap: () {},
+              splashColor: context.colors.highlightGreen.withOpacity(0.3),
+              radius: 25,
+              child: AspectRatio(
+                aspectRatio: aspectRatio(context),
+                child: Text(
+                  info.title,
+                  style: context.textStyles.textSmall,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ),
+            ),
           ),
-        ),
-        Text(
-          info.startTime,
-          style: context.textStyles.textSmall,
-        ),
-      ],
+          Text(
+            info.startTime,
+            style: context.textStyles.textSmall,
+          ),
+        ],
+      ),
     );
   }
 }
