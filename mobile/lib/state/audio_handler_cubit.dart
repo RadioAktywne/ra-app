@@ -24,7 +24,4 @@ class AudioHandlerCubit extends Cubit<AudioHandler?> {
     emit(audioService);
   }
 
-  AudioHandler? get() {
-    return state;
-  }
 }
