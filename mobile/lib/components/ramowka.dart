@@ -55,9 +55,7 @@ class RamowkaWidget extends StatelessWidget {
                   children: [
                     GestureDetector(
                       // TODO: nagivation to Ramowka page
-                      onTap: () {
-                        // print("Tapped Ramowka");
-                      },
+                      onTap: () {},
                       child: Text(
                         'Ramówka',
                         style: context.textStyles.textMedium,
@@ -65,9 +63,7 @@ class RamowkaWidget extends StatelessWidget {
                     ),
                     GestureDetector(
                       // TODO: nagivation to Ramowka page
-                      onTap: () {
-                        // print("Clicked button");
-                      },
+                      onTap: () {},
                       child: Icon(
                         Icons.menu,
                         size: 28,
