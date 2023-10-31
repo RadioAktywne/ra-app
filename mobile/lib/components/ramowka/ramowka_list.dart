@@ -36,7 +36,7 @@ class RamowkaList extends HookWidget {
   static String get _currentTime =>
       DateFormat(DateFormat.HOUR24_MINUTE).format(DateTime.now());
 
-  Future<List<RamowkaInfo>> _updateRamowka() async {
+  Future<List<RamowkaInfo>> _fetchRamowka() async {
     final data = await _fetchData();
     final ramowka = _parseRamowka(data, _currentTime, Day.today());
 
@@ -89,7 +89,7 @@ class RamowkaList extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final ramowka = useState(<RamowkaInfo>[]);
-    final ramowkaFuture = useMemoized(_updateRamowka);
+    final ramowkaFuture = useMemoized(_fetchRamowka);
     final snapshot = useFuture(ramowkaFuture);
 
     /// Called only on the first time the widget
@@ -107,7 +107,7 @@ class RamowkaList extends HookWidget {
       color: context.colors.highlightGreen,
       backgroundColor: context.colors.backgroundDark,
       displacement: 0,
-      onRefresh: () async => ramowka.value = await _updateRamowka(),
+      onRefresh: () async => ramowka.value = await _fetchRamowka(),
       child: snapshot.connectionState == ConnectionState.waiting
           ? _RamowkaListWaiting(height: height)
           : _decideRamowkaVariant(ramowka.value),

@@ -15,5 +15,5 @@ enum Day {
   static Day today() =>
       fromString(DateFormat.EEEE().format(DateTime.now()).toLowerCase());
 
-  static Day tomorrow() => Day.values[(today().index + 1) % 7];
+  static Day tomorrow() => Day.values[(today().index + 1) % values.length];
 }
