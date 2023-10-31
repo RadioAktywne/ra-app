@@ -8,7 +8,7 @@ import 'package:radioaktywne/extensions/extensions.dart';
 /// Widget representing Ramówka
 ///
 /// Consists of a [ColorShadowedCard] with a header and
-/// a list of entries in Ramowka.
+/// a [RamowkaList] of Ramowka entries.
 class Ramowka extends StatelessWidget {
   const Ramowka({
     super.key,
@@ -74,7 +74,6 @@ class Ramowka extends StatelessWidget {
         ),
         child: RamowkaList(
           timeout: timeout,
-          dDataSource: dataSource,
         ),
       ),
     );
