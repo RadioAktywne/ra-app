@@ -2,24 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 
+/// Represents aplication's bottom navigation bar.
 class RaBottomNavigationBar extends HookWidget {
   const RaBottomNavigationBar({
     super.key,
-    this.startIndex = 0,
-    this.borderWidth = 5,
+    this.startIconIndex = 0,
+    this.borderWidth = 5.0,
   });
 
-  final int startIndex;
+  /// Specifies the index of the icon
+  /// that should be selected at first.
+  ///
+  /// This has to be a value greater than
+  /// or equal to 0 and less than the number
+  /// of icons (4).
+  final int startIconIndex;
+
+  /// Specifies the width of the green border
+  /// of the widget (5.0 on default).
   final double borderWidth;
 
-  // ? Leaving this as a reminder...
+  // Leaving this as a reminder...
   // static const labels = <String>['home', 'mic', 'album', 'article'];
   // static const widths = <double>[30, 21, 32.5, 27];
   // static const heights = <double>[26, 28.5, 32.5, 27];
 
   @override
   Widget build(BuildContext context) {
-    final currentIndex = useState(startIndex);
+    assert(startIconIndex >= 0 && startIconIndex < 4);
+    final currentIndex = useState(startIconIndex);
     return Container(
       padding: EdgeInsets.only(top: borderWidth),
       height: 50,
