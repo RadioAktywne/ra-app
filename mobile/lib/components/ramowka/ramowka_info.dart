@@ -3,13 +3,6 @@ import 'package:radioaktywne/resources/day.dart';
 
 /// Information about a single Ramowka entry.
 class RamowkaInfo {
-  const RamowkaInfo({
-    required this.title,
-    required this.startTime,
-    required this.endTime,
-    required this.day,
-  });
-
   /// Creates an empty [RamowkaInfo] object.
   RamowkaInfo.empty()
       : title = '',
