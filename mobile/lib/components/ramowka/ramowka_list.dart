@@ -124,7 +124,7 @@ class _RamowkaListState extends State<RamowkaList> {
         displacement: 0,
         onRefresh: _updateRamowka,
         child: snapshot.connectionState == ConnectionState.waiting
-            ? _RamowkaWaiting(height: height)
+            ? _RamowkaListWaiting(height: height)
             : _decideRamowkaVariant(height),
       ),
     );
@@ -147,8 +147,60 @@ class _RamowkaListState extends State<RamowkaList> {
             .toList(),
       );
     } else {
-      return _RamowkaNoData(height: height);
+      return _RamowkaListNoData(height: height);
     }
+  }
+}
+
+/// Variant of the [RamowkaList] containing
+/// a waiting animation.
+class _RamowkaListWaiting extends StatelessWidget {
+  const _RamowkaListWaiting({required this.height});
+
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return RaListWidget(
+      rows: 1,
+      rowHeight: height,
+      items: [
+        Center(
+          child: SizedBox(
+            width: 30,
+            height: 30,
+            child: CircularProgressIndicator(
+              color: context.colors.highlightGreen,
+              backgroundColor: context.colors.backgroundDark,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Empty variant of [RamowkaList] displayed when
+/// the data can't be loaded.
+class _RamowkaListNoData extends StatelessWidget {
+  const _RamowkaListNoData({required this.height});
+
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return RaListWidget(
+      rows: 1,
+      rowHeight: height,
+      items: [
+        Center(
+          child: Text(
+            'Wystąpił błąd podczas pobierania danych',
+            style: context.textStyles.textSmall,
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -198,58 +250,6 @@ class _RamowkaListItem extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-/// Empty variant of [RamowkaList] displayed when
-/// the data can't be loaded.
-class _RamowkaNoData extends StatelessWidget {
-  const _RamowkaNoData({required this.height});
-
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return RaListWidget(
-      rows: 1,
-      rowHeight: height,
-      items: [
-        Center(
-          child: Text(
-            'Wystąpił błąd podczas pobierania danych',
-            style: context.textStyles.textSmall,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// Variant of the [RamowkaList] containing
-/// a waiting animation.
-class _RamowkaWaiting extends StatelessWidget {
-  const _RamowkaWaiting({required this.height});
-
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return RaListWidget(
-      rows: 1,
-      rowHeight: height,
-      items: [
-        Center(
-          child: SizedBox(
-            width: 30,
-            height: 30,
-            child: CircularProgressIndicator(
-              color: context.colors.highlightGreen,
-              backgroundColor: context.colors.backgroundDark,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
