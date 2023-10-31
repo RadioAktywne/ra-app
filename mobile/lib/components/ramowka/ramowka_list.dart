@@ -38,15 +38,13 @@ class RamowkaList extends HookWidget {
 
   Future<List<RamowkaInfo>> _updateRamowka() async {
     final data = await _fetchData();
-    final currentTime = _currentTime;
-
-    final ramowka = _parseRamowka(data, currentTime, Day.today());
+    final ramowka = _parseRamowka(data, _currentTime, Day.today());
 
     /// Display Ramowka from the next day if current
     /// list's length is less than [rows] and it's
     /// past 20:00.
-    if (ramowka.length < rows && currentTime.compareTo('20:00') >= 0) {
-      final ramowkaTomorrow = _parseRamowka(data, currentTime, Day.tomorrow());
+    if (ramowka.length < rows && _currentTime.compareTo('20:00') >= 0) {
+      final ramowkaTomorrow = _parseRamowka(data, _currentTime, Day.tomorrow());
       for (var i = 0; i <= rows - ramowka.length; i++) {
         ramowka.add(ramowkaTomorrow[i]);
       }
@@ -99,14 +97,7 @@ class RamowkaList extends HookWidget {
     useEffect(
       () {
         ramowkaFuture.then((e) => ramowka.value = e);
-
-        /// TODO: consider
-        /// This can be used in the future to reset
-        /// [ramowka] to empty list on dismount (e.g. page change),
-        /// so it can be loaded on every navigation to this page:
-        /// ```dart
-        /// return () => ramowka.value = [];
-        /// ```
+        // nothing to dispose of
         return;
       },
       [],
