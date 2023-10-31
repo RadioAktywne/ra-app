@@ -6,16 +6,17 @@ import 'package:radioaktywne/extensions/build_context.dart';
 class RaBottomNavigationBar extends HookWidget {
   const RaBottomNavigationBar({
     super.key,
-    this.startIndex = 0,
+    this.startIconIndex = 0,
     this.borderWidth = 5.0,
   });
 
   /// Specifies the index of the icon
   /// that should be selected at first.
   ///
-  /// This has to be a value between 0 and
-  /// the number of icons.
-  final int startIndex;
+  /// This has to be a value greater than
+  /// or equal to 0 and less than the number
+  /// of icons (4).
+  final int startIconIndex;
 
   /// Specifies the width of the green border
   /// of the widget (5.0 on default).
@@ -28,8 +29,8 @@ class RaBottomNavigationBar extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    assert(startIndex >= 0 && startIndex < 4);
-    final currentIndex = useState(startIndex);
+    assert(startIconIndex >= 0 && startIconIndex < 4);
+    final currentIndex = useState(startIconIndex);
     return Container(
       padding: EdgeInsets.only(top: borderWidth),
       height: 50,

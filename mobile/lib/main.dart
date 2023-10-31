@@ -4,7 +4,7 @@ import 'package:radioaktywne/components/color_shadowed_card.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
 import 'package:radioaktywne/components/ra_bottomnavbar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
-import 'package:radioaktywne/components/ramowka.dart';
+import 'package:radioaktywne/components/ramowka/ramowka.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 
@@ -92,7 +92,7 @@ class MainApp extends HookWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 /// Ramówka widget
-                const RamowkaWidget(),
+                const Ramowka(),
 
                 /// Old Ramowka
                 Padding(
