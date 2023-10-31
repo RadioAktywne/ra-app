@@ -126,22 +126,22 @@ class RamowkaList extends HookWidget {
   /// Decides, which variant of [RamowkaList] to render
   /// based on the contents of [ramowka] future.
   Widget _decideRamowkaVariant(List<RamowkaInfo> ramowka) {
-    if (ramowka.isNotEmpty) {
-      return RaListWidget(
-        rows: rows,
-        rowHeight: rowHeight,
-        items: ramowka
-            .map(
-              (ramowkaInfo) => _RamowkaListItem(
-                info: ramowkaInfo,
-                rowHeight: rowHeight,
-              ),
-            )
-            .toList(),
-      );
-    } else {
+    if (ramowka.isEmpty) {
       return _RamowkaListNoData(height: height);
     }
+
+    return RaListWidget(
+      rows: rows,
+      rowHeight: rowHeight,
+      items: ramowka
+          .map(
+            (ramowkaInfo) => _RamowkaListItem(
+              info: ramowkaInfo,
+              rowHeight: rowHeight,
+            ),
+          )
+          .toList(),
+    );
   }
 }
 
