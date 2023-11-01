@@ -15,7 +15,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     // playback state changes as they happen via playbackState...
     _player.playbackEventStream.map(_transformEvent).pipe(playbackState);
     // ... and also the current media item via mediaItem.
-    mediaItem.add(_item);
+    mediaItem.add(mediaItemTemplate);
 
     // Change stream title and subtitle based on IcyMetadata
     _player.icyMetadataStream.listen((event) {
@@ -26,26 +26,15 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
         print('stream title: $streamTitle');
       }
 
-      var mediaItemValue = mediaItem.value ??
-          const MediaItem(
-            id: 'https://listen.radioaktywne.pl:8443/raogg',
-            title: 'Stream title not provided', // TODO: zmienić na 'Radio Aktywne'
-            album: 'Stream name not provided', // TODO: zmienić na 'Radio Aktywne'
-          );
+      var mediaItemValue = mediaItem.value ?? mediaItemTemplate;
       if (streamName.isNotEmpty) {
         mediaItemValue = mediaItemValue.copyWith(
           album: streamName,
-          // album: streamName.isNotEmpty
-          //     ? streamName
-          //     : 'Stream name not provided',
         );
       }
       if (streamTitle.isNotEmpty) {
         mediaItemValue = mediaItemValue.copyWith(
           title: streamTitle,
-          // title: streamTitle.isNotEmpty
-          //     ? streamTitle
-          //     : 'Stream title not provided',
         );
       }
       mediaItem.add(mediaItemValue);
@@ -58,20 +47,15 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
         return;
       }
 
-      final mediaItemValue = mediaItem.value ??
-          const MediaItem(
-            id: 'https://listen.radioaktywne.pl:8443/raogg',
-            title: '',
-          );
-
+      final mediaItemValue = mediaItem.value ?? mediaItemTemplate;
       mediaItem.add(mediaItemValue.copyWith(title: streamTitle));
     });
   }
 
-  static final _item = MediaItem(
+  static final mediaItemTemplate = MediaItem(
     id: 'https://listen.radioaktywne.pl:8443/raogg',
-    title: 'Radio Aktywne',
-    album: 'Radio Aktywne',
+    title: 'Stream title not provided',  // TODO: zmienić na 'Radio Aktywne'
+    album: 'Stream name not provided',  // TODO: zmienić na 'Radio Aktywne'
     artUri: Uri.parse(
       'https://cdn-profiles.tunein.com/s10187/images/logod.png',
     ),
@@ -95,7 +79,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     // when user would press 'play' for the first time, he would hear the
     // stream starting from the moment he launched the app, not when he pressed
     // 'play'.
-    await _player.setAudioSource(AudioSource.uri(Uri.parse(_item.id)));
+    await _player.setAudioSource(AudioSource.uri(Uri.parse(mediaItemTemplate.id)));
     return _player.play();
   }
 

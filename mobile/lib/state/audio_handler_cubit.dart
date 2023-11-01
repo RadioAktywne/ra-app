@@ -23,5 +23,4 @@ class AudioHandlerCubit extends Cubit<AudioHandler?> {
     // setting proper AudioService object as state, notifying listeners
     emit(audioService);
   }
-
 }
