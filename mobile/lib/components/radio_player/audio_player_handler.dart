@@ -6,10 +6,9 @@ import 'package:radioaktywne/components/radio_player/stream_title_workaround.dar
 /// An [AudioHandler] for playing a single item.
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   /// Initialise the audio handler.
-  AudioPlayerHandler():
-    _player = AudioPlayer(),
-    streamTitleWorkaround = StreamTitleWorkaround()
-  {
+  AudioPlayerHandler()
+      : _player = AudioPlayer(),
+        streamTitleWorkaround = StreamTitleWorkaround() {
     // So that our clients (the Flutter UI and the system notification) know
     // what state to display, here we set up our audio handler to broadcast all
     // playback state changes as they happen via playbackState...
@@ -54,14 +53,15 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   static final mediaItemTemplate = MediaItem(
     id: 'https://listen.radioaktywne.pl:8443/raogg',
-    title: 'Stream title not provided',  // TODO: zmienić na 'Radio Aktywne'
-    album: 'Stream name not provided',  // TODO: zmienić na 'Radio Aktywne'
+    title: 'Stream title not provided', // TODO: zmienić na 'Radio Aktywne'
+    album: 'Stream name not provided', // TODO: zmienić na 'Radio Aktywne'
     artUri: Uri.parse(
       'https://cdn-profiles.tunein.com/s10187/images/logod.png',
     ),
   );
 
   final AudioPlayer _player;
+
   /// Workaround for stream title fetching
   final StreamTitleWorkaround streamTitleWorkaround;
 
@@ -79,7 +79,8 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     // when user would press 'play' for the first time, he would hear the
     // stream starting from the moment he launched the app, not when he pressed
     // 'play'.
-    await _player.setAudioSource(AudioSource.uri(Uri.parse(mediaItemTemplate.id)));
+    await _player
+        .setAudioSource(AudioSource.uri(Uri.parse(mediaItemTemplate.id)));
     return _player.play();
   }
 

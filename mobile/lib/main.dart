@@ -70,170 +70,175 @@ class MainApp extends HookWidget {
               key: _scaffoldKey,
               drawerScrimColor: context.colors.drawerBackgroundOverlay,
               onEndDrawerChanged: (isOpened) => isOpened
-              ? burgerMenuIconController.forward()
+                  ? burgerMenuIconController.forward()
                   : burgerMenuIconController.reverse(),
               endDrawer: RaBurgerMenu(
-              titles: const [
-              'Radio Aktywne',
-              'Nagrania',
-              'Płyta tygodnia',
-              'Publicystyka',
-              'Radiowcy',
-              'Ramówka',
-              'Audycje',
-              'O nas',
-              ],
-              links: [
-              () {},
-              () {},
-              () {},
-              () {},
-              () {},
-              () {},
-              () {},
-              () {},
-              ],
-            ),
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                /// Ramówka widget
-                const Ramowka(),
+                titles: const [
+                  'Radio Aktywne',
+                  'Nagrania',
+                  'Płyta tygodnia',
+                  'Publicystyka',
+                  'Radiowcy',
+                  'Ramówka',
+                  'Audycje',
+                  'O nas',
+                ],
+                links: [
+                  () {},
+                  () {},
+                  () {},
+                  () {},
+                  () {},
+                  () {},
+                  () {},
+                  () {},
+                ],
+              ),
+              body: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  /// Ramówka widget
+                  const Ramowka(),
 
-                /// Old Ramowka
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: ColorShadowedCard(
-                    shadowColor: context.colors.highlightYellow,
-                    header: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: Text(
-                        'Ramówka na dziś',
-                        style: context.textStyles.textMedium,
+                  /// Old Ramowka
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: ColorShadowedCard(
+                      shadowColor: context.colors.highlightYellow,
+                      header: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Text(
+                          'Ramówka na dziś',
+                          style: context.textStyles.textMedium,
+                        ),
                       ),
-                    ),
-                    footer: Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: const BoxDecoration(
-                                color: Colors.grey,
-                                shape: BoxShape.circle,
+                      footer: Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 2),
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: Colors.grey,
+                                  shape: BoxShape.circle,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 2),
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: const BoxDecoration(
-                                color: Colors.grey,
-                                shape: BoxShape.circle,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 2),
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: Colors.grey,
+                                  shape: BoxShape.circle,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      child: Text(
-                        'Lorem ipsum',
-                        style: context.textStyles.textSmall,
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Text(
+                          'Lorem ipsum',
+                          style: context.textStyles.textSmall,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: ColorShadowedCard(
-                            shadowColor: context.colors.highlightPurple,
-                            header: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2),
-                              child: Text(
-                                'Nagłówek',
-                                style: context.textStyles.textMedium,
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: ColorShadowedCard(
+                              shadowColor: context.colors.highlightPurple,
+                              header: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 2),
+                                child: Text(
+                                  'Nagłówek',
+                                  style: context.textStyles.textMedium,
+                                ),
                               ),
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.all(20),
-                              child: Text(
-                                'Lorem ipsum',
-                                style: context.textStyles.textSmall,
+                              child: Container(
+                                padding: const EdgeInsets.all(20),
+                                child: Text(
+                                  'Lorem ipsum',
+                                  style: context.textStyles.textSmall,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: ColorShadowedCard(
-                            shadowColor: context.colors.highlightBlue,
-                            footer: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2),
-                              child: Text(
-                                'Stopka',
-                                style: context.textStyles.textSmall,
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: ColorShadowedCard(
+                              shadowColor: context.colors.highlightBlue,
+                              footer: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 2),
+                                child: Text(
+                                  'Stopka',
+                                  style: context.textStyles.textSmall,
+                                ),
                               ),
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.all(20),
-                              child: Text(
-                                'Lorem ipsum',
-                                style: context.textStyles.textSmall,
+                              child: Container(
+                                padding: const EdgeInsets.all(20),
+                                child: Text(
+                                  'Lorem ipsum',
+                                  style: context.textStyles.textSmall,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: ColorShadowedCard(
-                    shadowColor: context.colors.highlightRed,
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      child: Text(
-                        'hello world',
-                        style: context.textStyles.textSmall,
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: ColorShadowedCard(
+                      shadowColor: context.colors.highlightRed,
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Text(
+                          'hello world',
+                          style: context.textStyles.textSmall,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const RadioAudioService(),
-              ],
-
+                  const RadioAudioService(),
+                ],
+              ),
+              bottomNavigationBar: const RaBottomNavigationBar(),
             ),
-            bottomNavigationBar: const RaBottomNavigationBar(),
           ),
         ),
       ),
