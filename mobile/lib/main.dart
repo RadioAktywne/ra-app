@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/color_shadowed_card.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
 import 'package:radioaktywne/components/ra_bottomnavbar.dart';
@@ -218,20 +218,6 @@ class MainApp extends HookWidget {
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    child: ColorShadowedCard(
-                      shadowColor: context.colors.highlightRed,
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        child: Text(
-                          'hello world',
-                          style: context.textStyles.textSmall,
-                        ),
-                      ),
                     ),
                   ),
                   const RadioAudioService(),
