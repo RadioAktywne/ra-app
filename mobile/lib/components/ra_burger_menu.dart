@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 
+/// Represents the burger menu contained
+/// in the right side drawer.
 class RaBurgerMenu extends HookWidget {
   const RaBurgerMenu({
     super.key,
@@ -12,13 +14,16 @@ class RaBurgerMenu extends HookWidget {
     this.selectedIndex = 0,
   });
 
-  // ? Item titles
+  /// Titles for menu items
   final List<String> titles;
-  // ? Navigation links
+
+  /// Navigation links
   final List<void Function()> links;
-  // ? Burger menu border width
+
+  /// Burger menu border width
   final double borderWidth;
-  // ? Selected page index
+
+  /// Index of the currently selected page
   final int selectedIndex;
 
   List<RaBurgerMenuItem> _makeList(
@@ -73,6 +78,7 @@ class RaBurgerMenu extends HookWidget {
   }
 }
 
+/// Represents a single item in the burger menu
 class RaBurgerMenuItem extends StatelessWidget {
   const RaBurgerMenuItem({
     super.key,
@@ -114,9 +120,7 @@ class RaBurgerMenuItem extends StatelessWidget {
               width: chosen ? 18 : 6,
               height: 38,
               color: color,
-              // Define how long the animation should take.
               duration: const Duration(milliseconds: 200),
-              // Provide an optional curve to make the animation feel smoother.
               curve: Curves.fastOutSlowIn,
             ),
           ],
@@ -124,5 +128,4 @@ class RaBurgerMenuItem extends StatelessWidget {
       ),
     );
   }
-  // final String routeName;
 }
