@@ -9,7 +9,6 @@ environment:
 
 dependencies:
   async: ^2.10.0
-  audio_service: ^0.18.10
   collection: ^1.17.0
   cupertino_icons: ^1.0.2
   flutter:
@@ -60,6 +59,7 @@ flutter_launcher_icons:
   adaptive_icon_background: "#302318"
   adaptive_icon_foreground: "assets/ra_logo/RA_logo_transparent_108px.png"
   remove_alpha_ios: true
+
 flutter:
   uses-material-design: true
   assets:

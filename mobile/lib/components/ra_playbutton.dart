@@ -16,7 +16,6 @@ class RaPlayButton extends HookWidget {
 
   /// Size of the button (in pixels).
   final double size;
-
   final void Function() onPressed;
 
   /// Duration of the shrink animation applied
@@ -64,6 +63,7 @@ class RaPlayButton extends HookWidget {
 // TODO: for 1s after 'play' is pressed, the app lacks visual feedback of this.
 // TODO: Loading indication of some kind is needed.
 
+/// Image appropriate to the state of the widget.
 class _PlayButtonImage extends HookWidget {
   _PlayButtonImage({
     this.playing = false,
