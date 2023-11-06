@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/color_shadowed_card.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
@@ -6,6 +7,10 @@ import 'package:radioaktywne/components/ra_bottomnavbar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
+import 'package:radioaktywne/state/audio_handler_cubit.dart';
+
+import 'components/radio_player/radio_audio_service.dart';
+import 'components/ramowka/ramowka.dart';
 
 void main() {
   runApp(MainApp());
@@ -22,7 +27,7 @@ class MainApp extends HookWidget {
       duration: const Duration(milliseconds: 450),
       reverseDuration: const Duration(milliseconds: 250),
     );
-    
+
     return MaterialApp(
       theme: context.theme,
       locale: const Locale('pl'),
