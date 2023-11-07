@@ -4,19 +4,19 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_list_widget.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_info.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/resources/day.dart';
 
-/// List of Ramowka entries.
-class RamowkaList extends StatefulWidget {
+/// Widget representing a list of Ramowka entries.
+class RamowkaList extends HookWidget {
   const RamowkaList({
     super.key,
     required this.timeout,
     this.rows = 7,
     this.rowHeight = 22.0,
-    this.dDataSource,
   });
 
   /// Timeout for the fetching function.
@@ -28,18 +28,6 @@ class RamowkaList extends StatefulWidget {
   /// Single row's height
   final double rowHeight;
 
-  /// Optional external data source to fill
-  /// the list, pulled from the radioaktywne.pl api on default.
-  final Future<void>? dDataSource;
-
-  @override
-  State<RamowkaList> createState() => _RamowkaListState();
-}
-
-class _RamowkaListState extends State<RamowkaList> {
-  Future<void>? _ramowkaFuture;
-  List<RamowkaInfo> _ramowka = [];
-
   static final Uri _url = Uri.parse(
     'https://radioaktywne.pl/wp-json/wp/v2/event?_embed=true&page=1&per_page=100',
   );
@@ -48,32 +36,21 @@ class _RamowkaListState extends State<RamowkaList> {
   static String get _currentTime =>
       DateFormat(DateFormat.HOUR24_MINUTE).format(DateTime.now());
 
-  Future _updateRamowka() async {
-    /// Debug: you can plug external data source in to test the widget
-    if (widget.dDataSource != null) {
-      return;
+  Future<List<RamowkaInfo>> _fetchRamowka() async {
+    final data = await _fetchData();
+    final ramowka = _parseRamowka(data, _currentTime, Day.today());
+
+    /// Display Ramowka from the next day if current
+    /// list's length is less than [rows] and it's
+    /// past 20:00.
+    if (ramowka.length < rows && _currentTime.compareTo('20:00') >= 0) {
+      final ramowkaTomorrow = _parseRamowka(data, _currentTime, Day.tomorrow());
+      for (var i = 0; i <= rows - ramowka.length; i++) {
+        ramowka.add(ramowkaTomorrow[i]);
+      }
     }
 
-    final data = await _fetchData();
-    final currentTime = _currentTime;
-
-    setState(
-      () {
-        _ramowka = _parseRamowka(data, currentTime, Day.today());
-
-        /// Display Ramowka from the next day if current
-        /// list's length is less than [rows] and it's
-        /// past 20:00.
-        if (_ramowka.length < widget.rows &&
-            currentTime.compareTo('20:00') >= 0) {
-          final ramowkaTomorrow =
-              _parseRamowka(data, currentTime, Day.tomorrow());
-          for (var i = 0; i <= widget.rows - _ramowka.length; i++) {
-            _ramowka.add(ramowkaTomorrow[i]);
-          }
-        }
-      },
-    );
+    return ramowka;
   }
 
   Future<Iterable<RamowkaInfo>> _fetchData() async {
@@ -82,7 +59,7 @@ class _RamowkaListState extends State<RamowkaList> {
           _url,
           headers: _headers,
         )
-        .timeout(widget.timeout);
+        .timeout(timeout);
 
     final jsonData = jsonDecode(response.body) as List<dynamic>;
 
@@ -107,48 +84,55 @@ class _RamowkaListState extends State<RamowkaList> {
           )
           .sorted((a, b) => a.startTime.compareTo(b.startTime));
 
-  @override
-  void initState() {
-    _ramowkaFuture = widget.dDataSource ?? Future<void>(_updateRamowka);
-    super.initState();
-  }
+  double get height => rows * rowHeight;
 
   @override
   Widget build(BuildContext context) {
-    final height = widget.rows * widget.rowHeight;
-    return FutureBuilder(
-      future: _ramowkaFuture,
-      builder: (context, snapshot) => RefreshIndicator(
-        color: context.colors.highlightGreen,
-        backgroundColor: context.colors.backgroundDark,
-        displacement: 0,
-        onRefresh: _updateRamowka,
-        child: snapshot.connectionState == ConnectionState.waiting
-            ? _RamowkaListWaiting(height: height)
-            : _decideRamowkaVariant(height),
-      ),
+    final ramowka = useState(<RamowkaInfo>[]);
+    final ramowkaFuture = useMemoized(_fetchRamowka);
+    final snapshot = useFuture(ramowkaFuture);
+
+    /// Called only on the first time the widget
+    /// is rendered, because of the empty list argument.
+    useEffect(
+      () {
+        ramowkaFuture.then((e) => ramowka.value = e);
+        // nothing to dispose of
+        return;
+      },
+      [],
+    );
+
+    return RefreshIndicator(
+      color: context.colors.highlightGreen,
+      backgroundColor: context.colors.backgroundDark,
+      displacement: 0,
+      onRefresh: () async => ramowka.value = await _fetchRamowka(),
+      child: snapshot.connectionState == ConnectionState.waiting
+          ? _RamowkaListWaiting(height: height)
+          : _decideRamowkaVariant(ramowka.value),
     );
   }
 
   /// Decides, which variant of [RamowkaList] to render
-  /// based on the contents of [_ramowka] future.
-  Widget _decideRamowkaVariant(double height) {
-    if (_ramowka.isNotEmpty) {
-      return RaListWidget(
-        rows: widget.rows,
-        rowHeight: widget.rowHeight,
-        items: _ramowka
-            .map(
-              (ramowkaInfo) => _RamowkaListItem(
-                info: ramowkaInfo,
-                rowHeight: widget.rowHeight,
-              ),
-            )
-            .toList(),
-      );
-    } else {
+  /// based on the contents of [ramowka] future.
+  Widget _decideRamowkaVariant(List<RamowkaInfo> ramowka) {
+    if (ramowka.isEmpty) {
       return _RamowkaListNoData(height: height);
     }
+
+    return RaListWidget(
+      rows: rows,
+      rowHeight: rowHeight,
+      items: ramowka
+          .map(
+            (ramowkaInfo) => _RamowkaListItem(
+              info: ramowkaInfo,
+              rowHeight: rowHeight,
+            ),
+          )
+          .toList(),
+    );
   }
 }
 

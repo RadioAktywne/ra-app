@@ -5,12 +5,12 @@ import 'package:radioaktywne/components/color_shadowed_card.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
 import 'package:radioaktywne/components/ra_bottomnavbar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
-import 'package:radioaktywne/components/ramowka/ramowka.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
 import 'components/radio_player/radio_audio_service.dart';
+import 'components/ramowka/ramowka.dart';
 
 void main() {
   runApp(MainApp());
