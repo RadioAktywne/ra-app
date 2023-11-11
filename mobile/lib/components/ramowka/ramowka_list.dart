@@ -46,7 +46,11 @@ class RamowkaList extends HookWidget {
     if (ramowka.length < rows && _currentTime.compareTo('20:00') >= 0) {
       final ramowkaTomorrow = _parseRamowka(data, _currentTime, Day.tomorrow());
       for (var i = 0; i <= rows - ramowka.length; i++) {
-        ramowka.add(ramowkaTomorrow[i]);
+        try {
+          ramowka.add(ramowkaTomorrow[i]);
+        } catch (e) {
+          break;
+        }
       }
     }
 
