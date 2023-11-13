@@ -11,7 +11,7 @@ import 'package:radioaktywne/l10n/localizations.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
 import 'components/radio_player/radio_player_widget.dart';
-import 'components/ramowka/ramowka.dart';
+import 'components/ramowka/ramowka_widget.dart';
 
 void main() {
   /// Setup so the orientation stays in portrait mode

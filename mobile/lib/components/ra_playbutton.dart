@@ -100,7 +100,7 @@ class _RaPlayButtonImage extends StatelessWidget {
   }
 }
 
-/// Animated playing variant of the button.
+/// Animated playing variant of the [RaPlayButton].
 ///
 /// Displayed when the stream is in [AudioProcessingState.ready] state.
 class _RaPlayButtonImagePlaying extends StatelessWidget {
