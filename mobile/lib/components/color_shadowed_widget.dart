@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:radioaktywne/components/shadowed_container.dart';
 
 class ColorShadowedWidget extends StatelessWidget {
   const ColorShadowedWidget({
@@ -16,11 +17,12 @@ class ColorShadowedWidget extends StatelessWidget {
       child: IntrinsicHeight(
         child: Stack(
           children: <Widget>[
-            const ShadowedContainer(
-              margin: EdgeInsets.only(
+            ShadowedContainer(
+              margin: const EdgeInsets.only(
                 left: 6,
                 bottom: 6,
               ),
+              shadowColor: shadowColor,
             ),
             Container(
               margin: const EdgeInsets.only(
@@ -32,48 +34,6 @@ class ColorShadowedWidget extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class ShadowedContainer extends StatelessWidget {
-  const ShadowedContainer({
-    super.key,
-    this.child,
-    this.width,
-    this.height,
-    this.size,
-    this.margin,
-    this.padding,
-    this.shape,
-  });
-
-  final Widget? child;
-
-  final double? width;
-  final double? height;
-  final double? size;
-  final EdgeInsets? margin;
-  final EdgeInsets? padding;
-  final BoxShape? shape;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size ?? width,
-      height: size ?? height,
-      margin: margin,
-      padding: padding,
-      decoration: const BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black38,
-            blurRadius: 5,
-            offset: Offset(0, 5),
-          ),
-        ],
-      ),
-      child: child,
     );
   }
 }

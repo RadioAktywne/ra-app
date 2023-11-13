@@ -5,7 +5,7 @@ import 'package:radioaktywne/extensions/extensions.dart';
 
 /// A scrollable list widget with alternating-colored items
 ///
-/// Can be reused for ramowka widgets for different
+/// Can be reused for Ramowka widgets of different
 /// days of the week
 class RaListWidget extends StatelessWidget {
   const RaListWidget({
@@ -25,11 +25,9 @@ class RaListWidget extends StatelessWidget {
   final double rowHeight;
 
   /// Calculate current color from current index in the list
-  Color _color(BuildContext context, int index) {
-    return index.isEven
-        ? context.colors.backgroundDarkSecondary
-        : context.colors.backgroundDark.withOpacity(0.5);
-  }
+  Color _color(BuildContext context, int index) => index.isEven
+      ? context.colors.backgroundDarkSecondary
+      : context.colors.backgroundDark.withOpacity(0.5);
 
   @override
   Widget build(BuildContext context) {
@@ -38,19 +36,11 @@ class RaListWidget extends StatelessWidget {
       height: height,
       child: ListView.builder(
         itemCount: max(items.length, rows),
-        itemBuilder: (context, index) {
-          Widget item;
-          try {
-            item = items.elementAt(index);
-          } catch (ignore) {
-            item = const SizedBox.shrink();
-          }
-          return _RaListWidgetItem(
-            item: item,
-            color: _color(context, index),
-            rowHeight: rowHeight,
-          );
-        },
+        itemBuilder: (context, index) => _RaListWidgetItem(
+          item: items[index],
+          color: _color(context, index),
+          rowHeight: rowHeight,
+        ),
       ),
     );
   }

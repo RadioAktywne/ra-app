@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/color_shadowed_card.dart';
@@ -9,17 +10,29 @@ import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
-import 'components/radio_player/radio_audio_service.dart';
+import 'components/radio_player/radio_player_widget.dart';
 import 'components/ramowka/ramowka.dart';
 
 void main() {
-  runApp(MainApp());
+  /// Setup so the orientation stays in portrait mode
+  ///
+  /// Also, in the AndroidManifest.xml file,
+  /// added a line: `android:screenOrientation="portrait"`
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) => runApp(MainApp()));
 }
 
 class MainApp extends HookWidget {
   MainApp({super.key});
 
   final _scaffoldKey = GlobalKey<ScaffoldState>(debugLabel: 'Inner scaffold');
+  static const _widgetPadding = EdgeInsets.symmetric(
+    vertical: 8,
+    horizontal: 16,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +41,7 @@ class MainApp extends HookWidget {
       reverseDuration: const Duration(milliseconds: 250),
     );
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: context.theme,
       locale: const Locale('pl'),
       supportedLocales: context.supportedLocales,
@@ -67,6 +81,7 @@ class MainApp extends HookWidget {
             ),
             body: Scaffold(
               key: _scaffoldKey,
+              backgroundColor: context.colors.backgroundLight,
               drawerScrimColor: context.colors.drawerBackgroundOverlay,
               onEndDrawerChanged: (isOpened) => isOpened
                   ? burgerMenuIconController.forward()
@@ -100,12 +115,14 @@ class MainApp extends HookWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       /// Ramówka widget
-                      const Ramowka(),
+                      const Padding(
+                        padding: _widgetPadding,
+                        child: RamowkaWidget(),
+                      ),
 
                       /// Old Ramowka
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
+                        padding: _widgetPadding,
                         child: ColorShadowedCard(
                           shadowColor: context.colors.highlightYellow,
                           header: Padding(
@@ -169,8 +186,7 @@ class MainApp extends HookWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 8),
+                        padding: _widgetPadding,
                         child: Row(
                           children: [
                             Expanded(
@@ -226,14 +242,16 @@ class MainApp extends HookWidget {
                       ),
                     ],
                   ),
+
+                  /// Radio player widget
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: RadioAudioService(),
+                    child: RadioPlayerWidget(),
                   ),
                 ],
               ),
-              bottomNavigationBar: const RaBottomNavigationBar(),
             ),
+            bottomNavigationBar: const RaBottomNavigationBar(),
           ),
         ),
       ),
