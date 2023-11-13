@@ -90,6 +90,7 @@ class _RaPlayButtonImage extends StatelessWidget {
           AudioProcessingState.loading ||
           AudioProcessingState.buffering =>
             _RaPlayButtonImageLoading(size: size),
+          // TODO: Add triangular shadow
           _ => _pauseIcon,
         },
       ),
