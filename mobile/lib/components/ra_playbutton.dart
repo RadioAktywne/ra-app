@@ -25,12 +25,14 @@ class RaPlayButton extends HookWidget {
   final void Function() onPressed;
 
   /// State of the audio player
+  ///
+  /// Default: [AudioProcessingState.idle]
   final AudioProcessingState audioProcessingState;
 
   /// Duration of the shrink animation applied
-  /// to the button on play/pause.
+  /// to the button on play/pause
   ///
-  /// Default: 150 ms.
+  /// Default: 150 ms
   final Duration shrinkAnimationDuration;
 
   @override
