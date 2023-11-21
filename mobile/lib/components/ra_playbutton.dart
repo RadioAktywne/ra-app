@@ -100,7 +100,7 @@ class _RaPlayButtonImage extends StatelessWidget {
   }
 }
 
-/// Animated playing variant of the [RaPlayButton].
+/// Animated playing variant of the button.
 ///
 /// Displayed when the stream is in [AudioProcessingState.ready] state.
 class _RaPlayButtonImagePlaying extends StatelessWidget {
@@ -115,7 +115,7 @@ class _RaPlayButtonImagePlaying extends StatelessWidget {
   /// values should it interpolate
   static final _tween = Tween<double>(begin: 0, end: 2);
 
-  /// Image while playing.
+  /// Image while playing
   static final _playIcon = const SvgGenImage('assets/icons/play.svg').svg();
 
   @override
@@ -164,12 +164,13 @@ class _RaPlayButtonImageLoading extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(
-          width: size - 11,
-          height: size - 11,
+        Container(
+          padding: const EdgeInsets.all(5),
+          width: size,
+          height: size,
           child: CircularProgressIndicator(
             color: context.colors.highlightRed,
-            strokeWidth: 2,
+            strokeWidth: 1.7,
           ),
         ),
       ],
