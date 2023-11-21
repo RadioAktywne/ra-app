@@ -1,7 +1,10 @@
 import 'dart:math';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
+import 'package:radioaktywne/components/shadowed_container.dart';
+import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/resources/assets.gen.dart';
 import 'package:simple_animations/simple_animations.dart';
 
@@ -11,26 +14,29 @@ class RaPlayButton extends HookWidget {
     super.key,
     required this.size,
     required this.onPressed,
+    this.audioProcessingState = AudioProcessingState.idle,
     this.shrinkAnimationDuration = const Duration(milliseconds: 150),
   });
 
   /// Size of the button (in pixels).
   final double size;
+
+  /// Action called every time the button is pressed
   final void Function() onPressed;
 
-  /// Duration of the shrink animation applied
-  /// to the button on play/pause.
+  /// State of the audio player
   ///
-  /// Default: 150 ms.
+  /// Default: [AudioProcessingState.idle]
+  final AudioProcessingState audioProcessingState;
+
+  /// Duration of the shrink animation applied
+  /// to the button on play/pause
+  ///
+  /// Default: 150 ms
   final Duration shrinkAnimationDuration;
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Refactor RAPlayButton state so that it depends on (listens to)
-    // TODO: radio stream processing state
-    // hint: check implementation of processing state in RadioAudioService
-    // widget with BlockBuilder and StreamBuilder.
-    final playing = useState(false);
     final sizeSlider = useState(size);
 
     return Container(
@@ -39,10 +45,11 @@ class RaPlayButton extends HookWidget {
       alignment: Alignment.center,
       child: GestureDetector(
         onTap: () async {
-          onPressed();
           sizeSlider.value = 0.0;
+
           await Future<dynamic>.delayed(shrinkAnimationDuration);
-          playing.value = !playing.value;
+          onPressed();
+
           sizeSlider.value = size;
         },
         child: AnimatedContainer(
@@ -50,8 +57,9 @@ class RaPlayButton extends HookWidget {
           duration: shrinkAnimationDuration,
           width: sizeSlider.value,
           height: sizeSlider.value,
-          child: _PlayButtonImage(
-            playing: playing.value,
+          child: _RaPlayButtonImage(
+            size: size,
+            audioProcessingState: audioProcessingState,
           ),
         ),
       ),
@@ -59,45 +67,113 @@ class RaPlayButton extends HookWidget {
   }
 }
 
-// TODO: Rethink RAPlayButton with loading animation in mind. Stream is loading
-// TODO: for 1s after 'play' is pressed, the app lacks visual feedback of this.
-// TODO: Loading indication of some kind is needed.
-
-/// Image appropriate to the state of the widget.
-class _PlayButtonImage extends HookWidget {
-  _PlayButtonImage({
-    this.playing = false,
+/// Image appropriate to the state of the audio player.
+class _RaPlayButtonImage extends StatelessWidget {
+  const _RaPlayButtonImage({
+    required this.size,
+    this.audioProcessingState = AudioProcessingState.idle,
   });
 
-  // TODO: use some sort of enum instead of bool for describing state.
-  // Could use AudioProcessingState from audio_service directly.
-  final bool playing;
+  /// Size of every variation of the button
+  final double size;
 
-  final _tween = Tween<double>(begin: 0, end: 2);
+  /// State of the audio player
+  final AudioProcessingState audioProcessingState;
 
   /// Image while paused.
-  static final _pause = const SvgGenImage('assets/icons/pause.svg').svg();
-
-  /// Image while playing.
-  static final _play = const SvgGenImage('assets/icons/play.svg').svg();
+  static final _pauseIcon = const SvgGenImage('assets/icons/pause.svg').svg();
 
   @override
   Widget build(BuildContext context) {
     return FittedBox(
       child: Center(
-        child: playing
-            ? LoopAnimationBuilder(
-                builder: (context, value, child) {
-                  return Transform.rotate(
-                    angle: pi * value,
-                    child: _play,
-                  );
-                },
-                duration: const Duration(seconds: 6),
-                tween: _tween,
-              )
-            : _pause,
+        child: switch (audioProcessingState) {
+          AudioProcessingState.ready => _RaPlayButtonImagePlaying(size: size),
+          AudioProcessingState.loading ||
+          AudioProcessingState.buffering =>
+            _RaPlayButtonImageLoading(size: size),
+          // TODO: Add triangular shadow
+          _ => _pauseIcon,
+        },
       ),
+    );
+  }
+}
+
+/// Animated playing variant of the button.
+///
+/// Displayed when the stream is in [AudioProcessingState.ready] state.
+class _RaPlayButtonImagePlaying extends StatelessWidget {
+  const _RaPlayButtonImagePlaying({
+    required this.size,
+  });
+
+  /// Size of every variation of the button
+  final double size;
+
+  /// Tween for the animation to know between what
+  /// values should it interpolate
+  static final _tween = Tween<double>(begin: 0, end: 2);
+
+  /// Image while playing
+  static final _playIcon = const SvgGenImage('assets/icons/play.svg').svg();
+
+  @override
+  Widget build(BuildContext context) {
+    return ShadowedContainer(
+      size: size,
+      child: LoopAnimationBuilder(
+        builder: (context, value, child) {
+          return Transform.rotate(
+            angle: pi * value,
+            child: _playIcon,
+          );
+        },
+        duration: const Duration(seconds: 6),
+        tween: _tween,
+      ),
+    );
+  }
+}
+
+/// Loading variant of the [RaPlayButton].
+///
+/// Displayed when the stream is in [AudioProcessingState.loading]
+/// or [AudioProcessingState.buffering] state.
+class _RaPlayButtonImageLoading extends StatelessWidget {
+  const _RaPlayButtonImageLoading({required this.size});
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: [
+        Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: context.colors.highlightGreen,
+            shape: BoxShape.circle,
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black38,
+                blurRadius: 5,
+                offset: Offset(0, 5),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(5),
+          width: size,
+          height: size,
+          child: CircularProgressIndicator(
+            color: context.colors.highlightRed,
+            strokeWidth: 1.7,
+          ),
+        ),
+      ],
     );
   }
 }

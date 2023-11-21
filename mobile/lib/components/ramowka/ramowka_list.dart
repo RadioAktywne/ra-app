@@ -28,6 +28,8 @@ class RamowkaList extends HookWidget {
   /// Single row's height
   final double rowHeight;
 
+  double get height => rows * rowHeight;
+
   static final Uri _url = Uri.parse(
     'https://radioaktywne.pl/wp-json/wp/v2/event?_embed=true&page=1&per_page=100',
   );
@@ -38,19 +40,15 @@ class RamowkaList extends HookWidget {
 
   Future<List<RamowkaInfo>> _fetchRamowka() async {
     final data = await _fetchData();
-    final ramowka = _parseRamowka(data, _currentTime, Day.today());
+    final ramowka = _parseRamowka(
+      data,
+      Day.today(),
+      additionalChecks: (e) =>
+          _currentTime.compareTo(e.endTime) <= 0 ||
+          _currentTime.compareTo(e.startTime) <= 0,
+    );
 
-    /// Display Ramowka from the next day if current
-    /// list's length is less than [rows] and it's
-    /// past 20:00.
-    if (ramowka.length < rows && _currentTime.compareTo('20:00') >= 0) {
-      final ramowkaTomorrow = _parseRamowka(data, _currentTime, Day.tomorrow());
-      for (var i = 0; i <= rows - ramowka.length; i++) {
-        ramowka.add(ramowkaTomorrow[i]);
-      }
-    }
-
-    return ramowka;
+    return _completeRamowka(data, ramowka);
   }
 
   Future<Iterable<RamowkaInfo>> _fetchData() async {
@@ -68,23 +66,41 @@ class RamowkaList extends HookWidget {
     );
   }
 
-  /// Parse data to a list of [RamowkaInfo] entries from
-  /// the current day and which haven't ended yet.
+  /// Adds [RamowkaInfo] entries from the next day
+  /// if it's past 20:00, or empty [RamowkaInfo] elements
+  /// to complete [ramowka] to [rows] number of elements.
+  List<RamowkaInfo> _completeRamowka(
+    Iterable<RamowkaInfo> data,
+    List<RamowkaInfo> ramowka,
+  ) {
+    final ramowkaTomorrow =
+        (ramowka.length < rows && _currentTime.compareTo('20:00') >= 0)
+            ? _parseRamowka(data, Day.tomorrow())
+            : <RamowkaInfo>[];
+
+    final times = rows - ramowka.length;
+    for (var i = 0; i < times; i++) {
+      try {
+        ramowka.add(ramowkaTomorrow[i]);
+      } catch (_) {
+        ramowka.add(RamowkaInfo.empty());
+      }
+    }
+
+    return ramowka;
+  }
+
+  /// Parse data to a list of current and future
+  /// [RamowkaInfo] entries from the current day.
   List<RamowkaInfo> _parseRamowka(
     Iterable<RamowkaInfo> data,
-    String currentTime,
-    Day day,
-  ) =>
+    Day day, {
+    bool Function(RamowkaInfo)? additionalChecks,
+  }) =>
       data
-          .where(
-            (e) =>
-                e.day == day &&
-                (currentTime.compareTo(e.endTime) <= 0 ||
-                    currentTime.compareTo(e.startTime) <= 0),
-          )
+          .where((e) => e.day == day)
+          .where(additionalChecks ?? (e) => true)
           .sorted((a, b) => a.startTime.compareTo(b.startTime));
-
-  double get height => rows * rowHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +154,9 @@ class RamowkaList extends HookWidget {
 
 /// Variant of the [RamowkaList] containing
 /// a waiting animation.
+///
+/// Displayed when the widget is waiting
+/// for the data.
 class _RamowkaListWaiting extends StatelessWidget {
   const _RamowkaListWaiting({required this.height});
 
@@ -164,8 +183,9 @@ class _RamowkaListWaiting extends StatelessWidget {
   }
 }
 
-/// Empty variant of [RamowkaList] displayed when
-/// the data can't be loaded.
+/// Empty variant of [RamowkaList].
+///
+/// Displayed when the data can't be loaded.
 class _RamowkaListNoData extends StatelessWidget {
   const _RamowkaListNoData({required this.height});
 
@@ -188,7 +208,7 @@ class _RamowkaListNoData extends StatelessWidget {
   }
 }
 
-/// Represents a single [RamowkaList] entry.
+/// A single [RamowkaList] entry widget.
 class _RamowkaListItem extends StatelessWidget {
   const _RamowkaListItem({
     required this.info,
