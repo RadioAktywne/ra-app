@@ -1,14 +1,12 @@
-import 'dart:convert';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_list_widget.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_info.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/resources/day.dart';
+import 'package:radioaktywne/resources/fetch_data.dart';
 
 /// Widget representing a list of Ramowka entries.
 class RamowkaList extends HookWidget {
@@ -38,32 +36,25 @@ class RamowkaList extends HookWidget {
   static String get _currentTime =>
       DateFormat(DateFormat.HOUR24_MINUTE).format(DateTime.now());
 
+  static bool _timeChecks(RamowkaInfo e) =>
+      _currentTime.compareTo(e.startTime) <= 0 ||
+      _currentTime.compareTo(e.endTime) <= 0;
+
   Future<List<RamowkaInfo>> _fetchRamowka() async {
-    final data = await _fetchData();
+    final data = await fetchData(
+      _url,
+      RamowkaInfo.fromJson,
+      timeout: timeout,
+      headers: _headers,
+    );
+
     final ramowka = _parseRamowka(
       data,
       Day.today(),
-      additionalChecks: (e) =>
-          _currentTime.compareTo(e.endTime) <= 0 ||
-          _currentTime.compareTo(e.startTime) <= 0,
+      additionalChecks: _timeChecks,
     );
 
     return _completeRamowka(data, ramowka);
-  }
-
-  Future<Iterable<RamowkaInfo>> _fetchData() async {
-    final response = await http
-        .get(
-          _url,
-          headers: _headers,
-        )
-        .timeout(timeout);
-
-    final jsonData = jsonDecode(response.body) as List<dynamic>;
-
-    return jsonData.map(
-      (dynamic data) => RamowkaInfo.fromJson(data as Map<String, dynamic>),
-    );
   }
 
   /// Adds [RamowkaInfo] entries from the next day
