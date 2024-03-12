@@ -12,15 +12,8 @@ import 'package:radioaktywne/extensions/extensions.dart';
 class RamowkaWidget extends StatelessWidget {
   const RamowkaWidget({
     super.key,
-    this.dataSource,
     this.timeout = const Duration(seconds: 7),
   });
-
-  /// Asynchronous source of data in the widget.
-  ///
-  /// On default, the data is pulled from the radioaktywne.pl api.
-  /// If specified, the data will be pulled from the specified source.
-  final Future<void>? dataSource;
 
   /// Timeout for the fetching function.
   final Duration timeout;
