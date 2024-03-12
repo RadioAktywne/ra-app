@@ -4,12 +4,13 @@ import 'package:http/http.dart' as http;
 
 /// Fetches the data from provided source [url]
 /// and bundles it into a form of an iterable
-/// of a provided type.
+/// of a provided type [T].
 ///
-/// The [fromJson] function has to be a function
+/// The [fromJson] has to be a function
 /// that converts the provided JSON data to
-/// an object of the implementer type. In other
-/// words, it's a JSON constructor.
+/// an object of type [T].
+/// For example, it can be [T]'s fromJson()
+/// constructor.
 Future<Iterable<T>> fetchData<T>(
   Uri url,
   T Function(Map<String, dynamic>) fromJson, {
@@ -23,8 +24,8 @@ Future<Iterable<T>> fetchData<T>(
       )
       .timeout(timeout);
 
-  // try if [response.body] is a List. If not,
-  // return the data wrapped in a list.
+  // try if [response.body] is a List.
+  // If not, return the data wrapped in a list.
   try {
     final jsonData = jsonDecode(response.body) as List<dynamic>;
     return jsonData.map(
