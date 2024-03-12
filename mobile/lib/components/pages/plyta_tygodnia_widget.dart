@@ -15,8 +15,9 @@ class PlytaTygodniaWidget extends HookWidget {
   );
   static const _infoHeaders = {'Content-Type': 'application/json'};
 
-  static const String _imgUrl =
-      'https://radioaktywne.pl/wp-json/wp/v2/media?_embed=true&include[]=';
+  static Uri _imgUrl(String id) => Uri.parse(
+        'https://radioaktywne.pl/wp-json/wp/v2/media?_embed=true&include[]=$id',
+      );
   static const _imgHeaders = {'Content-Type': 'image/jpeg'};
 
   Future<PlytaTygodniaInfo> _fetchPlytaTygodnia() async {
@@ -27,16 +28,22 @@ class PlytaTygodniaWidget extends HookWidget {
       timeout: timeout,
     );
 
-    //TODO: implement fetching image url + image
-    // Pseudo-code:
-    // final plytaTygodnia = data.first;
-    // final imageUrlId = PlytaTygodniaInfo.imageTag;
-    // final imageUrl = fetch(_imgUrl + imageUrlId);
-    // final image = ;
+    //TODO: Handle the case where no [data] comes in
+    final plytaTygodnia = data.first;
 
-    //TODO:
-    //TODO: implement
-    throw UnimplementedError("TODO");
+    final imageUrlId = plytaTygodnia.imageTag;
+    final imageUrls = await fetchData<String>(
+      _imgUrl(imageUrlId),
+      (e) => (e['guid'] as Map<String, dynamic>)['rendered'] as String,
+      headers: _imgHeaders,
+      timeout: timeout,
+    );
+
+    //TODO: Handle the case where no [imageUrl] comes in
+    final imageUrl = imageUrls.first;
+    plytaTygodnia.imageTag = imageUrl;
+
+    return plytaTygodnia;
   }
 
   @override
@@ -52,7 +59,7 @@ class PlytaTygodniaInfo {
       : artist = '',
         title = '',
         description = '',
-        imageTag = 0;
+        imageTag = '';
 
   /// Creates a [PlytaTygodniaInfo] object from a given Json map.
   PlytaTygodniaInfo.fromJson(Map<String, dynamic> jsonData)
@@ -60,12 +67,12 @@ class PlytaTygodniaInfo {
         title = (jsonData['acf'] as Map<String, dynamic>)['title'] as String,
         description =
             (jsonData['acf'] as Map<String, dynamic>)['description'] as String,
-        imageTag = (jsonData['acf'] as Map<String, dynamic>)['image'] as int;
+        imageTag = (jsonData['acf'] as Map<String, dynamic>)['image'] as String;
 
   final String artist;
   final String title;
   final String description;
-  final int imageTag;
+  String imageTag;
 
   @override
   String toString() {

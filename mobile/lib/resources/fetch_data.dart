@@ -23,9 +23,15 @@ Future<Iterable<T>> fetchData<T>(
       )
       .timeout(timeout);
 
-  final jsonData = jsonDecode(response.body) as List<dynamic>;
-
-  return jsonData.map(
-    (dynamic data) => fromJson(data as Map<String, dynamic>),
-  );
+  // try if [response.body] is a List. If not,
+  // return the data wrapped in a list.
+  try {
+    final jsonData = jsonDecode(response.body) as List<dynamic>;
+    return jsonData.map(
+      (dynamic data) => fromJson(data as Map<String, dynamic>),
+    );
+  } catch (_) {
+    final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
+    return [fromJson(jsonData)];
+  }
 }
