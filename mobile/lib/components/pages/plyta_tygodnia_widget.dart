@@ -32,7 +32,7 @@ class PlytaTygodniaWidget extends HookWidget {
     final plytaTygodnia = data.first;
 
     final imageUrlId = plytaTygodnia.imageTag;
-    final imageUrls = await fetchData<String>(
+    final imageUrls = await fetchData(
       _imgUrl(imageUrlId),
       (e) => (e['guid'] as Map<String, dynamic>)['rendered'] as String,
       headers: _imgHeaders,
