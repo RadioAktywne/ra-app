@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_list_widget.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_info.dart';
+import 'package:radioaktywne/components/refreshable_list_view.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/resources/day.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
@@ -41,20 +44,24 @@ class RamowkaList extends HookWidget {
       _currentTime.compareTo(e.endTime) <= 0;
 
   Future<List<RamowkaInfo>> _fetchRamowka() async {
-    final data = await fetchData(
-      _url,
-      RamowkaInfo.fromJson,
-      timeout: timeout,
-      headers: _headers,
-    );
+    try {
+      final data = await fetchData(
+        _url,
+        RamowkaInfo.fromJson,
+        timeout: timeout,
+        headers: _headers,
+      );
 
-    final ramowka = _parseRamowka(
-      data,
-      Day.today(),
-      additionalChecks: _timeChecks,
-    );
+      final ramowka = _parseRamowka(
+        data,
+        Day.today(),
+        additionalChecks: _timeChecks,
+      );
 
-    return _completeRamowka(data, ramowka);
+      return _completeRamowka(data, ramowka);
+    } on TimeoutException catch (_) {
+      return [];
+    }
   }
 
   /// Adds [RamowkaInfo] entries from the next day
@@ -90,55 +97,33 @@ class RamowkaList extends HookWidget {
   }) =>
       data
           .where((e) => e.day == day)
-          .where(additionalChecks ?? (e) => true)
+          .where(additionalChecks ?? (_) => true)
           .sorted((a, b) => a.startTime.compareTo(b.startTime));
 
   @override
   Widget build(BuildContext context) {
-    final ramowka = useState(<RamowkaInfo>[]);
-    final ramowkaFuture = useMemoized(_fetchRamowka);
-    final snapshot = useFuture(ramowkaFuture);
-
-    /// Called only on the first time the widget
-    /// is rendered, because of the empty list argument.
-    useEffect(
-      () {
-        ramowkaFuture.then((e) => ramowka.value = e);
-        // nothing to dispose of
-        return;
-      },
-      [],
+    final controller = useRefreshableListViewController(
+      <RamowkaInfo>[],
+      _fetchRamowka,
+      hasData: (e) => e.isNotEmpty,
     );
 
-    return RefreshIndicator(
-      color: context.colors.highlightGreen,
-      backgroundColor: context.colors.backgroundDark,
-      displacement: 0,
-      onRefresh: () async => ramowka.value = await _fetchRamowka(),
-      child: snapshot.connectionState == ConnectionState.waiting
-          ? _RamowkaListWaiting(height: height)
-          : _decideRamowkaVariant(ramowka.value),
-    );
-  }
-
-  /// Decides, which variant of [RamowkaList] to render
-  /// based on the contents of [ramowka] future.
-  Widget _decideRamowkaVariant(List<RamowkaInfo> ramowka) {
-    if (ramowka.isEmpty) {
-      return _RamowkaListNoData(height: height);
-    }
-
-    return RaListWidget(
-      rows: rows,
-      rowHeight: rowHeight,
-      items: ramowka
-          .map(
-            (ramowkaInfo) => _RamowkaListItem(
-              info: ramowkaInfo,
-              rowHeight: rowHeight,
-            ),
-          )
-          .toList(),
+    return RefreshableListView(
+      controller: controller,
+      childWaiting: _RamowkaListWaiting(height: height),
+      childNoData: _RamowkaListNoData(height: height),
+      child: RaListWidget(
+        rows: rows,
+        rowHeight: rowHeight,
+        items: controller.state.value
+            .map(
+              (ramowkaInfo) => _RamowkaListItem(
+                info: ramowkaInfo,
+                rowHeight: rowHeight,
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 }

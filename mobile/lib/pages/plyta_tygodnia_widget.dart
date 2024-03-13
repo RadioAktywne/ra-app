@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
+import 'package:radioaktywne/components/refreshable_list_view.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 
@@ -49,36 +50,16 @@ class PlytaTygodniaWidget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final plytaTygodniaState = useState(PlytaTygodniaInfo.empty());
-    final plytaTygodniaFuture = useMemoized(_fetchPlytaTygodnia);
-    final snapshot = useFuture(plytaTygodniaFuture);
-
-    /// Called only on the first time the widget
-    /// is rendered, because of the empty list argument.
-    useEffect(
-      () {
-        plytaTygodniaFuture.then((e) => plytaTygodniaState.value = e);
-        // nothing to dispose of
-        return;
-      },
-      [],
+    final controller = useRefreshableListViewController(
+      PlytaTygodniaInfo.empty(),
+      _fetchPlytaTygodnia,
     );
 
-    return ListView(
-      children: [
-        // TODO: refactor the whole hook situation into Widget/function
-        // TODO: can be called something like "RefreshablePageWidget"
-        RefreshIndicator(
-          color: context.colors.highlightGreen,
-          backgroundColor: context.colors.backgroundDark,
-          displacement: 0,
-          onRefresh: () async =>
-              plytaTygodniaState.value = await _fetchPlytaTygodnia(),
-          child: snapshot.connectionState == ConnectionState.waiting
-              ? const CircularProgressIndicator()
-              : Image.network(plytaTygodniaState.value.imageTag),
-        ),
-      ],
+    return RefreshableListView(
+      controller: controller,
+      childWaiting: const Placeholder(),
+      childNoData: const Placeholder(),
+      child: const Placeholder(),
     );
   }
 }
