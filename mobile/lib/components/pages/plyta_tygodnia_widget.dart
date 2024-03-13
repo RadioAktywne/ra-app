@@ -66,6 +66,8 @@ class PlytaTygodniaWidget extends HookWidget {
 
     return ListView(
       children: [
+        // TODO: refactor the whole hook situation into Widget/function
+        // TODO: can be called something like "RefreshablePageWidget"
         RefreshIndicator(
           color: context.colors.highlightGreen,
           backgroundColor: context.colors.backgroundDark,
