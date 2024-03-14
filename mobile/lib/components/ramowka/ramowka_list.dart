@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_list_widget.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_info.dart';
-import 'package:radioaktywne/components/refreshable_list_view.dart';
+import 'package:radioaktywne/components/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/resources/day.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
@@ -102,13 +102,13 @@ class RamowkaList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = useRefreshableListViewController(
+    final controller = useRefreshableFetchController(
       <RamowkaInfo>[],
       _fetchRamowka,
       hasData: (e) => e.isNotEmpty,
     );
 
-    return RefreshableListView(
+    return RefreshableFetchWidget(
       controller: controller,
       childWaiting: _RamowkaListWaiting(height: height),
       childNoData: _RamowkaListNoData(height: height),

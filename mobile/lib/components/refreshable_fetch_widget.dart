@@ -5,27 +5,30 @@ import 'package:radioaktywne/extensions/build_context.dart';
 /// A [ListView] that can be refreshed. It pulls the data
 /// from the source specified in the [controller].
 ///
-/// The [controller] __should be__ provided by
-/// the [useRefreshableListViewController] function.
+/// The [controller] __has to__ be provided by
+/// the [useRefreshableFetchController] function.
+///
+/// The [child] and [childNoData] __have to__ be scrollable
+/// for them to be refreshable.
 ///
 /// Example usage (inside widget's `build()` method):
 /// ```dart
 /// @override
 /// Widget build(BuildContext context) {
-///   final controller = useRefreshableListViewController(
+///   final controller = useRefreshableFetchController(
 ///     <someDefaultValue>,
 ///     <someFetchFunction>,
 ///     hasData: ...,
 ///   );
-///   return RefreshableListView(
+///   return RefreshableFetchWidget(
 ///     controller: controller,
 ///     child: ...,
 ///     ...,
 ///   );
 /// }
 /// ```
-class RefreshableListView<T> extends HookWidget {
-  const RefreshableListView({
+class RefreshableFetchWidget<T> extends HookWidget {
+  const RefreshableFetchWidget({
     super.key,
     required this.controller,
     required this.childWaiting,
@@ -39,7 +42,7 @@ class RefreshableListView<T> extends HookWidget {
   final Widget childNoData;
   final Widget child;
 
-  final RefreshableListViewController<T> controller;
+  final RefreshableFetchController<T> controller;
 
   final Color? refreshIndicatorColor;
   final Color? refreshIndicatorBackgroundColor;
@@ -71,15 +74,19 @@ class RefreshableListView<T> extends HookWidget {
 
 /// Sets up everything needed for fetching and
 /// re-fetching data (usually using a
-/// [RefreshableListView] widget).
+/// [RefreshableFetchWidget] widget).
 ///
-/// This is a hook and should be used as such -
-/// at the top of the Widget's `build()` function.
+/// This function is a hook and should be used as such -
+/// at the top of the widget's `build()` function.
 ///
 /// [defaultValue] - default value of the fetched data
+///
 /// [fetchFunction] - function for fetching and re-fetching data
-/// [hasData] - function for determining the current state
-RefreshableListViewController<T> useRefreshableListViewController<T>(
+///
+/// [hasData] - function for checking if the completed future has
+///   data by checking the `controller.state.value`. On
+///   default: the `controller.snapshot.hasData` is used instead.
+RefreshableFetchController<T> useRefreshableFetchController<T>(
   T defaultValue,
   Future<T> Function() fetchFunction, {
   bool Function(T)? hasData,
@@ -99,7 +106,7 @@ RefreshableListViewController<T> useRefreshableListViewController<T>(
     [],
   );
 
-  return RefreshableListViewController._(
+  return RefreshableFetchController._(
     state: state,
     snapshot: snapshot,
     fetchFunction: fetchFunction,
@@ -108,14 +115,14 @@ RefreshableListViewController<T> useRefreshableListViewController<T>(
 }
 
 /// A simple data class used for controlling
-/// the state of [RefreshableListView] widget.
-class RefreshableListViewController<T> {
+/// the state of [RefreshableFetchWidget] widget.
+class RefreshableFetchController<T> {
   /// Private constructor - to prevent
-  /// instantiating this class.
+  /// instantiating this class manually.
   ///
-  /// To instantiate - use
-  /// [useRefreshableListViewController] function.
-  const RefreshableListViewController._({
+  /// To get an instance - call
+  /// [useRefreshableFetchController] function.
+  const RefreshableFetchController._({
     required this.state,
     required this.snapshot,
     required this.fetchFunction,
