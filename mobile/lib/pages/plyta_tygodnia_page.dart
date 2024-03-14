@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/refreshable_fetch_widget.dart';
@@ -31,29 +33,33 @@ class PlytaTygodniaPage extends HookWidget {
   static const _imgHeaders = {'Content-Type': 'image/jpeg'};
 
   Future<PlytaTygodniaInfo> _fetchPlytaTygodnia() async {
-    final data = await fetchData(
-      _infoUrl,
-      PlytaTygodniaInfo.fromJson,
-      headers: _infoHeaders,
-      timeout: timeout,
-    );
+    try {
+      final data = await fetchData(
+        _infoUrl,
+        PlytaTygodniaInfo.fromJson,
+        headers: _infoHeaders,
+        timeout: timeout,
+      );
 
-    //TODO: Handle the case where no [data] comes in
-    final plytaTygodnia = data.first;
+      //TODO: Handle the case where no [data] comes in
+      final plytaTygodnia = data.first;
 
-    final imageUrlId = plytaTygodnia.imageTag;
-    final imageUrls = await fetchData(
-      _imgUrl(imageUrlId),
-      (e) => (e['guid'] as Map<String, dynamic>)['rendered'] as String,
-      headers: _imgHeaders,
-      timeout: timeout,
-    );
+      final imageUrlId = plytaTygodnia.imageTag;
+      final imageUrls = await fetchData(
+        _imgUrl(imageUrlId),
+        (e) => (e['guid'] as Map<String, dynamic>)['rendered'] as String,
+        headers: _imgHeaders,
+        timeout: timeout,
+      );
 
-    //TODO: Handle the case where no [imageUrl] comes in
-    final imageUrl = imageUrls.first;
-    plytaTygodnia.imageTag = imageUrl;
+      //TODO: Handle the case where no [imageUrl] comes in
+      final imageUrl = imageUrls.first;
+      plytaTygodnia.imageTag = imageUrl;
 
-    return plytaTygodnia;
+      return plytaTygodnia;
+    } on TimeoutException catch (_) {
+      return PlytaTygodniaInfo.empty();
+    }
   }
 
   @override
@@ -61,20 +67,49 @@ class PlytaTygodniaPage extends HookWidget {
     final controller = useRefreshableFetchController(
       PlytaTygodniaInfo.empty(),
       _fetchPlytaTygodnia,
+      hasData: (plyta) => plyta.isNotEmpty,
     );
 
     return RefreshableFetchWidget(
       controller: controller,
-      // TODO: change Placeholder widgets to actual
-      // TODO: widgets for noData and waiting cases
-      childWaiting: const Placeholder(),
-      childNoData: const Placeholder(),
+      childWaiting: Center(
+        child: CircularProgressIndicator(
+          color: context.colors.highlightGreen,
+          strokeWidth: 5,
+        ),
+      ),
+      childNoData: LayoutBuilder(
+        builder: (context, constraints) => SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: constraints.maxHeight,
+            ),
+            child: Center(
+              child: Padding(
+                padding: _pagePadding.copyWith(top: 0),
+                child: Text(
+                  'Wystąpił błąd podczas pobierania danych',
+                  style: context.textStyles.textMedium.copyWith(
+                    color: context.colors.highlightGreen,
+                  ),
+                  textAlign: TextAlign.center,
+                  softWrap: true,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
       child: Padding(
         padding: _pagePadding,
         child: ListView(
           children: [
-            Image.network(
-              controller.state.value.imageTag,
+            AspectRatio(
+              aspectRatio: 1,
+              child: Image.network(
+                controller.state.value.imageTag,
+              ),
             ),
             _emptySpace,
             Container(
@@ -86,7 +121,7 @@ class PlytaTygodniaPage extends HookWidget {
                 children: [
                   Padding(
                     padding: _textPadding,
-                    child: Text(
+                    child: SelectableText(
                       '${controller.state.value.artist} - ${controller.state.value.title}',
                       style: context.textStyles.textMedium.copyWith(
                         color: context.colors.backgroundLight,
@@ -99,7 +134,7 @@ class PlytaTygodniaPage extends HookWidget {
             _emptySpace,
             Padding(
               padding: _textPadding,
-              child: Text(
+              child: SelectableText(
                 controller.state.value.description,
                 style: context.textStyles.textSmall.copyWith(
                   color: context.colors.backgroundDark,
@@ -135,6 +170,9 @@ class PlytaTygodniaInfo {
   final String title;
   final String description;
   String imageTag;
+
+  bool get isNotEmpty =>
+      artist != '' && title != '' && description != '' && imageTag != '';
 
   @override
   String toString() {

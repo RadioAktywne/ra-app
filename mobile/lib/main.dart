@@ -30,6 +30,7 @@ class MainApp extends HookWidget {
   MainApp({super.key});
 
   final _scaffoldKey = GlobalKey<ScaffoldState>(debugLabel: 'Inner scaffold');
+  // ignore: unused_field
   static const _widgetPadding = EdgeInsets.symmetric(
     vertical: 8,
     horizontal: 16,
