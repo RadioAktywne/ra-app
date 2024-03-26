@@ -62,24 +62,20 @@ class PlytaTygodniaPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = useRefreshableFetchController(
-      PlytaTygodniaInfo.empty(),
-      _fetchPlytaTygodnia,
-      hasData: (plyta) => plyta.isNotEmpty,
-    );
-
     return RefreshableFetchWidget(
-      controller: controller,
-      childWaiting: const _PlytaTygodniaWaiting(),
-      childNoData: _PlytaTygodniaNoData(pagePadding: _pagePadding),
-      child: Padding(
+      fetchFunction: _fetchPlytaTygodnia,
+      defaultData: PlytaTygodniaInfo.empty(),
+      loadingBuilder: (context, snapshot) => const _PlytaTygodniaWaiting(),
+      errorBuilder: (context) =>
+          _PlytaTygodniaNoData(pagePadding: _pagePadding),
+      childBuilder: (context, data) => Padding(
         padding: _pagePadding,
         child: ListView(
           children: [
             AspectRatio(
               aspectRatio: 1,
               child: Image.network(
-                controller.state.value.imageTag,
+                data.imageTag,
                 loadingBuilder: (context, child, loadingProgress) =>
                     loadingProgress == null
                         ? child
@@ -119,7 +115,7 @@ class PlytaTygodniaPage extends HookWidget {
                   Padding(
                     padding: _textPadding,
                     child: SelectableText(
-                      '${controller.state.value.artist} - ${controller.state.value.title}',
+                      '${data.artist} - ${data.title}',
                       style: context.textStyles.textMedium.copyWith(
                         color: context.colors.backgroundLight,
                       ),
@@ -132,7 +128,7 @@ class PlytaTygodniaPage extends HookWidget {
             Padding(
               padding: _textPadding,
               child: SelectableText(
-                controller.state.value.description,
+                data.description,
                 style: context.textStyles.textSmall.copyWith(
                   color: context.colors.backgroundDark,
                 ),

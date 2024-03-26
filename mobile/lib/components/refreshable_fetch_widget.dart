@@ -2,115 +2,92 @@ import 'package:flutter/material.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 
-/// A [ListView] that can be refreshed. It pulls the data
-/// from the source specified in the [controller].
+/// A widget that can be used to easily build elements
+/// that pull data from an async source and need to be
+/// able to be refreshed.
 ///
-/// The [controller] _has to_ be provided by
-/// the [useRefreshableFetchController] function.
-///
-/// The [child] and [childNoData] _have to_ be scrollable
-/// for them to be refreshable.
-///
-/// Example usage (inside widget's `build()` method):
-/// ```dart
-/// @override
-/// Widget build(BuildContext context) {
-///   final controller = useRefreshableFetchController(
-///     <someDefaultValue>,
-///     <someFetchFunction>,
-///     hasData: ...,
-///   );
-///   return RefreshableFetchWidget(
-///     controller: controller,
-///     child: ...,
-///     ...,
-///   );
-/// }
-/// ```
+/// For this widget to work, the children built by
+/// the builders _have to_ be [Scrollable], e.g. a
+/// [ListView] or a [SingleChildScrollView].
 class RefreshableFetchWidget<T> extends HookWidget {
   const RefreshableFetchWidget({
     super.key,
-    required this.controller,
-    required this.childWaiting,
-    required this.childNoData,
-    required this.child,
+    required this.defaultData,
+    required this.fetchFunction,
+    required this.loadingBuilder,
+    required this.errorBuilder,
+    required this.childBuilder,
     this.refreshIndicatorColor,
     this.refreshIndicatorBackgroundColor,
+    this.hasData,
   });
 
+  /// The default value of the data that is going to be fetched.
+  final T defaultData;
+
+  /// Function used for fetching the data.
+  final Future<T> Function() fetchFunction;
+
   /// Child widget to be displayed in the widget's loading state.
-  final Widget childWaiting;
+  final Widget Function(BuildContext, AsyncSnapshot<T>) loadingBuilder;
 
   /// Child widget to be displayed in case the data couldn't be loaded.
-  final Widget childNoData;
+  final Widget Function(BuildContext) errorBuilder;
 
   /// Child widget to be displayed when the data is successfully loaded.
-  final Widget child;
+  final Widget Function(BuildContext, T) childBuilder;
 
-  /// Controller of the widget's inner state.
+  /// Function used for determining if the data was successfully
+  /// loaded.
   ///
-  /// _Has to_ be provided by the [useRefreshableFetchController] hook.
-  final RefreshableFetchController<T> controller;
+  /// On default, snapshot.hasData is used.
+  final bool Function(T)? hasData;
 
   final Color? refreshIndicatorColor;
   final Color? refreshIndicatorBackgroundColor;
 
   @override
   Widget build(BuildContext context) {
-    // TODO: change this to use builders instead of a passed-in 'hook'
-    // TODO: example:
-    /// Add parameter `data` to builders so that the widget's inner data can be
-    /// used in the widget's definition.
-    /// ```dart
-    /// return RefrechableFetchWidget(
-    ///   childBuilder: (context, data) => ...,
-    ///   childWaitingBuilder: (context, data) => ...,
-    ///   childNoDataBuilder: (context,data) => ...,
-    ///   ...,
-    /// );
-    /// ```
+    final data = _useRefreshableFetchController(defaultData, fetchFunction);
+
     return RefreshIndicator(
       color: refreshIndicatorColor ?? context.colors.highlightGreen,
       backgroundColor:
           refreshIndicatorBackgroundColor ?? context.colors.backgroundDark,
       displacement: 0,
-      onRefresh: () async =>
-          controller.state.value = await controller.fetchFunction(),
-      child: controller.snapshot.connectionState == ConnectionState.waiting
-          ? childWaiting
-          : _decideVariant(),
+      onRefresh: () async => data.state.value = await fetchFunction(),
+      child: data.snapshot.connectionState == ConnectionState.waiting
+          ? loadingBuilder(context, data.snapshot)
+          : _decideVariant(context, data),
     );
   }
 
   /// Decides, which variant of child to render
   /// based on the snapshot and the provided function
-  Widget _decideVariant() {
-    if (!controller.hasData(controller.state.value)) {
-      return childNoData;
+  Widget _decideVariant(
+    BuildContext context,
+    RefreshableFetchController<T> data,
+  ) {
+    if (hasData != null ? hasData!(data.state.value) : data.snapshot.hasData) {
+      return errorBuilder(context);
     }
-    return child;
+    return childBuilder(context, data.state.value);
   }
 }
 
-/// Sets up everything needed for fetching and
-/// re-fetching data (usually using a
-/// [RefreshableFetchWidget] widget).
+/// Sets up every hook needed for fetching, loading and
+/// re-fetching data.
 ///
 /// This function is a hook and should be used as such -
 /// at the top of the widget's `build()` function.
 ///
-/// [defaultValue] - default value of the fetched data
+/// [defaultValue] - default value of the fetched data.
 ///
 /// [fetchFunction] - function for fetching and re-fetching data
-///
-/// [hasData] - function for checking if the completed future has
-///   data by checking the `controller.state.value`. On
-///   default: the `controller.snapshot.hasData` is used instead.
-RefreshableFetchController<T> useRefreshableFetchController<T>(
+RefreshableFetchController<T> _useRefreshableFetchController<T>(
   T defaultValue,
-  Future<T> Function() fetchFunction, {
-  bool Function(T)? hasData,
-}) {
+  Future<T> Function() fetchFunction,
+) {
   final state = useState(defaultValue);
   final future = useMemoized(fetchFunction);
   final snapshot = useFuture(future);
@@ -129,8 +106,6 @@ RefreshableFetchController<T> useRefreshableFetchController<T>(
   return RefreshableFetchController._(
     state: state,
     snapshot: snapshot,
-    fetchFunction: fetchFunction,
-    hasData: hasData ?? (_) => snapshot.hasData,
   );
 }
 
@@ -141,16 +116,12 @@ class RefreshableFetchController<T> {
   /// instantiating this class manually.
   ///
   /// To get an instance - call
-  /// [useRefreshableFetchController] function.
+  /// [_useRefreshableFetchController] function.
   const RefreshableFetchController._({
     required this.state,
     required this.snapshot,
-    required this.fetchFunction,
-    required this.hasData,
   });
 
   final ValueNotifier<T> state;
   final AsyncSnapshot<T> snapshot;
-  final Future<T> Function() fetchFunction;
-  final bool Function(T) hasData;
 }

@@ -31,7 +31,7 @@ Future<Iterable<T>> fetchData<T>(
     return jsonData.map(
       (dynamic data) => fromJson(data as Map<String, dynamic>),
     );
-  } catch (_) {
+  } on FormatException catch (_) {
     final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
     return [fromJson(jsonData)];
   }

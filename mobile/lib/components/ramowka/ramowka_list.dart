@@ -102,20 +102,16 @@ class RamowkaList extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = useRefreshableFetchController(
-      <RamowkaInfo>[],
-      _fetchRamowka,
-      hasData: (e) => e.isNotEmpty,
-    );
-
     return RefreshableFetchWidget(
-      controller: controller,
-      childWaiting: _RamowkaListWaiting(height: height),
-      childNoData: _RamowkaListNoData(height: height),
-      child: RaListWidget(
+      defaultData: const <RamowkaInfo>[],
+      fetchFunction: _fetchRamowka,
+      loadingBuilder: (context, snapshot) =>
+          _RamowkaListWaiting(height: height),
+      errorBuilder: (context) => _RamowkaListNoData(height: height),
+      childBuilder: (context, data) => RaListWidget(
         rows: rows,
         rowHeight: rowHeight,
-        items: controller.state.value
+        items: data
             .map(
               (ramowkaInfo) => _RamowkaListItem(
                 info: ramowkaInfo,
