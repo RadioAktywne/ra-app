@@ -18,9 +18,9 @@ class StreamTitleWorkaround {
   bool _isPlaying = false;
   var _timer = Timer.periodic(
     const Duration(seconds: 5),
-    (timer) {
-    /* it's gonna be overwritten anyway */
-  },
+    (_) {
+      /* it's gonna be overwritten anyway */
+    },
   );
 
   void _fetchStatusJson() {
@@ -28,6 +28,7 @@ class StreamTitleWorkaround {
       (response) {
         final dynamic jsonData = jsonDecode(response.body);
         final dynamic maybeStreamName =
+            // ignore: avoid_dynamic_calls
             jsonData['icestats']['source'][0]['title'];
 
         if (maybeStreamName is String) {
