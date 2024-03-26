@@ -5,10 +5,10 @@ import 'package:radioaktywne/extensions/build_context.dart';
 /// A [ListView] that can be refreshed. It pulls the data
 /// from the source specified in the [controller].
 ///
-/// The [controller] __has to__ be provided by
+/// The [controller] _has to_ be provided by
 /// the [useRefreshableFetchController] function.
 ///
-/// The [child] and [childNoData] __have to__ be scrollable
+/// The [child] and [childNoData] _have to_ be scrollable
 /// for them to be refreshable.
 ///
 /// Example usage (inside widget's `build()` method):
@@ -38,10 +38,18 @@ class RefreshableFetchWidget<T> extends HookWidget {
     this.refreshIndicatorBackgroundColor,
   });
 
+  /// Child widget to be displayed in the widget's loading state.
   final Widget childWaiting;
+
+  /// Child widget to be displayed in case the data couldn't be loaded.
   final Widget childNoData;
+
+  /// Child widget to be displayed when the data is successfully loaded.
   final Widget child;
 
+  /// Controller of the widget's inner state.
+  ///
+  /// _Has to_ be provided by the [useRefreshableFetchController] hook.
   final RefreshableFetchController<T> controller;
 
   final Color? refreshIndicatorColor;
@@ -49,6 +57,18 @@ class RefreshableFetchWidget<T> extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: change this to use builders instead of a passed-in 'hook'
+    // TODO: example:
+    /// Add parameter `data` to builders so that the widget's inner data can be
+    /// used in the widget's definition.
+    /// ```dart
+    /// return RefrechableFetchWidget(
+    ///   childBuilder: (context, data) => ...,
+    ///   childWaitingBuilder: (context, data) => ...,
+    ///   childNoDataBuilder: (context,data) => ...,
+    ///   ...,
+    /// );
+    /// ```
     return RefreshIndicator(
       color: refreshIndicatorColor ?? context.colors.highlightGreen,
       backgroundColor:
