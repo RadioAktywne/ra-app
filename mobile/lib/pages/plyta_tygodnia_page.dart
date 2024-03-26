@@ -9,7 +9,7 @@ import 'package:radioaktywne/resources/fetch_data.dart';
 class PlytaTygodniaPage extends HookWidget {
   const PlytaTygodniaPage({
     super.key,
-    this.timeout = const Duration(seconds: 7),
+    this.timeout = const Duration(seconds: 10),
   });
 
   final Duration timeout;
@@ -41,7 +41,6 @@ class PlytaTygodniaPage extends HookWidget {
         timeout: timeout,
       );
 
-      //TODO: Handle the case where no [data] comes in
       final plytaTygodnia = data.first;
 
       final imageUrlId = plytaTygodnia.imageTag;
@@ -52,7 +51,6 @@ class PlytaTygodniaPage extends HookWidget {
         timeout: timeout,
       );
 
-      //TODO: Handle the case where no [imageUrl] comes in
       final imageUrl = imageUrls.first;
       plytaTygodnia.imageTag = imageUrl;
 
@@ -72,35 +70,8 @@ class PlytaTygodniaPage extends HookWidget {
 
     return RefreshableFetchWidget(
       controller: controller,
-      childWaiting: Center(
-        child: CircularProgressIndicator(
-          color: context.colors.highlightGreen,
-          strokeWidth: 5,
-        ),
-      ),
-      childNoData: LayoutBuilder(
-        builder: (context, constraints) => SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: constraints.maxHeight,
-            ),
-            child: Center(
-              child: Padding(
-                padding: _pagePadding.copyWith(top: 0),
-                child: Text(
-                  'Wystąpił błąd podczas pobierania danych',
-                  style: context.textStyles.textMedium.copyWith(
-                    color: context.colors.highlightGreen,
-                  ),
-                  textAlign: TextAlign.center,
-                  softWrap: true,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+      childWaiting: const _PlytaTygodniaWaiting(),
+      childNoData: _PlytaTygodniaNoData(pagePadding: _pagePadding),
       child: Padding(
         padding: _pagePadding,
         child: ListView(
@@ -109,6 +80,32 @@ class PlytaTygodniaPage extends HookWidget {
               aspectRatio: 1,
               child: Image.network(
                 controller.state.value.imageTag,
+                loadingBuilder: (context, child, loadingProgress) =>
+                    loadingProgress == null
+                        ? child
+                        : Container(
+                            color: context.colors.backgroundDarkSecondary,
+                            child: Center(
+                              child: SizedBox(
+                                width: 40,
+                                height: 40,
+                                child: CircularProgressIndicator(
+                                  color: context.colors.highlightGreen,
+                                  strokeWidth: 5,
+                                ),
+                              ),
+                            ),
+                          ),
+                errorBuilder: (context, child, loadingProgress) => Center(
+                  child: Text(
+                    'Wystąpił błąd podczas pobierania obrazu',
+                    style: context.textStyles.textMedium.copyWith(
+                      color: context.colors.highlightGreen,
+                    ),
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                  ),
+                ),
               ),
             ),
             _emptySpace,
@@ -143,6 +140,56 @@ class PlytaTygodniaPage extends HookWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _PlytaTygodniaNoData extends StatelessWidget {
+  const _PlytaTygodniaNoData({
+    required this.pagePadding,
+  });
+
+  final EdgeInsets pagePadding;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: constraints.maxHeight,
+            maxHeight: constraints.maxHeight,
+          ),
+          child: Center(
+            child: Padding(
+              padding: pagePadding.copyWith(top: 0),
+              child: Text(
+                'Wystąpił błąd podczas pobierania danych',
+                style: context.textStyles.textMedium.copyWith(
+                  color: context.colors.highlightGreen,
+                ),
+                textAlign: TextAlign.center,
+                softWrap: true,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PlytaTygodniaWaiting extends StatelessWidget {
+  const _PlytaTygodniaWaiting();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: CircularProgressIndicator(
+        color: context.colors.highlightGreen,
+        strokeWidth: 5,
       ),
     );
   }
