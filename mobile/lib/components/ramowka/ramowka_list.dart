@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_list_widget.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_info.dart';
 import 'package:radioaktywne/components/refreshable_fetch_widget.dart';
@@ -12,7 +11,7 @@ import 'package:radioaktywne/resources/day.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 
 /// Widget representing a list of Ramowka entries.
-class RamowkaList extends HookWidget {
+class RamowkaList extends StatelessWidget {
   const RamowkaList({
     super.key,
     required this.timeout,
@@ -108,10 +107,10 @@ class RamowkaList extends HookWidget {
       loadingBuilder: (context, snapshot) =>
           _RamowkaListWaiting(height: height),
       errorBuilder: (context) => _RamowkaListNoData(height: height),
-      childBuilder: (context, data) => RaListWidget(
+      builder: (context, ramowkaInfoList) => RaListWidget(
         rows: rows,
         rowHeight: rowHeight,
-        items: data
+        items: ramowkaInfoList
             .map(
               (ramowkaInfo) => _RamowkaListItem(
                 info: ramowkaInfo,

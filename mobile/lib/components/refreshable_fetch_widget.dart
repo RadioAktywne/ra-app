@@ -6,9 +6,11 @@ import 'package:radioaktywne/extensions/build_context.dart';
 /// that pull data from an async source and need to be
 /// able to be refreshed.
 ///
-/// For this widget to work, the children built by
-/// the builders _have to_ be [Scrollable], e.g. a
-/// [ListView] or a [SingleChildScrollView].
+/// For this widget to work, the outputs of
+/// [builder] and [errorBuilder] _have to_ be
+/// [Scrollable], e.g. a [ListView]
+/// or a [SingleChildScrollView], so that
+/// they can be refreshed.
 class RefreshableFetchWidget<T> extends HookWidget {
   const RefreshableFetchWidget({
     super.key,
@@ -16,7 +18,7 @@ class RefreshableFetchWidget<T> extends HookWidget {
     required this.fetchFunction,
     required this.loadingBuilder,
     required this.errorBuilder,
-    required this.childBuilder,
+    required this.builder,
     this.refreshIndicatorColor,
     this.refreshIndicatorBackgroundColor,
     this.hasData,
@@ -35,10 +37,9 @@ class RefreshableFetchWidget<T> extends HookWidget {
   final Widget Function(BuildContext) errorBuilder;
 
   /// Child widget to be displayed when the data is successfully loaded.
-  final Widget Function(BuildContext, T) childBuilder;
+  final Widget Function(BuildContext, T) builder;
 
-  /// Function used for determining if the data was successfully
-  /// loaded.
+  /// Determines if the data was successfully loaded.
   ///
   /// On default, snapshot.hasData is used.
   final bool Function(T)? hasData;
@@ -66,16 +67,16 @@ class RefreshableFetchWidget<T> extends HookWidget {
   /// based on the snapshot and the provided function
   Widget _decideVariant(
     BuildContext context,
-    RefreshableFetchController<T> data,
+    _RefreshableFetchController<T> data,
   ) {
     if (hasData != null ? hasData!(data.state.value) : data.snapshot.hasData) {
-      return errorBuilder(context);
+      return builder(context, data.state.value);
     }
-    return childBuilder(context, data.state.value);
+    return errorBuilder(context);
   }
 }
 
-/// Sets up every hook needed for fetching, loading and
+/// Sets up hooks needed for fetching, loading and
 /// re-fetching data.
 ///
 /// This function is a hook and should be used as such -
@@ -84,7 +85,7 @@ class RefreshableFetchWidget<T> extends HookWidget {
 /// [defaultValue] - default value of the fetched data.
 ///
 /// [fetchFunction] - function for fetching and re-fetching data
-RefreshableFetchController<T> _useRefreshableFetchController<T>(
+_RefreshableFetchController<T> _useRefreshableFetchController<T>(
   T defaultValue,
   Future<T> Function() fetchFunction,
 ) {
@@ -103,21 +104,16 @@ RefreshableFetchController<T> _useRefreshableFetchController<T>(
     [],
   );
 
-  return RefreshableFetchController._(
+  return _RefreshableFetchController(
     state: state,
     snapshot: snapshot,
   );
 }
 
-/// A simple data class used for controlling
+/// A simple hook wrapper used for controlling
 /// the state of [RefreshableFetchWidget] widget.
-class RefreshableFetchController<T> {
-  /// Private constructor - to prevent
-  /// instantiating this class manually.
-  ///
-  /// To get an instance - call
-  /// [_useRefreshableFetchController] function.
-  const RefreshableFetchController._({
+class _RefreshableFetchController<T> {
+  const _RefreshableFetchController({
     required this.state,
     required this.snapshot,
   });

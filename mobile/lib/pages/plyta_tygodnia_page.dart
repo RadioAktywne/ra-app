@@ -1,37 +1,38 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 
-class PlytaTygodniaPage extends HookWidget {
+class PlytaTygodniaPage extends StatelessWidget {
   const PlytaTygodniaPage({
     super.key,
-    this.timeout = const Duration(seconds: 10),
+    this.timeout = const Duration(seconds: 15),
   });
 
+  /// Fetch timeout
   final Duration timeout;
 
-  final EdgeInsets _textPadding = const EdgeInsets.symmetric(horizontal: 7);
-  final SizedBox _emptySpace = const SizedBox(height: 9);
-  final EdgeInsets _pagePadding = const EdgeInsets.only(
-    top: 26,
-    left: 26,
-    right: 26,
-  );
+  /// Paddings
+  static const EdgeInsets _textPadding = EdgeInsets.symmetric(horizontal: 7);
+  static const SizedBox _emptySpace = SizedBox(height: 9);
+  static const EdgeInsets _pagePadding =
+      EdgeInsets.only(top: 26, left: 26, right: 26);
 
+  /// Plyta tygodnia info fetch details
   static final Uri _infoUrl = Uri.parse(
-    'https://radioaktywne.pl/wp-json/wp/v2/album?_embed=true&page=1&per_page=16',
+    'https://radioaktywne.pl/wp-json/wp/v2/album?page=1&per_page=16',
   );
   static const _infoHeaders = {'Content-Type': 'application/json'};
 
+  /// Plyta tygodnia album cover fetch details
   static Uri _imgUrl(String id) => Uri.parse(
-        'https://radioaktywne.pl/wp-json/wp/v2/media?_embed=true&include[]=$id',
+        'https://radioaktywne.pl/wp-json/wp/v2/media?include[]=$id',
       );
   static const _imgHeaders = {'Content-Type': 'image/jpeg'};
 
+  /// Fetch current Plyta tygodnia from radioaktywne.pl api.
   Future<PlytaTygodniaInfo> _fetchPlytaTygodnia() async {
     try {
       final data = await fetchData(
@@ -43,9 +44,8 @@ class PlytaTygodniaPage extends HookWidget {
 
       final plytaTygodnia = data.first;
 
-      final imageUrlId = plytaTygodnia.imageTag;
       final imageUrls = await fetchData(
-        _imgUrl(imageUrlId),
+        _imgUrl(plytaTygodnia.imageTag),
         (e) => (e['guid'] as Map<String, dynamic>)['rendered'] as String,
         headers: _imgHeaders,
         timeout: timeout,
@@ -66,16 +66,15 @@ class PlytaTygodniaPage extends HookWidget {
       fetchFunction: _fetchPlytaTygodnia,
       defaultData: PlytaTygodniaInfo.empty(),
       loadingBuilder: (context, snapshot) => const _PlytaTygodniaWaiting(),
-      errorBuilder: (context) =>
-          _PlytaTygodniaNoData(pagePadding: _pagePadding),
-      childBuilder: (context, data) => Padding(
+      errorBuilder: (context) => const _PlytaTygodniaNoData(),
+      builder: (context, plytaTygodnia) => Padding(
         padding: _pagePadding,
         child: ListView(
           children: [
             AspectRatio(
               aspectRatio: 1,
               child: Image.network(
-                data.imageTag,
+                plytaTygodnia.imageTag,
                 loadingBuilder: (context, child, loadingProgress) =>
                     loadingProgress == null
                         ? child
@@ -115,7 +114,7 @@ class PlytaTygodniaPage extends HookWidget {
                   Padding(
                     padding: _textPadding,
                     child: SelectableText(
-                      '${data.artist} - ${data.title}',
+                      '${plytaTygodnia.artist} - ${plytaTygodnia.title}',
                       style: context.textStyles.textMedium.copyWith(
                         color: context.colors.backgroundLight,
                       ),
@@ -128,7 +127,7 @@ class PlytaTygodniaPage extends HookWidget {
             Padding(
               padding: _textPadding,
               child: SelectableText(
-                data.description,
+                plytaTygodnia.description,
                 style: context.textStyles.textSmall.copyWith(
                   color: context.colors.backgroundDark,
                 ),
@@ -141,12 +140,10 @@ class PlytaTygodniaPage extends HookWidget {
   }
 }
 
+/// Empty variant of the [PlytaTygodniaPage], to be
+/// displayed when data cannot be fetched.
 class _PlytaTygodniaNoData extends StatelessWidget {
-  const _PlytaTygodniaNoData({
-    required this.pagePadding,
-  });
-
-  final EdgeInsets pagePadding;
+  const _PlytaTygodniaNoData();
 
   @override
   Widget build(BuildContext context) {
@@ -160,7 +157,7 @@ class _PlytaTygodniaNoData extends StatelessWidget {
           ),
           child: Center(
             child: Padding(
-              padding: pagePadding.copyWith(top: 0),
+              padding: PlytaTygodniaPage._pagePadding.copyWith(top: 0),
               child: Text(
                 'Wystąpił błąd podczas pobierania danych',
                 style: context.textStyles.textMedium.copyWith(
@@ -177,6 +174,8 @@ class _PlytaTygodniaNoData extends StatelessWidget {
   }
 }
 
+/// Loading variant of [PlytaTygodniaPage], displaying
+/// loading animation.
 class _PlytaTygodniaWaiting extends StatelessWidget {
   const _PlytaTygodniaWaiting();
 
@@ -191,7 +190,7 @@ class _PlytaTygodniaWaiting extends StatelessWidget {
   }
 }
 
-/// Information about a single Plyta Tygodnia entry.
+/// Information about a single Plyta tygodnia.
 class PlytaTygodniaInfo {
   /// Creates an empty [PlytaTygodniaInfo] object.
   PlytaTygodniaInfo.empty()
