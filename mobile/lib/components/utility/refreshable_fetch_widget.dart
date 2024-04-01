@@ -6,16 +6,16 @@ import 'package:radioaktywne/extensions/build_context.dart';
 /// that pull data from an async source and need to be
 /// able to be refreshed.
 ///
-/// For this widget to work, the outputs of
+/// For this widget to work, the widgets built by
 /// [builder] and [errorBuilder] _have to_ be
-/// [Scrollable], e.g. a [ListView]
-/// or a [SingleChildScrollView], so that
-/// they can be refreshed.
+/// [Scrollable], e.g. a [ListView] or a
+/// [SingleChildScrollView], so that they
+/// can be refreshed.
 class RefreshableFetchWidget<T> extends HookWidget {
   const RefreshableFetchWidget({
     super.key,
     required this.defaultData,
-    required this.fetchFunction,
+    required this.onFetch,
     required this.loadingBuilder,
     required this.errorBuilder,
     required this.builder,
@@ -27,16 +27,20 @@ class RefreshableFetchWidget<T> extends HookWidget {
   /// The default value of the data that is going to be fetched.
   final T defaultData;
 
-  /// Function used for fetching the data.
-  final Future<T> Function() fetchFunction;
+  /// An async source of the data.
+  ///
+  /// Called once on initial render and once on every refresh.
+  final Future<T> Function() onFetch;
 
-  /// Child widget to be displayed in the widget's loading state.
+  /// A builder that specifies the widget to be displayed while
+  /// the data is still loading.
   final Widget Function(BuildContext, AsyncSnapshot<T>) loadingBuilder;
 
-  /// Child widget to be displayed in case the data couldn't be loaded.
+  /// A builder that is called when the data couldn't be loaded.
   final Widget Function(BuildContext) errorBuilder;
 
-  /// Child widget to be displayed when the data is successfully loaded.
+  /// A builder that specifies a widget to be displayed on
+  /// successfully loading the data.
   final Widget Function(BuildContext, T) builder;
 
   /// Determines if the data was successfully loaded.
@@ -49,14 +53,14 @@ class RefreshableFetchWidget<T> extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data = _useRefreshableFetchController(defaultData, fetchFunction);
+    final data = _useRefreshableFetchController(defaultData, onFetch);
 
     return RefreshIndicator(
       color: refreshIndicatorColor ?? context.colors.highlightGreen,
       backgroundColor:
           refreshIndicatorBackgroundColor ?? context.colors.backgroundDark,
       displacement: 0,
-      onRefresh: () async => data.state.value = await fetchFunction(),
+      onRefresh: () async => data.state.value = await onFetch(),
       child: data.snapshot.connectionState == ConnectionState.waiting
           ? loadingBuilder(context, data.snapshot)
           : _decideVariant(context, data),

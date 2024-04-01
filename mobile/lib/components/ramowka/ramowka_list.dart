@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:radioaktywne/components/ra_list_widget.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_info.dart';
-import 'package:radioaktywne/components/refreshable_fetch_widget.dart';
+import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/resources/day.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
@@ -103,7 +103,7 @@ class RamowkaList extends StatelessWidget {
   Widget build(BuildContext context) {
     return RefreshableFetchWidget(
       defaultData: const <RamowkaInfo>[],
-      fetchFunction: _fetchRamowka,
+      onFetch: _fetchRamowka,
       loadingBuilder: (context, snapshot) =>
           _RamowkaListWaiting(height: height),
       errorBuilder: (context) => _RamowkaListNoData(height: height),

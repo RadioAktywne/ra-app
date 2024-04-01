@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:radioaktywne/components/color_shadowed_widget.dart';
+import 'package:radioaktywne/components/utility/color_shadowed_widget.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 
 class ColorShadowedCard extends StatelessWidget {
@@ -19,28 +19,30 @@ class ColorShadowedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColorShadowedWidget(
-        shadowColor: shadowColor,
-        child: Container(
-          color: context.colors.backgroundDark,
-          padding: const EdgeInsets.all(4),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              if (header != null) Container(
+      shadowColor: shadowColor,
+      child: Container(
+        color: context.colors.backgroundDark,
+        padding: const EdgeInsets.all(4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            if (header != null)
+              Container(
                 color: context.colors.backgroundDark,
                 child: header,
               ),
+            Container(
+              color: context.colors.backgroundDarkSecondary,
+              child: child,
+            ),
+            if (footer != null)
               Container(
-                color: context.colors.backgroundDarkSecondary,
-                child: child,
-              ),
-              if (footer != null) Container(
                 color: context.colors.backgroundDark,
                 child: footer,
               ),
-            ],
-          ),
+          ],
         ),
+      ),
     );
   }
 }

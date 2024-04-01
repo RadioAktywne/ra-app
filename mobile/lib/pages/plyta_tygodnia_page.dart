@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:radioaktywne/components/refreshable_fetch_widget.dart';
+import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 
@@ -16,17 +16,19 @@ class PlytaTygodniaPage extends StatelessWidget {
 
   /// Paddings
   static const EdgeInsets _textPadding = EdgeInsets.symmetric(horizontal: 7);
-  static const SizedBox _emptySpace = SizedBox(height: 9);
   static const EdgeInsets _pagePadding =
       EdgeInsets.only(top: 26, left: 26, right: 26);
 
-  /// Plyta tygodnia info fetch details
+  /// Space between things on the page.
+  static const SizedBox _emptySpace = SizedBox(height: 9);
+
+  /// Plyta tygodnia info fetch details.
   static final Uri _infoUrl = Uri.parse(
     'https://radioaktywne.pl/wp-json/wp/v2/album?page=1&per_page=16',
   );
   static const _infoHeaders = {'Content-Type': 'application/json'};
 
-  /// Plyta tygodnia album cover fetch details
+  /// Plyta tygodnia album cover fetch details.
   static Uri _imgUrl(String id) => Uri.parse(
         'https://radioaktywne.pl/wp-json/wp/v2/media?include[]=$id',
       );
@@ -63,7 +65,7 @@ class PlytaTygodniaPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshableFetchWidget(
-      fetchFunction: _fetchPlytaTygodnia,
+      onFetch: _fetchPlytaTygodnia,
       defaultData: PlytaTygodniaInfo.empty(),
       loadingBuilder: (context, snapshot) => const _PlytaTygodniaWaiting(),
       errorBuilder: (context) => const _PlytaTygodniaNoData(),
@@ -133,6 +135,7 @@ class PlytaTygodniaPage extends StatelessWidget {
                 ),
               ),
             ),
+            _emptySpace,
           ],
         ),
       ),

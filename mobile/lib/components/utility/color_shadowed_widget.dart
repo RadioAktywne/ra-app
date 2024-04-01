@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:radioaktywne/components/shadowed_container.dart';
+import 'package:radioaktywne/components/utility/shadowed_container.dart';
 
 class ColorShadowedWidget extends StatelessWidget {
   const ColorShadowedWidget({
@@ -22,7 +22,7 @@ class ColorShadowedWidget extends StatelessWidget {
                 left: 6,
                 bottom: 6,
               ),
-              shadowColor: shadowColor,
+              backgroundColor: shadowColor,
             ),
             Container(
               margin: const EdgeInsets.only(
