@@ -1,5 +1,4 @@
-package com.example.radioaktywne
-
+package pl.radioaktywne
 import io.flutter.embedding.android.FlutterActivity
 
 class MainActivity: FlutterActivity() {
