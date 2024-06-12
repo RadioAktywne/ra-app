@@ -2,7 +2,6 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
-import 'package:marquee/marquee.dart';
 import 'package:radioaktywne/components/ra_playbutton.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
@@ -161,12 +160,9 @@ class _StreamTitle extends StatelessWidget {
             ? SizedBox(
                 width: MediaQuery.of(context).size.width / 1.6,
                 height: RadioPlayerWidget.height,
-                child: Marquee(
-                  text: mediaItem.title,
-                  blankSpace: 50,
-                  velocity: 10,
-                  // startAfter: const Duration(seconds: 3),
-                  startPadding: 40,
+                // TODO: Zmienić na Marquee zamiast Text
+                child: Text(
+                  mediaItem.title,
                   style: context.textStyles.textPlayer,
                 ),
               )

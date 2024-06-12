@@ -33,7 +33,6 @@ class RaBottomNavigationBar extends HookWidget {
     final currentIndex = useState(startIconIndex);
     return Container(
       padding: EdgeInsets.only(top: borderWidth),
-      height: 50,
       color: context.colors.highlightGreen,
       child: Container(
         padding: const EdgeInsets.only(left: 20, right: 20),
