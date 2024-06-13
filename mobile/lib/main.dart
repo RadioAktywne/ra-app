@@ -10,19 +10,20 @@ import 'package:radioaktywne/components/ra_bottomnavbar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
+import 'package:radioaktywne/resources/colors.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
 import 'components/radio_player/radio_player_widget.dart';
 import 'components/ramowka/ramowka_widget.dart';
 
 void main() {
-  // TODO: Think about better solution using
-  // TODO: (access to RAColors)
+  /// Sadly: only (known) way to do this on Android
+  /// (works just fine without this on iOS)
   if (Platform.isAndroid) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle.light.copyWith(
-        statusBarColor: const Color(0xFF302318),
-        systemNavigationBarColor: const Color(0xFF302318),
+        statusBarColor: const ColorsLight().backgroundDark,
+        systemNavigationBarColor: const ColorsLight().backgroundDark,
       ),
     );
   }
@@ -53,6 +54,7 @@ class MainApp extends HookWidget {
       duration: const Duration(milliseconds: 450),
       reverseDuration: const Duration(milliseconds: 250),
     );
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: context.theme,
