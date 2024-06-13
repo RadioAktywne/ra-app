@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,24 +8,12 @@ import 'package:radioaktywne/components/ra_bottomnavbar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
-import 'package:radioaktywne/resources/colors.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
 import 'components/radio_player/radio_player_widget.dart';
 import 'components/ramowka/ramowka_widget.dart';
 
 void main() {
-  /// Sadly: only (known) way to do this on Android
-  /// (works just fine without this on iOS)
-  if (Platform.isAndroid) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle.light.copyWith(
-        statusBarColor: const ColorsLight().backgroundDark,
-        systemNavigationBarColor: const ColorsLight().backgroundDark,
-      ),
-    );
-  }
-
   /// Setup so the orientation stays in portrait mode
   ///
   /// Also, in the AndroidManifest.xml file,
@@ -66,213 +52,220 @@ class MainApp extends HookWidget {
       onGenerateTitle: (context) => context.l10n.hello,
       home: BlocProvider(
         create: (_) => AudioHandlerCubit(),
-        child: Scaffold(
-          appBar: RaAppBar(
-            height: 75,
-            icon: Icon(
-              Icons.menu,
-              color: context.colors.highlightGreen,
-              size: 32,
-              semanticLabel: 'RA AppBar menu button',
-            ),
-            bottomSize: 5,
-            mainColor: context.colors.backgroundDark,
-            accentColor: context.colors.highlightGreen,
-            iconButton: IconButton(
-              onPressed: () => _scaffoldKey.currentState!.isEndDrawerOpen
-                  ? _scaffoldKey.currentState!.closeEndDrawer()
-                  : _scaffoldKey.currentState!.openEndDrawer(),
-              icon: AnimatedIcon(
-                icon: AnimatedIcons.menu_close,
-                progress: burgerMenuIconController,
+        child: AnnotatedRegion(
+          value: SystemUiOverlayStyle(
+            systemNavigationBarColor: context.colors.backgroundDark,
+          ),
+          child: Scaffold(
+            appBar: RaAppBar(
+              height: 75,
+              icon: Icon(
+                Icons.menu,
                 color: context.colors.highlightGreen,
                 size: 32,
                 semanticLabel: 'RA AppBar menu button',
               ),
-            ),
-            text: 'Radio\nAktywne',
-            iconPath: 'assets/ra_logo/RA_logo.svg',
-            titlePadding: const EdgeInsets.only(left: 4, top: 8, bottom: 16),
-            imageHeight: 40,
-          ),
-          body: SafeArea (
-            child: Scaffold(
-              key: _scaffoldKey,
-              backgroundColor: Colors.transparent,
-              drawerScrimColor: context.colors.drawerBackgroundOverlay,
-              onEndDrawerChanged: (isOpened) => isOpened
-                  ? burgerMenuIconController.forward()
-                  : burgerMenuIconController.reverse(),
-              endDrawer: RaBurgerMenu(
-                titles: const [
-                  'Radio Aktywne',
-                  'Nagrania',
-                  'Płyta tygodnia',
-                  'Publicystyka',
-                  'Radiowcy',
-                  'Ramówka',
-                  'Audycje',
-                  'O nas',
-                ],
-                links: [
-                  () {},
-                  () {},
-                  () {},
-                  () {},
-                  () {},
-                  () {},
-                  () {},
-                  () {},
-                ],
+              bottomSize: 5,
+              mainColor: context.colors.backgroundDark,
+              accentColor: context.colors.highlightGreen,
+              iconButton: IconButton(
+                onPressed: () => _scaffoldKey.currentState!.isEndDrawerOpen
+                    ? _scaffoldKey.currentState!.closeEndDrawer()
+                    : _scaffoldKey.currentState!.openEndDrawer(),
+                icon: AnimatedIcon(
+                  icon: AnimatedIcons.menu_close,
+                  progress: burgerMenuIconController,
+                  color: context.colors.highlightGreen,
+                  size: 32,
+                  semanticLabel: 'RA AppBar menu button',
+                ),
               ),
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      /// Ramówka widget
-                      const Padding(
-                        padding: _widgetPadding,
-                        child: RamowkaWidget(),
-                      ),
-                    
-                      /// Old Ramowka
-                      Padding(
-                        padding: _widgetPadding,
-                        child: ColorShadowedCard(
-                          shadowColor: context.colors.highlightYellow,
-                          header: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: Text(
-                              'Ramówka na dziś',
-                              style: context.textStyles.textMedium,
+              text: 'Radio\nAktywne',
+              iconPath: 'assets/ra_logo/RA_logo.svg',
+              titlePadding: const EdgeInsets.only(left: 4, top: 8, bottom: 16),
+              imageHeight: 40,
+            ),
+            body: SafeArea(
+              child: Scaffold(
+                key: _scaffoldKey,
+                backgroundColor: Colors.transparent,
+                drawerScrimColor: context.colors.drawerBackgroundOverlay,
+                onEndDrawerChanged: (isOpened) => isOpened
+                    ? burgerMenuIconController.forward()
+                    : burgerMenuIconController.reverse(),
+                endDrawer: RaBurgerMenu(
+                  titles: const [
+                    'Radio Aktywne',
+                    'Nagrania',
+                    'Płyta tygodnia',
+                    'Publicystyka',
+                    'Radiowcy',
+                    'Ramówka',
+                    'Audycje',
+                    'O nas',
+                  ],
+                  links: [
+                    () {},
+                    () {},
+                    () {},
+                    () {},
+                    () {},
+                    () {},
+                    () {},
+                    () {},
+                  ],
+                ),
+                body: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        /// Ramówka widget
+                        const Padding(
+                          padding: _widgetPadding,
+                          child: RamowkaWidget(),
+                        ),
+
+                        /// Old Ramowka
+                        Padding(
+                          padding: _widgetPadding,
+                          child: ColorShadowedCard(
+                            shadowColor: context.colors.highlightYellow,
+                            header: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: Text(
+                                'Ramówka na dziś',
+                                style: context.textStyles.textMedium,
+                              ),
                             ),
-                          ),
-                          footer: Padding(
-                            padding: const EdgeInsets.only(top: 4),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 2),
-                                  child: Container(
-                                    width: 8,
-                                    height: 8,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.grey,
-                                      shape: BoxShape.circle,
+                            footer: Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 2,
+                                    ),
+                                    child: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.grey,
+                                        shape: BoxShape.circle,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 2),
-                                  child: Container(
-                                    width: 8,
-                                    height: 8,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      shape: BoxShape.circle,
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 2,
+                                    ),
+                                    child: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.circle,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 2),
-                                  child: Container(
-                                    width: 8,
-                                    height: 8,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.grey,
-                                      shape: BoxShape.circle,
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 2),
+                                    child: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.grey,
+                                        shape: BoxShape.circle,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            child: Text(
-                              'Lorem ipsum',
-                              style: context.textStyles.textSmall,
+                            child: Container(
+                              padding: const EdgeInsets.all(20),
+                              child: Text(
+                                'Lorem ipsum',
+                                style: context.textStyles.textSmall,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: _widgetPadding,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                child: ColorShadowedCard(
-                                  shadowColor: context.colors.highlightPurple,
-                                  header: Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 2),
-                                    child: Text(
-                                      'Nagłówek',
-                                      style: context.textStyles.textMedium,
+                        Padding(
+                          padding: _widgetPadding,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: ColorShadowedCard(
+                                    shadowColor: context.colors.highlightPurple,
+                                    header: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 2),
+                                      child: Text(
+                                        'Nagłówek',
+                                        style: context.textStyles.textMedium,
+                                      ),
                                     ),
-                                  ),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(20),
-                                    child: Text(
-                                      'Lorem ipsum',
-                                      style: context.textStyles.textSmall,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(20),
+                                      child: Text(
+                                        'Lorem ipsum',
+                                        style: context.textStyles.textSmall,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                child: ColorShadowedCard(
-                                  shadowColor: context.colors.highlightBlue,
-                                  footer: Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 2),
-                                    child: Text(
-                                      'Stopka',
-                                      style: context.textStyles.textSmall,
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: ColorShadowedCard(
+                                    shadowColor: context.colors.highlightBlue,
+                                    footer: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 2),
+                                      child: Text(
+                                        'Stopka',
+                                        style: context.textStyles.textSmall,
+                                      ),
                                     ),
-                                  ),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(20),
-                                    child: Text(
-                                      'Lorem ipsum',
-                                      style: context.textStyles.textSmall,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(20),
+                                      child: Text(
+                                        'Lorem ipsum',
+                                        style: context.textStyles.textSmall,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                    
-                  /// Radio player widget
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: RadioPlayerWidget(),
-                  ),
-                ],
+                      ],
+                    ),
+
+                    /// Radio player widget
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: RadioPlayerWidget(),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          bottomNavigationBar: Theme(
-            data: Theme.of(context)
-                .copyWith(canvasColor: context.colors.backgroundDark),
-            child: const RaBottomNavigationBar(),
+            bottomNavigationBar: Theme(
+              data: Theme.of(context)
+                  .copyWith(canvasColor: context.colors.backgroundDark),
+              child: const RaBottomNavigationBar(),
+            ),
           ),
         ),
       ),
