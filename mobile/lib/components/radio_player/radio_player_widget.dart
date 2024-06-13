@@ -5,6 +5,7 @@ import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_playbutton.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
+import 'package:text_scroll/text_scroll.dart';
 
 /// The radio player, consisting of a [RaPlayButton]
 /// and stream title.
@@ -156,21 +157,21 @@ class _StreamTitle extends StatelessWidget {
       stream: audioHandler.mediaItem,
       builder: (context, snapshot) {
         final mediaItem = snapshot.data;
-        return (mediaItem?.title != null && mediaItem!.title.isNotEmpty == true)
-            ? SizedBox(
-                width: MediaQuery.of(context).size.width / 1.6,
-                height: RadioPlayerWidget.height,
-                // TODO: Zmienić na Marquee zamiast Text
-                child: Text(
-                  mediaItem.title,
-                  style: context.textStyles.textPlayer,
-                ),
-              )
-            : Text(
-                'No stream title', // TODO: Wymienić na 'Radio Aktywne'
-                style: context.textStyles.textPlayer,
-                overflow: TextOverflow.ellipsis,
-              );
+        return SizedBox(
+          width: MediaQuery.of(context).size.width / 1.4,
+          child: TextScroll(
+            (mediaItem?.title != null && mediaItem!.title.isNotEmpty == true)
+                ? mediaItem.title
+                : 'No stream title',
+            velocity: const Velocity(
+              pixelsPerSecond: Offset(17, 0),
+            ),
+            pauseBetween: const Duration(milliseconds: 2500),
+            intervalSpaces: 6,
+            selectable: true,
+            style: context.textStyles.textPlayer,
+          ),
+        );
       },
     );
   }
