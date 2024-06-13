@@ -7,8 +7,8 @@ import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 import 'package:text_scroll/text_scroll.dart';
 
-/// The radio player, consisting of a [RaPlayButton]
-/// and stream title.
+/// The radio player with scrolling stream title
+/// and a [RaPlayButton].
 ///
 /// Should be positioned at the bottom of the screen,
 /// "attached" to the navigation bar
@@ -41,7 +41,7 @@ class RadioPlayerWidget extends HookWidget {
                     ),
                   ),
                   Text(
-                    'No stream title', // TODO: Wymienić na 'Radio Aktywne'
+                    context.l10n.noStreamTitle,
                     style: context.textStyles.textPlayer,
                     overflow: TextOverflow.ellipsis,
                   ),

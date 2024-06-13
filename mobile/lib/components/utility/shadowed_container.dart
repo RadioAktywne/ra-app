@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:radioaktywne/extensions/extensions.dart';
 
 /// A [Container] with a built-in shadow same as
-/// in Figma to reduce boilerplate.
+/// in Figma.
 class ShadowedContainer extends StatelessWidget {
   const ShadowedContainer({
     super.key,
@@ -9,18 +10,22 @@ class ShadowedContainer extends StatelessWidget {
     this.width,
     this.height,
     this.size,
+    this.backgroundColor,
     this.shadowColor,
     this.margin,
     this.padding,
+    this.shape,
   });
 
   final Widget? child;
   final double? width;
   final double? height;
   final double? size;
+  final Color? backgroundColor;
   final Color? shadowColor;
   final EdgeInsets? margin;
   final EdgeInsets? padding;
+  final BoxShape? shape;
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +36,13 @@ class ShadowedContainer extends StatelessWidget {
       margin: margin,
       padding: padding,
       decoration: BoxDecoration(
-        color: shadowColor,
-        boxShadow: const [
+        color: backgroundColor,
+        shape: shape ?? BoxShape.rectangle,
+        boxShadow: [
           BoxShadow(
-            color: Colors.black38,
+            color: shadowColor ?? context.colors.blackShadow,
             blurRadius: 5,
-            offset: Offset(0, 5),
+            offset: const Offset(0, 5),
           ),
         ],
       ),

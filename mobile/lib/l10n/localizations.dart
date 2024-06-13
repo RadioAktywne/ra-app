@@ -96,6 +96,30 @@ abstract class AppLocalizations {
   /// In pl, this message translates to:
   /// **'cześć'**
   String get hello;
+
+  /// No description provided for @dataLoadError.
+  ///
+  /// In pl, this message translates to:
+  /// **'Wystąpił błąd podczas pobierania danych'**
+  String get dataLoadError;
+
+  /// No description provided for @imageLoadError.
+  ///
+  /// In pl, this message translates to:
+  /// **'Wystąpił błąd podczas pobierania obrazu'**
+  String get imageLoadError;
+
+  /// No description provided for @noStreamTitle.
+  ///
+  /// In pl, this message translates to:
+  /// **'Radio Aktywne'**
+  String get noStreamTitle;
+
+  /// No description provided for @ramowka.
+  ///
+  /// In pl, this message translates to:
+  /// **'Ramówka'**
+  String get ramowka;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

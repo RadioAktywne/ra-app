@@ -1,4 +1,8 @@
 {
     "@locale": "pl",
-    "hello": "cześć"
+    "hello": "cześć",
+    "dataLoadError": "Wystąpił błąd podczas pobierania danych",
+    "imageLoadError": "Wystąpił błąd podczas pobierania obrazu",
+    "noStreamTitle": "Radio Aktywne",
+    "ramowka": "Ramówka"
 }

@@ -3,10 +3,11 @@ import 'dart:math';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
-import 'package:radioaktywne/components/shadowed_container.dart';
+import 'package:radioaktywne/components/utility/shadowed_container.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/resources/assets.gen.dart';
 import 'package:simple_animations/simple_animations.dart';
+import 'package:simple_shadow/simple_shadow.dart';
 
 /// Represents play/pause animated button.
 class RaPlayButton extends HookWidget {
@@ -34,6 +35,8 @@ class RaPlayButton extends HookWidget {
   ///
   /// Default: 150 ms
   final Duration shrinkAnimationDuration;
+
+  static const _shadowBlur = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +95,14 @@ class _RaPlayButtonImage extends StatelessWidget {
           AudioProcessingState.loading ||
           AudioProcessingState.buffering =>
             _RaPlayButtonImageLoading(size: size),
-          // TODO: Add triangular shadow
-          _ => _pauseIcon,
+          // TODO: (maybe?) Handle error state:
+          // TODO: AudioProcessingState.error => ...,
+          _ => SimpleShadow(
+              opacity: 0.38,
+              sigma: RaPlayButton._shadowBlur * 2,
+              offset: const Offset(0, 5),
+              child: _pauseIcon,
+            )
         },
       ),
     );
@@ -108,19 +117,20 @@ class _RaPlayButtonImagePlaying extends StatelessWidget {
     required this.size,
   });
 
-  /// Size of every variation of the button
+  /// Size of every variation of the button.
   final double size;
 
   /// Tween for the animation to know between what
-  /// values should it interpolate
+  /// values should it interpolate.
   static final _tween = Tween<double>(begin: 0, end: 2);
 
-  /// Image while playing
+  /// Image while playing.
   static final _playIcon = const SvgGenImage('assets/icons/play.svg').svg();
 
   @override
   Widget build(BuildContext context) {
     return ShadowedContainer(
+      shape: BoxShape.circle,
       size: size,
       child: LoopAnimationBuilder(
         builder: (context, value, child) {
@@ -149,20 +159,11 @@ class _RaPlayButtonImageLoading extends StatelessWidget {
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
-        Container(
+        ShadowedContainer(
           width: size,
           height: size,
-          decoration: BoxDecoration(
-            color: context.colors.highlightGreen,
-            shape: BoxShape.circle,
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black38,
-                blurRadius: 5,
-                offset: Offset(0, 5),
-              ),
-            ],
-          ),
+          backgroundColor: context.colors.highlightGreen,
+          shape: BoxShape.circle,
         ),
         Container(
           padding: const EdgeInsets.all(5),

@@ -1,8 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:radioaktywne/components/color_shadowed_card.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_list.dart';
+import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 
 /// Widget representing Ramówka
@@ -12,15 +10,8 @@ import 'package:radioaktywne/extensions/extensions.dart';
 class RamowkaWidget extends StatelessWidget {
   const RamowkaWidget({
     super.key,
-    this.dataSource,
     this.timeout = const Duration(seconds: 7),
   });
-
-  /// Asynchronous source of data in the widget.
-  ///
-  /// On default, the data is pulled from the radioaktywne.pl api.
-  /// If specified, the data will be pulled from the specified source.
-  final Future<void>? dataSource;
 
   /// Timeout for the fetching function.
   final Duration timeout;
@@ -48,7 +39,7 @@ class RamowkaWidget extends StatelessWidget {
                     // TODO: nagivation to Ramowka page
                     onTap: () {},
                     child: Text(
-                      'Ramówka',
+                      context.l10n.ramowka,
                       style: context.textStyles.textMedium,
                     ),
                   ),
