@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
-import 'package:radioaktywne/extensions/build_context.dart';
+import 'package:radioaktywne/extensions/extensions.dart';
+import 'package:radioaktywne/models/plyta_tygodnia_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 
 class PlytaTygodniaPage extends StatelessWidget {
@@ -95,7 +96,7 @@ class PlytaTygodniaPage extends StatelessWidget {
                           ),
                 errorBuilder: (context, child, loadingProgress) => Center(
                   child: Text(
-                    'Wystąpił błąd podczas pobierania obrazu',
+                    context.l10n.imageLoadError,
                     style: context.textStyles.textMedium.copyWith(
                       color: context.colors.highlightGreen,
                     ),
@@ -162,7 +163,7 @@ class _PlytaTygodniaNoData extends StatelessWidget {
             child: Padding(
               padding: PlytaTygodniaPage._pagePadding.copyWith(top: 0),
               child: Text(
-                'Wystąpił błąd podczas pobierania danych',
+                context.l10n.dataLoadError,
                 style: context.textStyles.textMedium.copyWith(
                   color: context.colors.highlightGreen,
                 ),
@@ -190,43 +191,5 @@ class _PlytaTygodniaWaiting extends StatelessWidget {
         strokeWidth: 5,
       ),
     );
-  }
-}
-
-/// Information about a single Plyta tygodnia.
-class PlytaTygodniaInfo {
-  /// Creates an empty [PlytaTygodniaInfo] object.
-  PlytaTygodniaInfo.empty()
-      : artist = '',
-        title = '',
-        description = '',
-        imageTag = '';
-
-  /// Creates a [PlytaTygodniaInfo] object from a given Json map.
-  PlytaTygodniaInfo.fromJson(Map<String, dynamic> jsonData)
-      : artist = (jsonData['acf'] as Map<String, dynamic>)['artist'] as String,
-        title = (jsonData['acf'] as Map<String, dynamic>)['title'] as String,
-        description =
-            (jsonData['acf'] as Map<String, dynamic>)['description'] as String,
-        imageTag = ((jsonData['acf'] as Map<String, dynamic>)['image'] as int)
-            .toString();
-
-  final String artist;
-  final String title;
-  final String description;
-  String imageTag;
-
-  bool get isNotEmpty =>
-      artist != '' && title != '' && description != '' && imageTag != '';
-
-  @override
-  String toString() {
-    return '''
-    Plyta tygodnia {
-      artist: `$artist`,
-      title: `$title`, 
-      description: `$description`,
-    }
-    ''';
   }
 }

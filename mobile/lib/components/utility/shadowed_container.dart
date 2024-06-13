@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:radioaktywne/extensions/extensions.dart';
 
 /// A [Container] with a built-in shadow same as
 /// in Figma.
@@ -39,7 +40,7 @@ class ShadowedContainer extends StatelessWidget {
         shape: shape ?? BoxShape.rectangle,
         boxShadow: [
           BoxShadow(
-            color: shadowColor ?? Colors.black38,
+            color: shadowColor ?? context.colors.blackShadow,
             blurRadius: 5,
             offset: const Offset(0, 5),
           ),

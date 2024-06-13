@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
-import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
 import 'package:radioaktywne/components/ra_bottomnavbar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
+import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
@@ -30,11 +30,6 @@ class MainApp extends HookWidget {
   MainApp({super.key});
 
   final _scaffoldKey = GlobalKey<ScaffoldState>(debugLabel: 'Inner scaffold');
-  // ignore: unused_field
-  static const _widgetPadding = EdgeInsets.symmetric(
-    vertical: 8,
-    horizontal: 16,
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -110,9 +105,14 @@ class MainApp extends HookWidget {
                   () {},
                 ],
               ),
-              body: const PlytaTygodniaPage(),
-              // last "not refactored" screen:
-              // const MainAppPage(widgetPadding: _widgetPadding),
+              body: // const PlytaTygodniaPage(),
+                  // last "not refactored" screen:
+                  const MainAppPage(
+                widgetPadding: EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 16,
+                ),
+              ),
             ),
             bottomNavigationBar: const RaBottomNavigationBar(),
           ),
@@ -256,8 +256,6 @@ class MainAppPage extends StatelessWidget {
             ),
           ],
         ),
-
-        /// Radio player widget
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: RadioPlayerWidget(),

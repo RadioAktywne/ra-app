@@ -39,7 +39,7 @@ class RamowkaWidget extends StatelessWidget {
                     // TODO: nagivation to Ramowka page
                     onTap: () {},
                     child: Text(
-                      'Ramówka',
+                      context.l10n.ramowka,
                       style: context.textStyles.textMedium,
                     ),
                   ),

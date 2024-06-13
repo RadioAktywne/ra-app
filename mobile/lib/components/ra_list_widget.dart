@@ -35,7 +35,7 @@ class RaListWidget extends StatelessWidget {
     return SizedBox(
       height: height,
       child: ListView.builder(
-        itemCount: max(items.length, rows),
+        itemCount: min(items.length, rows),
         itemBuilder: (context, index) => _RaListWidgetItem(
           item: items[index],
           color: _color(context, index),

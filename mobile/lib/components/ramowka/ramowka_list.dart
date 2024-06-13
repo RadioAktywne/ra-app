@@ -4,9 +4,9 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:radioaktywne/components/ra_list_widget.dart';
-import 'package:radioaktywne/components/ramowka/ramowka_info.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
+import 'package:radioaktywne/models/ramowka_info.dart';
 import 'package:radioaktywne/resources/day.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 
@@ -170,7 +170,7 @@ class _RamowkaListNoData extends StatelessWidget {
       items: [
         Center(
           child: Text(
-            'Wystąpił błąd podczas pobierania danych',
+            context.l10n.dataLoadError,
             style: context.textStyles.textSmall,
           ),
         ),

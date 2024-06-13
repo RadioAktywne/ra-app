@@ -101,10 +101,10 @@ class RaBurgerMenuItem extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: ButtonStyle(
-          overlayColor: MaterialStateProperty.all(color.withAlpha(50)),
-          padding: MaterialStateProperty.all(EdgeInsets.zero),
+          overlayColor: WidgetStateProperty.all(color.withAlpha(50)),
+          padding: WidgetStateProperty.all(EdgeInsets.zero),
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          elevation: MaterialStateProperty.all(0),
+          elevation: WidgetStateProperty.all(0),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
