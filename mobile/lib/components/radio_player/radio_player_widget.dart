@@ -7,9 +7,8 @@ import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 import 'package:text_scroll/text_scroll.dart';
 
-/// The radio player, consisting of a [RaPlayButton]
-/// and the stream title.
-/// and stream title.
+/// The radio player with scrolling stream title
+/// and a [RaPlayButton].
 ///
 /// Should be positioned at the bottom of the screen,
 /// "attached" to the navigation bar
@@ -144,7 +143,6 @@ class _StreamPlayButton extends StatelessWidget {
   }
 }
 
-/// The display of the radio stream title.
 /// The display of the radio stream title.
 class _StreamTitle extends StatelessWidget {
   const _StreamTitle({
