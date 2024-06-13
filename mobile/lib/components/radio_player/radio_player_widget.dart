@@ -5,9 +5,11 @@ import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_playbutton.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
+import 'package:text_scroll/text_scroll.dart';
 
 /// The radio player, consisting of a [RaPlayButton]
 /// and the stream title.
+/// and stream title.
 ///
 /// Should be positioned at the bottom of the screen,
 /// "attached" to the navigation bar
@@ -143,6 +145,7 @@ class _StreamPlayButton extends StatelessWidget {
 }
 
 /// The display of the radio stream title.
+/// The display of the radio stream title.
 class _StreamTitle extends StatelessWidget {
   const _StreamTitle({
     required this.audioHandler,
@@ -156,24 +159,21 @@ class _StreamTitle extends StatelessWidget {
       stream: audioHandler.mediaItem,
       builder: (context, snapshot) {
         final mediaItem = snapshot.data;
-        return (mediaItem?.title != null && mediaItem!.title.isNotEmpty == true)
-            ? SizedBox(
-                width: MediaQuery.of(context).size.width / 1.6,
-                height: RadioPlayerWidget.height,
-                child: Text(
-                  mediaItem.title,
-                  // blankSpace: 50,
-                  // velocity: 10,
-                  // // startAfter: const Duration(seconds: 3),
-                  // startPadding: 40,
-                  style: context.textStyles.textPlayer,
-                ),
-              )
-            : Text(
-                context.l10n.noStreamTitle,
-                style: context.textStyles.textPlayer,
-                overflow: TextOverflow.ellipsis,
-              );
+        return SizedBox(
+          width: MediaQuery.of(context).size.width / 1.4,
+          child: TextScroll(
+            (mediaItem?.title != null && mediaItem!.title.isNotEmpty == true)
+                ? mediaItem.title
+                : 'No stream title',
+            velocity: const Velocity(
+              pixelsPerSecond: Offset(17, 0),
+            ),
+            pauseBetween: const Duration(milliseconds: 2500),
+            intervalSpaces: 6,
+            selectable: true,
+            style: context.textStyles.textPlayer,
+          ),
+        );
       },
     );
   }

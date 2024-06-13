@@ -37,16 +37,34 @@ class MainApp extends HookWidget {
       duration: const Duration(milliseconds: 450),
       reverseDuration: const Duration(milliseconds: 250),
     );
+
+    //? Navigation mock
+    // TODO: Add proper navigation
+    const dRoutes = [
+      MainPage(),
+      PlytaTygodniaPage(),
+    ];
+    const dIcons = [
+      Icon(Icons.home_outlined, size: 30),
+      Icon(Icons.album_outlined, size: 32.5),
+    ];
+    final dCurrentRoute = useState(0);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: context.theme,
+      theme: context.theme.copyWith(
+        scaffoldBackgroundColor: context.colors.backgroundLight,
+      ),
       locale: const Locale('pl'),
       supportedLocales: context.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       onGenerateTitle: (context) => context.l10n.hello,
       home: BlocProvider(
         create: (_) => AudioHandlerCubit(),
-        child: SafeArea(
+        child: AnnotatedRegion(
+          value: SystemUiOverlayStyle(
+            systemNavigationBarColor: context.colors.backgroundDark,
+          ),
           child: Scaffold(
             appBar: RaAppBar(
               height: 75,
@@ -76,45 +94,50 @@ class MainApp extends HookWidget {
               titlePadding: const EdgeInsets.only(left: 4, top: 8, bottom: 16),
               imageHeight: 40,
             ),
-            body: Scaffold(
-              key: _scaffoldKey,
-              backgroundColor: context.colors.backgroundLight,
-              drawerScrimColor: context.colors.drawerBackgroundOverlay,
-              onEndDrawerChanged: (isOpened) => isOpened
-                  ? burgerMenuIconController.forward()
-                  : burgerMenuIconController.reverse(),
-              endDrawer: RaBurgerMenu(
-                titles: const [
-                  'Radio Aktywne',
-                  'Nagrania',
-                  'Płyta tygodnia',
-                  'Publicystyka',
-                  'Radiowcy',
-                  'Ramówka',
-                  'Audycje',
-                  'O nas',
-                ],
-                links: [
-                  () {},
-                  () {},
-                  () {},
-                  () {},
-                  () {},
-                  () {},
-                  () {},
-                  () {},
-                ],
-              ),
-              body: // const PlytaTygodniaPage(),
-                  // last "not refactored" screen:
-                  const MainAppPage(
-                widgetPadding: EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 16,
+            body: SafeArea(
+              child: Scaffold(
+                key: _scaffoldKey,
+                backgroundColor: Colors.transparent,
+                drawerScrimColor: context.colors.drawerBackgroundOverlay,
+                onEndDrawerChanged: (isOpened) => isOpened
+                    ? burgerMenuIconController.forward()
+                    : burgerMenuIconController.reverse(),
+                endDrawer: RaBurgerMenu(
+                  titles: const [
+                    'Radio Aktywne',
+                    'Nagrania',
+                    'Płyta tygodnia',
+                    'Publicystyka',
+                    'Radiowcy',
+                    'Ramówka',
+                    'Audycje',
+                    'O nas',
+                  ],
+                  links: [
+                    () {},
+                    () {},
+                    () {},
+                    () {},
+                    () {},
+                    () {},
+                    () {},
+                    () {},
+                  ],
                 ),
+                body: dRoutes[dCurrentRoute.value],
               ),
             ),
             bottomNavigationBar: const RaBottomNavigationBar(),
+
+            //? Navigation mock
+            // TODO: Implement proper navigation
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => dCurrentRoute.value =
+                  (dCurrentRoute.value + 1) % dRoutes.length,
+              backgroundColor: context.colors.backgroundDark,
+              foregroundColor: context.colors.highlightGreen,
+              child: dIcons[(dCurrentRoute.value + 1) % dRoutes.length],
+            ),
           ),
         ),
       ),
@@ -122,10 +145,15 @@ class MainApp extends HookWidget {
   }
 }
 
-class MainAppPage extends StatelessWidget {
-  const MainAppPage({super.key, required this.widgetPadding});
+class MainPage extends StatelessWidget {
+  const MainPage({
+    super.key,
+  });
 
-  final EdgeInsets widgetPadding;
+  static const _widgetPadding = EdgeInsets.symmetric(
+    vertical: 8,
+    horizontal: 16,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -136,14 +164,14 @@ class MainAppPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             /// Ramówka widget
-            Padding(
-              padding: widgetPadding,
-              child: const RamowkaWidget(),
+            const Padding(
+              padding: _widgetPadding,
+              child: RamowkaWidget(),
             ),
 
             /// Old Ramowka
             Padding(
-              padding: widgetPadding,
+              padding: _widgetPadding,
               child: ColorShadowedCard(
                 shadowColor: context.colors.highlightYellow,
                 header: Padding(
@@ -159,7 +187,9 @@ class MainAppPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 2,
+                        ),
                         child: Container(
                           width: 8,
                           height: 8,
@@ -170,7 +200,9 @@ class MainAppPage extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 2,
+                        ),
                         child: Container(
                           width: 8,
                           height: 8,
@@ -181,7 +213,9 @@ class MainAppPage extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 2,
+                        ),
                         child: Container(
                           width: 8,
                           height: 8,
@@ -204,7 +238,7 @@ class MainAppPage extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: widgetPadding,
+              padding: _widgetPadding,
               child: Row(
                 children: [
                   Expanded(
@@ -213,7 +247,9 @@ class MainAppPage extends StatelessWidget {
                       child: ColorShadowedCard(
                         shadowColor: context.colors.highlightPurple,
                         header: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 2,
+                          ),
                           child: Text(
                             'Nagłówek',
                             style: context.textStyles.textMedium,
@@ -235,7 +271,9 @@ class MainAppPage extends StatelessWidget {
                       child: ColorShadowedCard(
                         shadowColor: context.colors.highlightBlue,
                         footer: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 2,
+                          ),
                           child: Text(
                             'Stopka',
                             style: context.textStyles.textSmall,

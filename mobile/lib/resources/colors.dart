@@ -31,9 +31,9 @@ abstract class RAColors {
   static RAColors ofBrightness(Brightness brightness) {
     switch (brightness) {
       case Brightness.light:
-        return const _ColorsLight();
+        return const ColorsLight();
       case Brightness.dark:
-        return const _ColorsLight();
+        return const ColorsLight();
     }
   }
 
@@ -54,8 +54,8 @@ abstract class RAColors {
   RAColor get blackShadow;
 }
 
-class _ColorsLight extends RAColors {
-  const _ColorsLight() : super._();
+class ColorsLight extends RAColors {
+  const ColorsLight() : super._();
   // backgrounds
   @override
   RAColor get backgroundLight => const RAColor._(0xFFFFF4DB);
