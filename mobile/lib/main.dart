@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +16,17 @@ import 'components/radio_player/radio_player_widget.dart';
 import 'components/ramowka/ramowka_widget.dart';
 
 void main() {
+  // TODO: Think about better solution using
+  // TODO: (access to RAColors)
+  if (Platform.isAndroid) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: const Color(0xFF302318),
+        systemNavigationBarColor: const Color(0xFF302318),
+      ),
+    );
+  }
+
   /// Setup so the orientation stays in portrait mode
   ///
   /// Also, in the AndroidManifest.xml file,
@@ -254,7 +267,11 @@ class MainApp extends HookWidget {
               ),
             ),
           ),
-          bottomNavigationBar: const RaBottomNavigationBar(),
+          bottomNavigationBar: Theme(
+            data: Theme.of(context)
+                .copyWith(canvasColor: context.colors.backgroundDark),
+            child: const RaBottomNavigationBar(),
+          ),
         ),
       ),
     );
