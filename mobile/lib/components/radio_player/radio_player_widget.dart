@@ -159,23 +159,18 @@ class _StreamTitle extends StatelessWidget {
         final mediaItem = snapshot.data;
         return SizedBox(
           width: MediaQuery.of(context).size.width / 1.4,
-          child:
-              (mediaItem?.title != null && mediaItem!.title.isNotEmpty == true)
-                  ? TextScroll(
-                      mediaItem.title,
-                      velocity: const Velocity(
-                        pixelsPerSecond: Offset(17, 0),
-                      ),
-                      pauseBetween: const Duration(milliseconds: 2500),
-                      intervalSpaces: 6,
-                      selectable: true,
-                      style: context.textStyles.textPlayer,
-                    )
-                  : Text(
-                      'No stream title', // TODO: Wymienić na 'Radio Aktywne'
-                      style: context.textStyles.textPlayer,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+          child: TextScroll(
+            (mediaItem?.title != null && mediaItem!.title.isNotEmpty == true)
+                ? mediaItem.title
+                : 'No stream title',
+            velocity: const Velocity(
+              pixelsPerSecond: Offset(17, 0),
+            ),
+            pauseBetween: const Duration(milliseconds: 2500),
+            intervalSpaces: 6,
+            selectable: true,
+            style: context.textStyles.textPlayer,
+          ),
         );
       },
     );
