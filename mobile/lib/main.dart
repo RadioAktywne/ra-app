@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -146,8 +148,7 @@ class MainApp extends HookWidget {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 2,
-                                    ),
+                                        horizontal: 2),
                                     child: Container(
                                       width: 8,
                                       height: 8,
@@ -159,8 +160,7 @@ class MainApp extends HookWidget {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 2,
-                                    ),
+                                        horizontal: 2),
                                     child: Container(
                                       width: 8,
                                       height: 8,
@@ -261,11 +261,7 @@ class MainApp extends HookWidget {
                 ),
               ),
             ),
-            bottomNavigationBar: Theme(
-              data: Theme.of(context)
-                  .copyWith(canvasColor: context.colors.backgroundDark),
-              child: const RaBottomNavigationBar(),
-            ),
+            bottomNavigationBar: const RaBottomNavigationBar(),
           ),
         ),
       ),
