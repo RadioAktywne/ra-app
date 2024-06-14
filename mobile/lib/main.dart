@@ -8,7 +8,8 @@ import 'package:radioaktywne/components/ra_burger_menu.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
-import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
+import 'package:radioaktywne/pages/article_page.dart';
+// import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
 import 'components/radio_player/radio_player_widget.dart';
@@ -42,7 +43,7 @@ class MainApp extends HookWidget {
     // TODO: Add proper navigation
     const dRoutes = [
       MainPage(),
-      PlytaTygodniaPage(),
+      ArticlePage(),
     ];
     const dIcons = [
       Icon(Icons.home_outlined, size: 30),
