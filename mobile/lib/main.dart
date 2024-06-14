@@ -37,12 +37,11 @@ final _router = GoRouter(
           builder: (context, state) => const PlytaTygodniaPage(),
         ),
       ],
-      builder: (context, state, child) => RaNavigationShell(
-        state: state,
-        child: child,
-      ),
+      builder: (context, state, child) =>
+          RaNavigationShell(state: state, child: child),
     ),
   ],
+
   // TODO: debug only, will delete later
   // (because there will be no way to go to page
   // that doesn't exist).
@@ -234,6 +233,8 @@ class MainPage extends StatelessWidget {
             ),
           ],
         ),
+
+        // TODO: refactor for this to be "attached" to the ShellRoute
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: RadioPlayerWidget(),

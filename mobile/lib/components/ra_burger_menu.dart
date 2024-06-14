@@ -15,6 +15,8 @@ class RaBurgerMenu extends HookWidget {
     this.onItemClicked,
   });
 
+  /// Map of navigation links for the [GoRouter]
+  /// with their
   final Map<String, String> navigationItems;
 
   final void Function()? onItemClicked;

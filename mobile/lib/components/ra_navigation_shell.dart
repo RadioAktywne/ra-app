@@ -37,7 +37,7 @@ class RaNavigationShell extends HookWidget {
     final index = _navigationItems.keys.toList().indexOf(
           _navigationItems.keys.firstWhere((key) => key == state.fullPath),
         );
-    return min(index, 0);
+    return max(index, 0);
   }
 
   @override
@@ -99,6 +99,8 @@ class RaNavigationShell extends HookWidget {
             ),
           ),
           bottomNavigationBar: const RaBottomNavigationBar(),
+          // TODO: refactor for RadioPlayer to be "attached" to this
+          // TODO: (maybe in form of a FloatingActionButton?)
         ),
       ),
     );
