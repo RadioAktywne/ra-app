@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
-import 'package:radioaktywne/components/ra_appbar.dart';
-import 'package:radioaktywne/components/ra_bottomnavbar.dart';
-import 'package:radioaktywne/components/ra_burger_menu.dart';
+import 'package:radioaktywne/components/ra_navigation_shell.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
-import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
 import 'components/radio_player/radio_player_widget.dart';
 import 'components/ramowka/ramowka_widget.dart';
@@ -23,34 +20,58 @@ void main() {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
-  ]).then((_) => runApp(MainApp()));
+  ]).then((_) => runApp(const MainApp()));
 }
 
-class MainApp extends HookWidget {
-  MainApp({super.key});
+final _router = GoRouter(
+  initialLocation: '/home',
+  routes: [
+    ShellRoute(
+      routes: [
+        GoRoute(
+          path: '/home',
+          builder: (context, state) => const MainPage(),
+        ),
+        GoRoute(
+          path: '/album',
+          builder: (context, state) => const PlytaTygodniaPage(),
+        ),
+      ],
+      builder: (context, state, child) => RaNavigationShell(
+        state: state,
+        child: child,
+      ),
+    ),
+  ],
+  // TODO: debug only, will delete later
+  // (because there will be no way to go to page
+  // that doesn't exist).
+  errorBuilder: (context, state) => Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Page ${state.fullPath} doesn't (yet) exist...",
+          style: context.textStyles.textMedium,
+        ),
+        TextButton(
+          onPressed: () => context.go('/home'),
+          child: Text(
+            'Home',
+            style: context.textStyles.polibudzka,
+          ),
+        ),
+      ],
+    ),
+  ),
+);
 
-  final _scaffoldKey = GlobalKey<ScaffoldState>(debugLabel: 'Inner scaffold');
+class MainApp extends HookWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final burgerMenuIconController = useAnimationController(
-      duration: const Duration(milliseconds: 450),
-      reverseDuration: const Duration(milliseconds: 250),
-    );
-
-    //? Navigation mock
-    // TODO: Add proper navigation
-    const dRoutes = [
-      MainPage(),
-      PlytaTygodniaPage(),
-    ];
-    const dIcons = [
-      Icon(Icons.home_outlined, size: 30),
-      Icon(Icons.album_outlined, size: 32.5),
-    ];
-    final dCurrentRoute = useState(0);
-
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: context.theme.copyWith(
         scaffoldBackgroundColor: context.colors.backgroundLight,
@@ -59,88 +80,7 @@ class MainApp extends HookWidget {
       supportedLocales: context.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       onGenerateTitle: (context) => context.l10n.hello,
-      home: BlocProvider(
-        create: (_) => AudioHandlerCubit(),
-        child: AnnotatedRegion(
-          value: SystemUiOverlayStyle(
-            systemNavigationBarColor: context.colors.backgroundDark,
-          ),
-          child: Scaffold(
-            appBar: RaAppBar(
-              height: 75,
-              icon: Icon(
-                Icons.menu,
-                color: context.colors.highlightGreen,
-                size: 32,
-                semanticLabel: 'RA AppBar menu button',
-              ),
-              bottomSize: 5,
-              mainColor: context.colors.backgroundDark,
-              accentColor: context.colors.highlightGreen,
-              iconButton: IconButton(
-                onPressed: () => _scaffoldKey.currentState!.isEndDrawerOpen
-                    ? _scaffoldKey.currentState!.closeEndDrawer()
-                    : _scaffoldKey.currentState!.openEndDrawer(),
-                icon: AnimatedIcon(
-                  icon: AnimatedIcons.menu_close,
-                  progress: burgerMenuIconController,
-                  color: context.colors.highlightGreen,
-                  size: 32,
-                  semanticLabel: 'RA AppBar menu button',
-                ),
-              ),
-              text: 'Radio\nAktywne',
-              iconPath: 'assets/ra_logo/RA_logo.svg',
-              titlePadding: const EdgeInsets.only(left: 4, top: 8, bottom: 16),
-              imageHeight: 40,
-            ),
-            body: SafeArea(
-              child: Scaffold(
-                key: _scaffoldKey,
-                backgroundColor: Colors.transparent,
-                drawerScrimColor: context.colors.drawerBackgroundOverlay,
-                onEndDrawerChanged: (isOpened) => isOpened
-                    ? burgerMenuIconController.forward()
-                    : burgerMenuIconController.reverse(),
-                endDrawer: RaBurgerMenu(
-                  titles: const [
-                    'Radio Aktywne',
-                    'Nagrania',
-                    'Płyta tygodnia',
-                    'Publicystyka',
-                    'Radiowcy',
-                    'Ramówka',
-                    'Audycje',
-                    'O nas',
-                  ],
-                  links: [
-                    () {},
-                    () {},
-                    () {},
-                    () {},
-                    () {},
-                    () {},
-                    () {},
-                    () {},
-                  ],
-                ),
-                body: dRoutes[dCurrentRoute.value],
-              ),
-            ),
-            bottomNavigationBar: const RaBottomNavigationBar(),
-
-            //? Navigation mock
-            // TODO: Implement proper navigation
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => dCurrentRoute.value =
-                  (dCurrentRoute.value + 1) % dRoutes.length,
-              backgroundColor: context.colors.backgroundDark,
-              foregroundColor: context.colors.highlightGreen,
-              child: dIcons[(dCurrentRoute.value + 1) % dRoutes.length],
-            ),
-          ),
-        ),
-      ),
+      routerConfig: _router,
     );
   }
 }
