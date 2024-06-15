@@ -21,7 +21,8 @@ class PlytaTygodniaPage extends StatelessWidget {
       EdgeInsets.only(top: 26, left: 26, right: 26);
 
   /// Space between things on the page.
-  static const SizedBox _emptySpace = SizedBox(height: 9);
+  static const SizedBox _emptySpaceBetween = SizedBox(height: 9);
+  static const SizedBox _emptySpaceEnd = SizedBox(height: 100);
 
   /// Plyta tygodnia info fetch details.
   static final Uri _infoUrl = Uri.parse(
@@ -106,7 +107,7 @@ class PlytaTygodniaPage extends StatelessWidget {
                 ),
               ),
             ),
-            _emptySpace,
+            _emptySpaceBetween,
             Container(
               height: 31,
               color: context.colors.backgroundDark,
@@ -126,17 +127,17 @@ class PlytaTygodniaPage extends StatelessWidget {
                 ],
               ),
             ),
-            _emptySpace,
+            _emptySpaceBetween,
             Padding(
               padding: _textPadding,
               child: SelectableText(
-                plytaTygodnia.description,
+                plytaTygodnia.description + plytaTygodnia.description,
                 style: context.textStyles.textSmall.copyWith(
                   color: context.colors.backgroundDark,
                 ),
               ),
             ),
-            _emptySpace,
+            _emptySpaceEnd,
           ],
         ),
       ),

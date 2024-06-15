@@ -8,6 +8,7 @@ import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
 import 'package:radioaktywne/components/ra_bottomnavbar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
+import 'package:radioaktywne/components/radio_player/radio_player_widget.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
@@ -35,7 +36,10 @@ class RaNavigationShell extends HookWidget {
 
   int _determineSelected() {
     final index = _navigationItems.keys.toList().indexOf(
-          _navigationItems.keys.firstWhere((key) => key == state.fullPath),
+          _navigationItems.keys.firstWhere(
+            (key) => key == state.fullPath,
+            orElse: () => '/home',
+          ),
         );
     return max(index, 0);
   }
@@ -46,6 +50,8 @@ class RaNavigationShell extends HookWidget {
       duration: const Duration(milliseconds: 450),
       reverseDuration: const Duration(milliseconds: 250),
     );
+
+    final selectedPageIndex = _determineSelected();
 
     return BlocProvider(
       create: (_) => AudioHandlerCubit(),
@@ -92,15 +98,20 @@ class RaNavigationShell extends HookWidget {
                   : burgerMenuIconController.reverse(),
               endDrawer: RaBurgerMenu(
                 onItemClicked: burgerMenuIconController.reverse,
-                selectedIndex: _determineSelected(),
+                selectedIndex: selectedPageIndex,
                 navigationItems: _navigationItems,
               ),
               body: child,
             ),
           ),
-          bottomNavigationBar: const RaBottomNavigationBar(),
-          // TODO: refactor for RadioPlayer to be "attached" to this
-          // TODO: (maybe in form of a FloatingActionButton?)
+          bottomNavigationBar:
+              RaBottomNavigationBar(selectedPageIndex: selectedPageIndex),
+          bottomSheet: Container(
+            color: context.colors.backgroundLight,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: const RadioPlayerWidget(),
+          ),
+          resizeToAvoidBottomInset: true,
         ),
       ),
     );
