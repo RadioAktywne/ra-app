@@ -4,6 +4,10 @@ import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 
 /// Represents aplication's bottom navigation bar.
+///
+/// TODO: refactor into custom-made widget
+/// (so that none of this wierdness with
+/// page index happens anymore)
 class RaBottomNavigationBar extends HookWidget {
   const RaBottomNavigationBar({
     super.key,
@@ -32,6 +36,7 @@ class RaBottomNavigationBar extends HookWidget {
   // static const widths = <double>[30, 21, 32.5, 27];
   // static const heights = <double>[26, 28.5, 32.5, 27];
 
+  // TODO: refactor to use routes from RaRoutes
   static const _navigationItems = [
     BottomNavigationBarItem(
       icon: Icon(Icons.home_outlined, size: 30),

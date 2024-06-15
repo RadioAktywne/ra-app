@@ -23,6 +23,8 @@ class RaNavigationShell extends HookWidget {
   final GoRouterState state;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>(debugLabel: 'Inner scaffold');
+
+  // TODO: refactor to use routes from RaRoutes
   static const _navigationItems = {
     '/home': 'Radio Aktywne',
     '/recordings': 'Nagrania',
