@@ -1,0 +1,12 @@
+abstract class RaRoutes {
+  const RaRoutes._();
+
+  static const String home = '/home';
+  static const String recordings = '/recordings';
+  static const String albumOfTheWeek = '/album';
+  static const String journalism = '/journalism';
+  static const String radioPeople = '/radioPeople';
+  static const String ramowka = '/ramowka';
+  static const String broadcasts = '/broadcasts';
+  static const String about = '/about';
+}
