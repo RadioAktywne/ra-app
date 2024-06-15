@@ -106,10 +106,9 @@ class RaNavigationShell extends HookWidget {
           ),
           bottomNavigationBar:
               RaBottomNavigationBar(selectedPageIndex: selectedPageIndex),
-          bottomSheet: Container(
-            color: context.colors.backgroundLight,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: const RadioPlayerWidget(),
+          bottomSheet: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: RadioPlayerWidget(),
           ),
           resizeToAvoidBottomInset: true,
         ),

@@ -73,6 +73,8 @@ class MainApp extends HookWidget {
       debugShowCheckedModeBanner: false,
       theme: context.theme.copyWith(
         scaffoldBackgroundColor: context.colors.backgroundLight,
+        bottomSheetTheme:
+            const BottomSheetThemeData(backgroundColor: Colors.transparent),
       ),
       locale: const Locale('pl'),
       supportedLocales: context.supportedLocales,
