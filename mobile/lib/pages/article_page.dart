@@ -115,10 +115,12 @@ class ArticlePage extends StatelessWidget {
                   children: [
                     Padding(
                       padding: _textPadding,
-                      child: SelectableText(
-                        article.title,
-                        style: context.textStyles.textMedium.copyWith(
-                          color: context.colors.backgroundLight,
+                      child: SelectionArea(
+                        child: DefaultTextStyle(
+                          style: context.textStyles.textMedium.copyWith(
+                            color: context.colors.backgroundLight,
+                          ),
+                          child: HtmlWidget(article.title),
                         ),
                       ),
                     ),

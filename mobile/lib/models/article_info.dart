@@ -8,9 +8,7 @@ class ArticleInfo {
 
   /// Creates a [ArticleInfo] object from a given Json map.
   ArticleInfo.fromJson(Map<String, dynamic> jsonData)
-      : title = _parseTitle(
-          (jsonData['title'] as Map<String, dynamic>)['rendered'] as String,
-        ),
+      : title = (jsonData['title'] as Map<String, dynamic>)['rendered'] as String,
         content =
             (jsonData['content'] as Map<String, dynamic>)['rendered'] as String,
         imageTag = jsonData['featured_media'].toString();
@@ -21,10 +19,7 @@ class ArticleInfo {
 
   bool get isNotEmpty =>
       title.isNotEmpty && content.isNotEmpty && imageTag.isNotEmpty;
-
-  static String _parseTitle(String title) {
-    return title.replaceAll('&#8211;', '–');
-  }
+      
 
   @override
   String toString() {
