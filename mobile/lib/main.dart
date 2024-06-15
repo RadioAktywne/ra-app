@@ -9,6 +9,7 @@ import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 import 'package:radioaktywne/pages/article_page.dart';
+import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
 // import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
@@ -42,10 +43,12 @@ class MainApp extends HookWidget {
     //? Navigation mock
     // TODO: Add proper navigation
     const dRoutes = [
-      MainPage(),
       ArticlePage(),
+      MainPage(),
+      PlytaTygodniaPage(),
     ];
     const dIcons = [
+      Icon(Icons.article, size: 27),
       Icon(Icons.home_outlined, size: 30),
       Icon(Icons.album_outlined, size: 32.5),
     ];

@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
@@ -17,10 +19,12 @@ class ArticlePage extends StatelessWidget {
 
   /// Paddings
   static const EdgeInsets _textPadding = EdgeInsets.symmetric(horizontal: 7);
-  static const EdgeInsets _pagePadding = EdgeInsets.only(top: 26, left: 26, right: 26);
+  static const EdgeInsets _pagePadding = EdgeInsets.symmetric(horizontal: 26);
 
   /// Space between things on the page.
   static const SizedBox _emptySpace = SizedBox(height: 9);
+
+  static const SizedBox _spaceFromTop = SizedBox(height: 26);
 
   /// Article info fetch details.
   static final Uri _infoUrl = Uri.parse(
@@ -56,7 +60,6 @@ class ArticlePage extends StatelessWidget {
       articlePage.imageTag = imageUrl;
 
       return articlePage;
-
     } on TimeoutException catch (_) {
       return ArticleInfo.empty();
     }
@@ -69,86 +72,76 @@ class ArticlePage extends StatelessWidget {
       defaultData: ArticleInfo.empty(),
       loadingBuilder: (context, snapshot) => const _ArticleWaiting(),
       errorBuilder: (context) => const _ArticleNoData(),
-      builder: (context, article) => Padding(
-        padding: _pagePadding,
-        child: ListView(
-          children: [
-            AspectRatio(
-              aspectRatio: 1,
-              child: Image.network(
-                article.imageTag,
-                loadingBuilder: (context, child, loadingProgress) =>
-                    loadingProgress == null
-                        ? child
-                        : Container(
-                            color: context.colors.backgroundDarkSecondary,
-                            child: Center(
-                              child: SizedBox(
-                                width: 40,
-                                height: 40,
-                                child: CircularProgressIndicator(
-                                  color: context.colors.highlightGreen,
-                                  strokeWidth: 5,
-                                ),
-                              ),
+      builder: (context, article) {
+        return Padding(
+          padding: _pagePadding,
+          child: ListView(
+            children: [
+              _spaceFromTop,
+              AspectRatio(
+                aspectRatio: 1,
+                child: Image.network(
+                  article.imageTag,
+                  loadingBuilder: (context, child, loadingProgress) =>
+                      loadingProgress == null
+                          ? FittedBox(
+                              fit: BoxFit.fitWidth,
+                              clipBehavior: Clip.hardEdge,
+                              child: child,
+                            )
+                          : Container(
+                              color: context.colors.backgroundDarkSecondary,
+                              child: const RaProgressIndicator(),
                             ),
-                          ),
-                errorBuilder: (context, error, stackTrace) => Center(
-                  child: Text(
-                    context.l10n.imageLoadError,
-                    style: context.textStyles.textMedium.copyWith(
-                      color: context.colors.highlightGreen,
+                  errorBuilder: (context, error, stackTrace) => Center(
+                    child: Text(
+                      context.l10n.imageLoadError,
+                      style: context.textStyles.textMedium.copyWith(
+                        color: context.colors.highlightGreen,
+                      ),
+                      textAlign: TextAlign.center,
+                      softWrap: true,
                     ),
-                    textAlign: TextAlign.center,
-                    softWrap: true,
                   ),
                 ),
               ),
-            ),
-            _emptySpace,
-            Container(
-              color: context.colors.backgroundDark,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: _textPadding,
-                    child: Html(
-                      data: article.title,
-                      style: {
-                        'html': Style(
-                          color: context.colors.backgroundLight, // Adjust text color
-                          fontSize: FontSize(context.textStyles.textMedium.fontSize!),
-                           fontWeight: FontWeight.bold,
+              _emptySpace,
+              Container(
+                height: 31,
+                color: context.colors.backgroundDark,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: _textPadding,
+                      child: SelectableText(
+                        article.title,
+                        style: context.textStyles.textMedium.copyWith(
+                          color: context.colors.backgroundLight,
                         ),
-                      },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            _emptySpace,
-            Padding(
-              padding: _textPadding,
-              child: Html(
-                data: article.content,
-                style: {
-                  'html': Style(
-                    color: context.colors.backgroundDark, // Adjust text color
-                    fontSize: FontSize(context.textStyles.textSmall.fontSize!),
+              _emptySpace,
+              Padding(
+                padding: _textPadding,
+                child: SelectionArea(
+                  child: DefaultTextStyle(
+                    style: context.textStyles.textSmall.copyWith(
+                      color: context.colors.backgroundDark,
+                    ),
+                    child: HtmlWidget(article.content),
                   ),
-                  // 'img': Style(
-                  //   width: Width(50, Unit.percent),
-                  //   height: Height(50, Unit.percent),
-                  // ),
-                },
+                ),
               ),
-            ),
-            _emptySpace,
-          ],
-        ),
-      ),
+              _emptySpace,
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -194,11 +187,6 @@ class _ArticleWaiting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: CircularProgressIndicator(
-        color: context.colors.highlightGreen,
-        strokeWidth: 5,
-      ),
-    );
+    return const RaProgressIndicator();
   }
 }

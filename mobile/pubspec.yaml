@@ -16,10 +16,14 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.1.6
   flutter_comms: ^1.1.0
-  flutter_html: ^3.0.0-beta.2
   flutter_localizations:
     sdk: flutter
   flutter_svg: ^2.0.10
+  # Core version of the library for parsing 
+  # and displaying widgets from raw HTML.
+  # If any features (e.g. embeds) are missing,
+  # replace with `flutter_widget_from_html`.
+  flutter_widget_from_html_core: ^0.15.1
   freezed_annotation: ^2.2.0
   go_router: ^14.1.4
   http: ^1.2.1
