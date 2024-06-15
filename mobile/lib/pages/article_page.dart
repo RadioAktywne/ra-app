@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
@@ -27,6 +28,11 @@ class ArticlePage extends StatelessWidget {
   );
   static const _infoHeaders = {'Content-Type': 'application/json'};
 
+  static Uri _imgUrl(String id) => Uri.parse(
+        'https://radioaktywne.pl/wp-json/wp/v2/media?include[]=$id',
+      );
+  static const _imgHeaders = {'Content-Type': 'image/jpeg'};
+
   /// Fetch current article from radioaktywne.pl api.
   Future<ArticleInfo> _fetchArticle() async {
     try {
@@ -37,7 +43,20 @@ class ArticlePage extends StatelessWidget {
         timeout: timeout,
       );
 
-      return data.first;
+      final articlePage = data.first;
+
+      final imageUrls = await fetchData(
+        _imgUrl(articlePage.imageTag),
+        (e) => (e['guid'] as Map<String, dynamic>)['rendered'] as String,
+        headers: _imgHeaders,
+        timeout: timeout,
+      );
+
+      final imageUrl = imageUrls.first;
+      articlePage.imageTag = imageUrl;
+
+      return articlePage;
+
     } on TimeoutException catch (_) {
       return ArticleInfo.empty();
     }
@@ -57,7 +76,7 @@ class ArticlePage extends StatelessWidget {
             AspectRatio(
               aspectRatio: 1,
               child: Image.network(
-                article.featuredMediaUrl,
+                article.imageTag,
                 loadingBuilder: (context, child, loadingProgress) =>
                     loadingProgress == null
                         ? child
@@ -88,7 +107,6 @@ class ArticlePage extends StatelessWidget {
             ),
             _emptySpace,
             Container(
-              height: 31,
               color: context.colors.backgroundDark,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -96,11 +114,15 @@ class ArticlePage extends StatelessWidget {
                 children: [
                   Padding(
                     padding: _textPadding,
-                    child: SelectableText(
-                      '${article.authorName} - ${article.title}',
-                      style: context.textStyles.textMedium.copyWith(
-                        color: context.colors.backgroundLight,
-                      ),
+                    child: Html(
+                      data: article.title,
+                      style: {
+                        'html': Style(
+                          color: context.colors.backgroundLight, // Adjust text color
+                          fontSize: FontSize(context.textStyles.textMedium.fontSize!),
+                           fontWeight: FontWeight.bold,
+                        ),
+                      },
                     ),
                   ),
                 ],
@@ -109,11 +131,14 @@ class ArticlePage extends StatelessWidget {
             _emptySpace,
             Padding(
               padding: _textPadding,
-              child: SelectableText(
-                article.content,
-                style: context.textStyles.textSmall.copyWith(
-                  color: context.colors.backgroundDark,
-                ),
+              child: Html(
+                data: article.content,
+                style: {
+                  'html': Style(
+                    color: context.colors.backgroundDark, // Adjust text color
+                    fontSize: FontSize(context.textStyles.textSmall.fontSize!),
+                  ),
+                },
               ),
             ),
             _emptySpace,
