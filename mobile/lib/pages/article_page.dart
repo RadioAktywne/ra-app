@@ -138,6 +138,10 @@ class ArticlePage extends StatelessWidget {
                     color: context.colors.backgroundDark, // Adjust text color
                     fontSize: FontSize(context.textStyles.textSmall.fontSize!),
                   ),
+                  // 'img': Style(
+                  //   width: Width(50, Unit.percent),
+                  //   height: Height(50, Unit.percent),
+                  // ),
                 },
               ),
             ),
