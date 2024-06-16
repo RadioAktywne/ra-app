@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:http/http.dart' as http;
+import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
@@ -18,21 +20,16 @@ class ArticleSelectionPage extends StatelessWidget {
 
   static const EdgeInsets _pagePadding = EdgeInsets.symmetric(horizontal: 26);
 
-  static final List<Uri> _infoUrls = [
-    Uri.parse('https://radioaktywne.pl/wp-json/wp/v2/media?include[]=2253'),
-    Uri.parse('https://radioaktywne.pl/wp-json/wp/v2/media?include[]=2247'),
-    Uri.parse('https://radioaktywne.pl/wp-json/wp/v2/media?_embed=true&include[]=1878'),
-    Uri.parse('https://radioaktywne.pl/wp-json/wp/v2/media?_embed=true&include[]=1866'),
-    // Add more URLs here
-  ];
+  // Single URL that returns all articles
+  static final Uri _infoUrl = Uri.parse('https://radioaktywne.pl/wp-json/wp/v2/posts?_embed=true&page=1&per_page=16');
 
-Future<List<ArticleSelectionInfo>> _fetchArticles() async {
-  final articles = <ArticleSelectionInfo>[];
+  Future<List<ArticleSelectionInfo>> _fetchArticles() async {
+    final articles = <ArticleSelectionInfo>[];
 
-  for (final url in _infoUrls) {
     try {
-      final response = await http.get(url).timeout(timeout);
+      final response = await http.get(_infoUrl).timeout(timeout);
       final jsonDataList = jsonDecode(response.body) as List<dynamic>;
+
       for (final jsonData in jsonDataList) {
         final article = ArticleSelectionInfo.fromJson(jsonData as Map<String, dynamic>);
         articles.add(article);
@@ -40,10 +37,8 @@ Future<List<ArticleSelectionInfo>> _fetchArticles() async {
     } catch (_) {
       articles.add(ArticleSelectionInfo.empty());
     }
+    return articles;
   }
-
-  return articles;
-}
 
   @override
   Widget build(BuildContext context) {
@@ -53,15 +48,31 @@ Future<List<ArticleSelectionInfo>> _fetchArticles() async {
       loadingBuilder: (context, snapshot) => const _ArticleSelectionWaiting(),
       errorBuilder: (context) => const _ArticleSelectionNoData(),
       builder: (context, articles) {
-        return GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // This creates two columns
+        return Padding(
+          padding: const EdgeInsets.only(top: 20), // Add top padding here
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, // This creates two columns
+              mainAxisSpacing: 20, 
+            ),
+            itemCount: articles.length,
+            itemBuilder: (context, index) {
+              final article = articles[index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: ColorShadowedCard(
+                  shadowColor: context.colors.highlightBlue,
+                  footer: DefaultTextStyle(
+                          style: context.textStyles.textSmall.copyWith(
+                            color: context.colors.highlightGreen,
+                          ),
+                          child: HtmlWidget(article.title),
+                        ),
+                  child: Image.network(article.thumbnail),
+                  ),
+              );
+            },
           ),
-          itemCount: articles.length,
-          itemBuilder: (context, index) {
-            final article = articles[index];
-            return Image.network(article.thumbnail);
-          },
         );
       },
     );

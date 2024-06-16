@@ -1,20 +1,25 @@
 class ArticleSelectionInfo {
 
-  ArticleSelectionInfo.empty() : thumbnail = '';
+  ArticleSelectionInfo.empty() : thumbnail = '', title = '';
 
-  ArticleSelectionInfo.fromJson(Map<String, dynamic> jsonData) :
-      thumbnail = (jsonData['guid']as Map<String, dynamic>)['rendered'] as String;
+ArticleSelectionInfo.fromJson(Map<String, dynamic> jsonData) :
+      thumbnail = jsonData['_embedded']['wp:featuredmedia'][0]['media_details']['sizes']['thumbnail']['source_url'] as String,
+      title = (jsonData['title'] as Map<String, dynamic>)['rendered'] as String;
+
+
       // thumbnail = jsonData['date'] as String;
 
   final String thumbnail;
+  final String title;
 
-  bool get isNotEmpty => thumbnail.isNotEmpty;
+  bool get isNotEmpty => thumbnail.isNotEmpty && title.isNotEmpty;
 
   @override
   String toString() {
     return '''
     ArticleSelectionInfo {
       thumbnail: '$thumbnail',
+      title: '$title',
     }
     ''';
   }
