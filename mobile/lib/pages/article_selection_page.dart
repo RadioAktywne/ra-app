@@ -84,7 +84,7 @@ class ArticleSelectionPage extends StatelessWidget {
                         color: context.colors.highlightGreen,
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(7),
+                        padding: const EdgeInsets.all(5),
                         child: HtmlWidget(article.title),
                         ),
                     ),
