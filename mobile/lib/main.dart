@@ -12,6 +12,7 @@ import 'package:radioaktywne/pages/article_page.dart';
 import 'package:radioaktywne/pages/article_selection_page.dart';
 import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
+import 'package:radioaktywne/models/article_info.dart';
 
 import 'components/radio_player/radio_player_widget.dart';
 import 'components/ramowka/ramowka_widget.dart';
@@ -44,7 +45,6 @@ class MainApp extends HookWidget {
     // TODO: Add proper navigation
     const dRoutes = [
       ArticleSelectionPage(),
-      ArticlePage(),
       MainPage(),
     ];
     const dIcons = [
