@@ -22,6 +22,7 @@ class ArticleSelectionPage extends StatelessWidget {
   static const EdgeInsets _pagePadding = EdgeInsets.symmetric(horizontal: 26);
 
   // Single URL that returns all articles
+  // TODO: Lazy loading and loading every article not one page of articles
   static final Uri _infoUrl = Uri.parse('https://radioaktywne.pl/wp-json/wp/v2/posts?_embed=true&page=1&per_page=16');
 
   Future<List<ArticleInfo>> _fetchArticles() async {
