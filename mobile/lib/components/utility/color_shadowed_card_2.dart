@@ -47,7 +47,6 @@ class ColorShadowedCard2 extends StatelessWidget {
                 child: Opacity(
                   opacity: 0.8,
                   child: Container(
-                    height: 60,
                     color: context.colors.backgroundDark,
                     child: footer,
                   ),

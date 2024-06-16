@@ -44,6 +44,14 @@ class ArticleSelectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final shadowColors = <Color>[
+      context.colors.highlightRed,
+      context.colors.highlightYellow,
+      context.colors.highlightGreen,
+      context.colors.highlightBlue,
+    ];
+
     return RefreshableFetchWidget(
       onFetch: _fetchArticles,
       defaultData: [ArticleInfo.empty()],
@@ -51,7 +59,7 @@ class ArticleSelectionPage extends StatelessWidget {
       errorBuilder: (context) => const _ArticleSelectionNoData(),
       builder: (context, articles) {
         return Padding(
-          padding: const EdgeInsets.only(top: 20, bottom: 20), // Add top padding here
+          padding: const EdgeInsets.only(top: 20, bottom: 20),
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, // This creates two columns
@@ -70,12 +78,15 @@ class ArticleSelectionPage extends StatelessWidget {
                     );
                   },
                   child: ColorShadowedCard2(
-                    shadowColor: context.colors.highlightBlue,
+                    shadowColor: shadowColors[index % shadowColors.length],
                     footer: DefaultTextStyle(
                       style: context.textStyles.textMedium.copyWith(
                         color: context.colors.highlightGreen,
                       ),
-                      child: HtmlWidget(article.title),
+                      child: Padding(
+                        padding: const EdgeInsets.all(7),
+                        child: HtmlWidget(article.title),
+                        ),
                     ),
                     child: Image.network(article.thumbnail),
                   ),
