@@ -74,7 +74,6 @@ class ArticleSelectionPage extends StatelessWidget {
                     footer: DefaultTextStyle(
                       style: context.textStyles.textMedium.copyWith(
                         color: context.colors.highlightGreen,
-                        fontWeight: FontWeight.bold,
                       ),
                       child: HtmlWidget(article.title),
                     ),
