@@ -24,16 +24,16 @@ void main() {
 }
 
 final _router = GoRouter(
-  initialLocation: '/home',
+  initialLocation: RaRoutes.home,
   routes: [
     ShellRoute(
       routes: [
         GoRoute(
-          path: '/home',
+          path: RaRoutes.home,
           builder: (context, state) => const MainPage(),
         ),
         GoRoute(
-          path: '/album',
+          path: RaRoutes.albumOfTheWeek,
           builder: (context, state) => const PlytaTygodniaPage(),
         ),
       ],
