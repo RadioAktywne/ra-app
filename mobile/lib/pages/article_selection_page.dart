@@ -55,7 +55,6 @@ class ArticleSelectionPage extends StatelessWidget {
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, // This creates two columns
-              mainAxisSpacing: 20, 
             ),
             itemCount: articles.length,
             itemBuilder: (context, index) {
