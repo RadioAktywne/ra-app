@@ -80,7 +80,7 @@ class ArticleSelectionPage extends StatelessWidget {
                   child: ColorShadowedCard2(
                     shadowColor: shadowColors[index % shadowColors.length],
                     footer: DefaultTextStyle(
-                      style: context.textStyles.textMedium.copyWith(
+                      style: context.textStyles.textSmall.copyWith(
                         color: context.colors.highlightGreen,
                       ),
                       child: Padding(
