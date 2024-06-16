@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
+import 'package:radioaktywne/resources/ra_routes.dart';
 
 /// Represents aplication's bottom navigation bar.
 ///
@@ -41,22 +42,22 @@ class RaBottomNavigationBar extends HookWidget {
     BottomNavigationBarItem(
       icon: Icon(Icons.home_outlined, size: 30),
       activeIcon: Icon(Icons.home, size: 30),
-      label: '/home',
+      label: RaRoutes.home,
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.mic_none_outlined, size: 28.5),
       activeIcon: Icon(Icons.mic, size: 28.5),
-      label: '/mic',
+      label: RaRoutes.recordings,
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.album_outlined, size: 32.5),
       activeIcon: Icon(Icons.album, size: 32.5),
-      label: '/album',
+      label: RaRoutes.albumOfTheWeek,
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.article_outlined, size: 27),
       activeIcon: Icon(Icons.article, size: 27),
-      label: '/articles',
+      label: RaRoutes.articles,
     ),
   ];
 

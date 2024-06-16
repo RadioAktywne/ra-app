@@ -4,7 +4,7 @@ abstract class RaRoutes {
   static const String home = '/home';
   static const String recordings = '/recordings';
   static const String albumOfTheWeek = '/album';
-  static const String journalism = '/journalism';
+  static const String articles = '/articles';
   static const String radioPeople = '/radioPeople';
   static const String ramowka = '/ramowka';
   static const String broadcasts = '/broadcasts';

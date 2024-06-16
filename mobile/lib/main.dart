@@ -7,6 +7,7 @@ import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
+import 'package:radioaktywne/resources/ra_routes.dart';
 
 import 'components/ramowka/ramowka_widget.dart';
 
@@ -53,7 +54,7 @@ final _router = GoRouter(
           style: context.textStyles.textMedium,
         ),
         TextButton(
-          onPressed: () => context.go('/home'),
+          onPressed: () => context.go(RaRoutes.home),
           child: Text(
             'Home',
             style: context.textStyles.polibudzka,
