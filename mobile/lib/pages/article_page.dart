@@ -28,7 +28,7 @@ class ArticlePage extends StatelessWidget {
 
   /// Article info fetch details.
   static final Uri _infoUrl = Uri.parse(
-    'https://radioaktywne.pl/wp-json/wp/v2/posts?_embed=true&page=1&per_page=16',
+    'https://radioaktywne.pl/wp-json/wp/v2/posts/1683',
   );
   static const _infoHeaders = {'Content-Type': 'application/json'};
 

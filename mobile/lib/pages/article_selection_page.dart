@@ -9,6 +9,7 @@ import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_selection_info.dart';
+import 'package:radioaktywne/pages/article_page.dart';
 
 class ArticleSelectionPage extends StatelessWidget {
   const ArticleSelectionPage({
@@ -60,16 +61,24 @@ class ArticleSelectionPage extends StatelessWidget {
               final article = articles[index];
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: ColorShadowedCard(
-                  shadowColor: context.colors.highlightBlue,
-                  footer: DefaultTextStyle(
-                          style: context.textStyles.textSmall.copyWith(
-                            color: context.colors.highlightGreen,
-                          ),
-                          child: HtmlWidget(article.title),
-                        ),
-                  child: Image.network(article.thumbnail),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ArticlePage()),
+                    );
+                  },
+                  child: ColorShadowedCard(
+                    shadowColor: context.colors.highlightBlue,
+                    footer: DefaultTextStyle(
+                      style: context.textStyles.textSmall.copyWith(
+                        color: context.colors.highlightGreen,
+                      ),
+                      child: HtmlWidget(article.title),
+                    ),
+                    child: Image.network(article.thumbnail),
                   ),
+                ),
               );
             },
           ),
