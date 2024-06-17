@@ -10,6 +10,7 @@ import 'package:radioaktywne/components/ra_bottomnavbar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
 import 'package:radioaktywne/components/radio_player/radio_player_widget.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
+import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/resources/ra_routes.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
@@ -110,7 +111,7 @@ class RaNavigationShell extends HookWidget {
           bottomNavigationBar:
               RaBottomNavigationBar(selectedPageIndex: selectedPageIndex),
           bottomSheet: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: RaPageConstraints.outerWidgetPagePadding,
             child: RadioPlayerWidget(),
           ),
           resizeToAvoidBottomInset: true,

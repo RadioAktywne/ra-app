@@ -104,6 +104,7 @@ class RamowkaList extends StatelessWidget {
     return RefreshableFetchWidget(
       defaultData: const <RamowkaInfo>[],
       onFetch: _fetchRamowka,
+      hasData: (ramowka) => ramowka.isNotEmpty,
       loadingBuilder: (context, snapshot) =>
           _RamowkaListWaiting(height: height),
       errorBuilder: (context) => _RamowkaListNoData(height: height),

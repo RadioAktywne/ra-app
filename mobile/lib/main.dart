@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
-import 'package:radioaktywne/components/ra_navigation_shell.dart';
+import 'package:radioaktywne/components/ramowka/ramowka_widget.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
-import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
-import 'package:radioaktywne/resources/ra_routes.dart';
-
-import 'components/ramowka/ramowka_widget.dart';
+import 'package:radioaktywne/resources/ra_router_config.dart';
 
 void main() {
   /// Setup so the orientation stays in portrait mode
@@ -22,48 +18,6 @@ void main() {
     DeviceOrientation.portraitDown,
   ]).then((_) => runApp(const MainApp()));
 }
-
-final _router = GoRouter(
-  initialLocation: RaRoutes.home,
-  routes: [
-    ShellRoute(
-      routes: [
-        GoRoute(
-          path: RaRoutes.home,
-          builder: (context, state) => const MainPage(),
-        ),
-        GoRoute(
-          path: RaRoutes.albumOfTheWeek,
-          builder: (context, state) => const PlytaTygodniaPage(),
-        ),
-      ],
-      builder: (context, state, child) =>
-          RaNavigationShell(state: state, child: child),
-    ),
-  ],
-
-  // TODO: debug only, will delete later
-  // (because there will be no way to go to page
-  // that doesn't exist).
-  errorBuilder: (context, state) => Center(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          "Page `$state` doesn't (yet) exist...",
-          style: context.textStyles.textMedium,
-        ),
-        TextButton(
-          onPressed: () => context.go(RaRoutes.home),
-          child: Text(
-            'Home',
-            style: context.textStyles.polibudzka,
-          ),
-        ),
-      ],
-    ),
-  ),
-);
 
 class MainApp extends HookWidget {
   const MainApp({super.key});
@@ -81,11 +35,12 @@ class MainApp extends HookWidget {
       supportedLocales: context.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       onGenerateTitle: (context) => context.l10n.hello,
-      routerConfig: _router,
+      routerConfig: raRouter,
     );
   }
 }
 
+// TODO: needs major refactor
 class MainPage extends StatelessWidget {
   const MainPage({
     super.key,
