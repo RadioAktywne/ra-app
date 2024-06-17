@@ -53,7 +53,7 @@ class ArticleSelectionPage extends StatelessWidget {
       builder: (context, articles) {
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // This creates two columns
+            crossAxisCount: 2,
           ),
           itemCount: articles.length,
           itemBuilder: (context, index) {
