@@ -88,14 +88,7 @@ class ArticleSelectionPage extends StatelessWidget {
                     errorBuilder: (context, error, stackTrace) => AspectRatio(
                       aspectRatio: 1,
                       child: Center(
-                        child: Text(
-                          context.l10n.imageLoadError,
-                          style: context.textStyles.textSmall.copyWith(
-                            color: context.colors.highlightGreen,
-                          ),
-                          textAlign: TextAlign.center,
-                          softWrap: true,
-                        ),
+                        child: Image.asset('assets/defaultMedia.png'),
                       ),
                     ),
                   ),
