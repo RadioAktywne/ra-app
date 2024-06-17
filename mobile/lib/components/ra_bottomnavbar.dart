@@ -4,11 +4,9 @@ import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 import 'package:radioaktywne/resources/ra_routes.dart';
 
+// TODO: Refactor into widget that determines
+// TODO: selected icon by current route path
 /// Represents aplication's bottom navigation bar.
-///
-/// TODO: refactor into custom-made widget
-/// (so that none of this wierdness with
-/// page index happens anymore)
 class RaBottomNavigationBar extends HookWidget {
   const RaBottomNavigationBar({
     super.key,

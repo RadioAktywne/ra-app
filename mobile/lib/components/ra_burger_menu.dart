@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 
+// TODO: Refactor into widget that determines
+// TODO: selected icon by current route path
 /// Represents the burger menu contained
 /// in the right side drawer.
 class RaBurgerMenu extends HookWidget {
