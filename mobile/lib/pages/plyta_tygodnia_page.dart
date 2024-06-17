@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/plyta_tygodnia_info.dart';
@@ -17,11 +18,11 @@ class PlytaTygodniaPage extends StatelessWidget {
 
   /// Paddings
   static const EdgeInsets _textPadding = EdgeInsets.symmetric(horizontal: 7);
-  static const EdgeInsets _pagePadding =
-      EdgeInsets.only(top: 26, left: 26, right: 26);
+  static const EdgeInsets _pagePadding = EdgeInsets.only(left: 26, right: 26);
 
   /// Space between things on the page.
   static const SizedBox _emptySpace = SizedBox(height: 9);
+  static const SizedBox _spaceFromTop = SizedBox(height: 26);
 
   /// Plyta tygodnia info fetch details.
   static final Uri _infoUrl = Uri.parse(
@@ -74,25 +75,21 @@ class PlytaTygodniaPage extends StatelessWidget {
         padding: _pagePadding,
         child: ListView(
           children: [
+            _spaceFromTop,
             AspectRatio(
               aspectRatio: 1,
               child: Image.network(
                 plytaTygodnia.imageTag,
                 loadingBuilder: (context, child, loadingProgress) =>
                     loadingProgress == null
-                        ? child
+                        ? FittedBox(
+                            fit: BoxFit.fitWidth,
+                            clipBehavior: Clip.hardEdge,
+                            child: child,
+                          )
                         : Container(
                             color: context.colors.backgroundDarkSecondary,
-                            child: Center(
-                              child: SizedBox(
-                                width: 40,
-                                height: 40,
-                                child: CircularProgressIndicator(
-                                  color: context.colors.highlightGreen,
-                                  strokeWidth: 5,
-                                ),
-                              ),
-                            ),
+                            child: const RaProgressIndicator(),
                           ),
                 errorBuilder: (context, child, loadingProgress) => Center(
                   child: Text(
@@ -185,11 +182,6 @@ class _PlytaTygodniaWaiting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: CircularProgressIndicator(
-        color: context.colors.highlightGreen,
-        strokeWidth: 5,
-      ),
-    );
+    return const RaProgressIndicator();
   }
 }
