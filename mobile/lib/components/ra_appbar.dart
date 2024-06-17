@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
+import 'package:radioaktywne/resources/ra_routes.dart';
 
 class RaAppBar extends StatelessWidget implements PreferredSizeWidget {
   const RaAppBar({
@@ -52,23 +54,26 @@ class RaAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Padding(
         padding:
             titlePadding ?? const EdgeInsets.only(left: 4, top: 8, bottom: 16),
-        child: Row(
-          children: [
-            if (iconPath != null)
-              SvgPicture.asset(
-                height: imageHeight,
-                iconPath!,
-              )
-            else
-              Container(),
-            const SizedBox(
-              width: 14,
-            ),
-            Text(
-              text,
-              style: context.textStyles.polibudzka,
-            ),
-          ],
+        child: GestureDetector(
+          onTap: () => context.go(RaRoutes.home),
+          child: Row(
+            children: [
+              if (iconPath != null)
+                SvgPicture.asset(
+                  height: imageHeight,
+                  iconPath!,
+                )
+              else
+                Container(),
+              const SizedBox(
+                width: 14,
+              ),
+              Text(
+                text,
+                style: context.textStyles.polibudzka,
+              ),
+            ],
+          ),
         ),
       ),
     );

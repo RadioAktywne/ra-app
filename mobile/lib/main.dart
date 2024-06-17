@@ -142,49 +142,44 @@ class MainPage extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: ColorShadowedCard(
-                          shadowColor: context.colors.highlightPurple,
-                          header: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 2,
-                            ),
-                            child: Text(
-                              'Nagłówek',
-                              style: context.textStyles.textMedium,
-                            ),
+                      child: ColorShadowedCard(
+                        shadowColor: context.colors.highlightPurple,
+                        header: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 2,
                           ),
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            child: Text(
-                              'Lorem ipsum',
-                              style: context.textStyles.textSmall,
-                            ),
+                          child: Text(
+                            'Nagłówek',
+                            style: context.textStyles.textMedium,
+                          ),
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          child: Text(
+                            'Lorem ipsum',
+                            style: context.textStyles.textSmall,
                           ),
                         ),
                       ),
                     ),
+                    const SizedBox(width: 16),
                     Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: ColorShadowedCard(
-                          shadowColor: context.colors.highlightBlue,
-                          footer: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 2,
-                            ),
-                            child: Text(
-                              'Stopka',
-                              style: context.textStyles.textSmall,
-                            ),
+                      child: ColorShadowedCard(
+                        shadowColor: context.colors.highlightBlue,
+                        footer: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 2,
                           ),
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            child: Text(
-                              'Lorem ipsum',
-                              style: context.textStyles.textSmall,
-                            ),
+                          child: Text(
+                            'Stopka',
+                            style: context.textStyles.textSmall,
+                          ),
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          child: Text(
+                            'Lorem ipsum',
+                            style: context.textStyles.textSmall,
                           ),
                         ),
                       ),

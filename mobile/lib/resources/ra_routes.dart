@@ -3,7 +3,7 @@ abstract class RaRoutes {
 
   static const String home = '/home';
   static const String recordings = '/recordings';
-  static const String albumOfTheWeek = '/album';
+  static const String albumOfTheWeek = '/albumOfTheWeek';
   static const String articles = '/articles';
   static const String radioPeople = '/radioPeople';
   static const String ramowka = '/ramowka';
