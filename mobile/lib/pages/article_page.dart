@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:radioaktywne/components/utility/custom_padding_html_widget.dart';
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
@@ -13,7 +13,6 @@ class ArticlePage extends StatelessWidget {
   final ArticleInfo article;
 
   /// Paddings
-  static const EdgeInsets _textPadding = EdgeInsets.symmetric(horizontal: 7);
   static const EdgeInsets _pagePadding = EdgeInsets.symmetric(horizontal: 26);
 
   /// Space between things on the page.
@@ -61,35 +60,23 @@ class ArticlePage extends StatelessWidget {
             Container(
               height: 31,
               color: context.colors.backgroundDark,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: _textPadding,
-                    child: SelectionArea(
-                      child: DefaultTextStyle(
-                        style: context.textStyles.textMedium.copyWith(
-                          color: context.colors.backgroundLight,
-                        ),
-                        child: HtmlWidget(article.title),
-                      ),
+              child: Align(
+                alignment:Alignment.centerLeft,
+                child:
+                  CustomPaddingHtmlWidget(
+                    style: context.textStyles.textMedium.copyWith(
+                      color: context.colors.backgroundLight,
                     ),
+                    htmlContent: article.title,
                   ),
-                ],
               ),
             ),
             _emptySpace,
-            Padding(
-              padding: _textPadding,
-              child: SelectionArea(
-                child: DefaultTextStyle(
-                  style: context.textStyles.textSmall.copyWith(
-                    color: context.colors.backgroundDark,
-                  ),
-                  child: HtmlWidget(article.content),
-                ),
+            CustomPaddingHtmlWidget(
+              style: context.textStyles.textSmall.copyWith(
+                color: context.colors.backgroundDark,
               ),
+              htmlContent: article.content,
             ),
             _emptySpace,
           ],
