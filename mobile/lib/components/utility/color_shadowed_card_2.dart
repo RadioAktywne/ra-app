@@ -15,14 +15,14 @@ class ColorShadowedCard2 extends StatelessWidget {
   final Color shadowColor;
   final Widget? header;
   final Widget? footer;
-  
+
   @override
   Widget build(BuildContext context) {
     return ColorShadowedWidget(
       shadowColor: shadowColor,
       child: Container(
         color: context.colors.backgroundDark,
-        padding: const EdgeInsets.all(4),
+        padding: const EdgeInsets.all(3),
         child: Stack(
           children: <Widget>[
             Column(

@@ -23,7 +23,9 @@ class ArticleSelectionPage extends StatelessWidget {
   // Single URL that returns all articles
   // TODO: Lazy loading and loading every article not one page of articles
 
-  static final Uri _infoUrl = Uri.parse('https://radioaktywne.pl/wp-json/wp/v2/posts?_embed=true&page=1&per_page=16');
+  static final Uri _infoUrl = Uri.parse(
+    'https://radioaktywne.pl/wp-json/wp/v2/posts?_embed=true&page=1&per_page=16',
+  );
 
   Future<Iterable<ArticleInfo>> _fetchArticles() async {
     try {
@@ -35,7 +37,6 @@ class ArticleSelectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final shadowColors = <Color>[
       context.colors.highlightRed,
       context.colors.highlightYellow,
@@ -46,6 +47,7 @@ class ArticleSelectionPage extends StatelessWidget {
     return RefreshableFetchWidget(
       onFetch: _fetchArticles,
       defaultData: const <ArticleInfo>[],
+      hasData: (articles) => articles.isNotEmpty,
       loadingBuilder: (context, snapshot) => const _ArticleSelectionWaiting(),
       errorBuilder: (context) => const _ArticleSelectionNoData(),
       builder: (context, articles) {
@@ -63,7 +65,11 @@ class ArticleSelectionPage extends StatelessWidget {
                 onTap: () {
                   Navigator.push<ArticlePage>(
                     context,
-                    MaterialPageRoute(builder: (context) => ArticlePage(article: article,)),
+                    MaterialPageRoute(
+                      builder: (context) => ArticlePage(
+                        article: article,
+                      ),
+                    ),
                   );
                 },
                 child: ColorShadowedCard2(
@@ -75,20 +81,23 @@ class ArticleSelectionPage extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(5),
                       child: HtmlWidget(article.title),
-                      ),
+                    ),
                   ),
-                    child: Image.network(
-                      article.thumbnail,
-                      errorBuilder: (context, error, stackTrace) => Center(
+                  child: Image.network(
+                    article.thumbnail,
+                    errorBuilder: (context, error, stackTrace) => AspectRatio(
+                      aspectRatio: 1,
+                      child: Center(
                         child: Text(
                           context.l10n.imageLoadError,
-                          style: context.textStyles.textMedium.copyWith(
+                          style: context.textStyles.textSmall.copyWith(
                             color: context.colors.highlightGreen,
                           ),
                           textAlign: TextAlign.center,
                           softWrap: true,
                         ),
                       ),
+                    ),
                   ),
                 ),
               ),
