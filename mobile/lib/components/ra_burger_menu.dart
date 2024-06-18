@@ -18,7 +18,7 @@ class RaBurgerMenu extends HookWidget {
   });
 
   /// Map of navigation links for the [GoRouter]
-  /// with their
+  /// with their corresponding names.
   final Map<String, String> navigationItems;
 
   final void Function()? onItemClicked;
@@ -44,9 +44,7 @@ class RaBurgerMenu extends HookWidget {
         title: pageTitle,
         color: colors[index % colors.length],
         onPressed: () {
-          if (onItemClicked != null) {
-            onItemClicked?.call();
-          }
+          onItemClicked?.call();
           context.go(pagePath);
         },
         chosen: index == selectedIndex,

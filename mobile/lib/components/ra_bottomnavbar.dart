@@ -64,7 +64,6 @@ class RaBottomNavigationBar extends HookWidget {
   @override
   Widget build(BuildContext context) {
     assert(startIconIndex >= 0 && startIconIndex < 4);
-    // final currentIndex = useState(startIconIndex);
     return Container(
       padding: EdgeInsets.only(top: borderWidth),
       color: context.colors.highlightGreen,
