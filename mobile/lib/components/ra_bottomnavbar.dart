@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
-import 'package:radioaktywne/resources/ra_routes.dart';
+import 'package:radioaktywne/router/ra_routes.dart';
 
 // TODO: Refactor into widget that determines
 // TODO: selected icon by current route path

@@ -5,7 +5,7 @@ import 'package:radioaktywne/components/ramowka/ramowka_widget.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
-import 'package:radioaktywne/resources/ra_router_config.dart';
+import 'package:radioaktywne/router/ra_router_config.dart';
 
 void main() {
   /// Setup so the orientation stays in portrait mode

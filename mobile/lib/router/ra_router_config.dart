@@ -7,7 +7,7 @@ import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/pages/article_page.dart';
 import 'package:radioaktywne/pages/article_selection_page.dart';
 import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
-import 'package:radioaktywne/resources/ra_routes.dart';
+import 'package:radioaktywne/router/ra_routes.dart';
 
 final raRouter = GoRouter(
   initialLocation: RaRoutes.home,
@@ -31,6 +31,8 @@ final raRouter = GoRouter(
           builder: (context, state) =>
               ArticlePage(article: state.extra! as ArticleInfo),
         ),
+        // TODO: Add other routes instead of error page
+        // TODO: for better end-user experience
       ],
       builder: (context, state, child) =>
           RaNavigationShell(state: state, child: child),

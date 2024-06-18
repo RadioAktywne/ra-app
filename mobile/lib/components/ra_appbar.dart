@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
-import 'package:radioaktywne/resources/ra_routes.dart';
+import 'package:radioaktywne/router/ra_routes.dart';
 
 class RaAppBar extends StatelessWidget implements PreferredSizeWidget {
   const RaAppBar({
