@@ -89,5 +89,5 @@ class ColorsLight extends RAColors {
   RAColor get drawerBackgroundOverlay => const RAColor._(0x5A130900);
 
   @override
-  RAColor get blackShadow => const RAColor._(0x610000);
+  RAColor get blackShadow => const RAColor._(0x60000000);
 }
