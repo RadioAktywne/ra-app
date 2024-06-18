@@ -19,9 +19,9 @@ class RefreshableFetchWidget<T> extends HookWidget {
     required this.loadingBuilder,
     required this.errorBuilder,
     required this.builder,
+    required this.hasData,
     this.refreshIndicatorColor,
     this.refreshIndicatorBackgroundColor,
-    this.hasData,
   });
 
   /// The default value of the data that is going to be fetched.
@@ -44,9 +44,7 @@ class RefreshableFetchWidget<T> extends HookWidget {
   final Widget Function(BuildContext, T) builder;
 
   /// Determines if the data was successfully loaded.
-  ///
-  /// On default, snapshot.hasData is used.
-  final bool Function(T)? hasData;
+  final bool Function(T) hasData;
 
   final Color? refreshIndicatorColor;
   final Color? refreshIndicatorBackgroundColor;
@@ -73,7 +71,7 @@ class RefreshableFetchWidget<T> extends HookWidget {
     BuildContext context,
     _RefreshableFetchController<T> data,
   ) {
-    if (hasData != null ? hasData!(data.state.value) : data.snapshot.hasData) {
+    if (hasData(data.state.value)) {
       return builder(context, data.state.value);
     }
     return errorBuilder(context);

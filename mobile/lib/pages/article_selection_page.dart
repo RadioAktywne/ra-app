@@ -2,13 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:go_router/go_router.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card_2.dart';
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
-import 'package:radioaktywne/pages/article_page.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
+import 'package:radioaktywne/resources/ra_page_constraints.dart';
+import 'package:radioaktywne/router/ra_routes.dart';
 
 class ArticleSelectionPage extends StatelessWidget {
   const ArticleSelectionPage({
@@ -18,11 +20,8 @@ class ArticleSelectionPage extends StatelessWidget {
 
   final Duration timeout;
 
-  static const EdgeInsets _pagePadding = EdgeInsets.symmetric(horizontal: 26);
-
   // Single URL that returns all articles
   // TODO: Lazy loading and loading every article not one page of articles
-
   static final Uri _infoUrl = Uri.parse(
     'https://radioaktywne.pl/wp-json/wp/v2/posts?_embed=true&page=1&per_page=16',
   );
@@ -52,6 +51,9 @@ class ArticleSelectionPage extends StatelessWidget {
       errorBuilder: (context) => const _ArticleSelectionNoData(),
       builder: (context, articles) {
         return GridView.builder(
+          padding: const EdgeInsets.only(
+            bottom: 1.5 * RaPageConstraints.radioPlayerHeight,
+          ),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
           ),
@@ -60,18 +62,11 @@ class ArticleSelectionPage extends StatelessWidget {
             final article = articles.elementAt(index);
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              // TODO: Add proper navigation to the article page
               child: GestureDetector(
-                onTap: () {
-                  Navigator.push<ArticlePage>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ArticlePage(
-                        article: article,
-                      ),
-                    ),
-                  );
-                },
+                onTap: () => context.push(
+                  RaRoutes.articleId(article.id),
+                  extra: article,
+                ),
                 child: ColorShadowedCard2(
                   shadowColor: shadowColors[index % shadowColors.length],
                   footer: DefaultTextStyle(
@@ -117,7 +112,7 @@ class _ArticleSelectionNoData extends StatelessWidget {
           ),
           child: Center(
             child: Padding(
-              padding: ArticleSelectionPage._pagePadding.copyWith(top: 0),
+              padding: RaPageConstraints.outerTextPagePadding,
               child: Text(
                 context.l10n.dataLoadError,
                 style: context.textStyles.textMedium.copyWith(

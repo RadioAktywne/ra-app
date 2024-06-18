@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_playbutton.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
+import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 import 'package:text_scroll/text_scroll.dart';
 
@@ -18,16 +19,15 @@ class RadioPlayerWidget extends HookWidget {
 
   /// Measurements from Figma
   static const double buttonSize = 37;
-  static const double height = 50;
   static const EdgeInsets horizontalPadding =
-      EdgeInsets.symmetric(horizontal: 15);
+      EdgeInsets.symmetric(horizontal: 14);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AudioHandlerCubit, AudioHandler?>(
       builder: (context, audioHandler) {
         return Container(
-          height: height,
+          height: RaPageConstraints.radioPlayerHeight,
           color: context.colors.backgroundDarkSecondary,
           child: Row(
             children: switch (audioHandler) {

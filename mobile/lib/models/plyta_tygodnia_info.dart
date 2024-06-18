@@ -22,7 +22,7 @@ class PlytaTygodniaInfo {
   String imageTag;
 
   bool get isNotEmpty =>
-      artist != '' && title != '' && description != '' && imageTag != '';
+      artist != '' || title != '' || description != '' || imageTag != '';
 
   @override
   String toString() {

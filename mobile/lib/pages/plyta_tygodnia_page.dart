@@ -6,6 +6,7 @@ import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/plyta_tygodnia_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
+import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
 class PlytaTygodniaPage extends StatelessWidget {
   const PlytaTygodniaPage({
@@ -16,13 +17,13 @@ class PlytaTygodniaPage extends StatelessWidget {
   /// Fetch timeout
   final Duration timeout;
 
-  /// Paddings
   static const EdgeInsets _textPadding = EdgeInsets.symmetric(horizontal: 7);
-  static const EdgeInsets _pagePadding = EdgeInsets.only(left: 26, right: 26);
 
-  /// Space between things on the page.
-  static const SizedBox _emptySpace = SizedBox(height: 9);
-  static const SizedBox _spaceFromTop = SizedBox(height: 26);
+  /// Space between widgets on page
+  static const SizedBox _betweenPadding = SizedBox(height: 9);
+
+  /// Space before or after widgets on page
+  static const SizedBox _verticalPadding = SizedBox(height: 26);
 
   /// Plyta tygodnia info fetch details.
   static final Uri _infoUrl = Uri.parse(
@@ -69,13 +70,14 @@ class PlytaTygodniaPage extends StatelessWidget {
     return RefreshableFetchWidget(
       onFetch: _fetchPlytaTygodnia,
       defaultData: PlytaTygodniaInfo.empty(),
+      hasData: (plytaTygodnia) => plytaTygodnia.isNotEmpty,
       loadingBuilder: (context, snapshot) => const _PlytaTygodniaWaiting(),
       errorBuilder: (context) => const _PlytaTygodniaNoData(),
       builder: (context, plytaTygodnia) => Padding(
-        padding: _pagePadding,
+        padding: RaPageConstraints.outerTextPagePadding,
         child: ListView(
           children: [
-            _spaceFromTop,
+            _verticalPadding,
             AspectRatio(
               aspectRatio: 1,
               child: Image.network(
@@ -103,7 +105,7 @@ class PlytaTygodniaPage extends StatelessWidget {
                 ),
               ),
             ),
-            _emptySpace,
+            _betweenPadding,
             Container(
               height: 31,
               color: context.colors.backgroundDark,
@@ -123,17 +125,17 @@ class PlytaTygodniaPage extends StatelessWidget {
                 ],
               ),
             ),
-            _emptySpace,
+            _betweenPadding,
             Padding(
               padding: _textPadding,
               child: SelectableText(
-                plytaTygodnia.description,
+                plytaTygodnia.description + plytaTygodnia.description,
                 style: context.textStyles.textSmall.copyWith(
                   color: context.colors.backgroundDark,
                 ),
               ),
             ),
-            _emptySpace,
+            const SizedBox(height: 1.5 * RaPageConstraints.radioPlayerHeight),
           ],
         ),
       ),
@@ -158,7 +160,7 @@ class _PlytaTygodniaNoData extends StatelessWidget {
           ),
           child: Center(
             child: Padding(
-              padding: PlytaTygodniaPage._pagePadding.copyWith(top: 0),
+              padding: RaPageConstraints.outerTextPagePadding,
               child: Text(
                 context.l10n.dataLoadError,
                 style: context.textStyles.textMedium.copyWith(

@@ -3,17 +3,14 @@ import 'package:radioaktywne/components/utility/custom_padding_html_widget.dart'
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
+import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
 class ArticlePage extends StatelessWidget {
-
   const ArticlePage({
     super.key,
     required this.article,
   });
   final ArticleInfo article;
-
-  /// Paddings
-  static const EdgeInsets _pagePadding = EdgeInsets.symmetric(horizontal: 26);
 
   /// Space between things on the page.
   static const SizedBox _emptySpace = SizedBox(height: 9);
@@ -21,11 +18,10 @@ class ArticlePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: After adding proper navigation this Container should be romoved
     return Container(
       color: context.colors.backgroundLight,
       child: Padding(
-        padding: _pagePadding,
+        padding: RaPageConstraints.outerTextPagePadding,
         child: ListView(
           children: [
             _spaceFromTop,
@@ -45,14 +41,7 @@ class ArticlePage extends StatelessWidget {
                             child: const RaProgressIndicator(),
                           ),
                 errorBuilder: (context, error, stackTrace) => Center(
-                  child: Text(
-                    context.l10n.imageLoadError,
-                    style: context.textStyles.textMedium.copyWith(
-                      color: context.colors.highlightGreen,
-                    ),
-                    textAlign: TextAlign.center,
-                    softWrap: true,
-                  ),
+                  child: Image.asset('assets/defaultMedia.png'),
                 ),
               ),
             ),
@@ -61,14 +50,13 @@ class ArticlePage extends StatelessWidget {
               height: 31,
               color: context.colors.backgroundDark,
               child: Align(
-                alignment:Alignment.centerLeft,
-                child:
-                  CustomPaddingHtmlWidget(
-                    style: context.textStyles.textMedium.copyWith(
-                      color: context.colors.backgroundLight,
-                    ),
-                    htmlContent: article.title,
+                alignment: Alignment.centerLeft,
+                child: CustomPaddingHtmlWidget(
+                  style: context.textStyles.textMedium.copyWith(
+                    color: context.colors.backgroundLight,
                   ),
+                  htmlContent: article.title,
+                ),
               ),
             ),
             _emptySpace,
@@ -78,7 +66,7 @@ class ArticlePage extends StatelessWidget {
               ),
               htmlContent: article.content,
             ),
-            _emptySpace,
+            const SizedBox(height: 1.5 * RaPageConstraints.radioPlayerHeight),
           ],
         ),
       ),

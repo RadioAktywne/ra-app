@@ -1,24 +1,27 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 
+// TODO: Refactor into widget that determines
+// TODO: selected icon by current route path
 /// Represents the burger menu contained
 /// in the right side drawer.
 class RaBurgerMenu extends HookWidget {
   const RaBurgerMenu({
     super.key,
-    required this.titles,
-    required this.links,
+    required this.navigationItems,
+    required this.selectedIndex,
     this.borderWidth = 5.0,
-    this.selectedIndex = 0,
+    this.onItemClicked,
   });
 
-  /// Titles for menu items
-  final List<String> titles;
+  /// Map of navigation links for the [GoRouter]
+  /// with their corresponding names.
+  final Map<String, String> navigationItems;
 
-  /// Navigation links
-  final List<void Function()> links;
+  final void Function()? onItemClicked;
 
   /// Burger menu border width
   final double borderWidth;
@@ -26,15 +29,7 @@ class RaBurgerMenu extends HookWidget {
   /// Index of the currently selected page
   final int selectedIndex;
 
-  List<RaBurgerMenuItem> _makeList(
-    BuildContext context,
-    List<String> titles,
-    List<void Function()> links,
-    ValueNotifier<int> selectedIndex,
-  ) {
-    assert(titles.length == links.length);
-
-    final list = <RaBurgerMenuItem>[];
+  List<RaBurgerMenuItem> _makeList(BuildContext context) {
     final colors = <Color>[
       context.colors.highlightRed,
       context.colors.highlightYellow,
@@ -42,27 +37,23 @@ class RaBurgerMenu extends HookWidget {
       context.colors.highlightBlue,
     ];
 
-    titles.forEachIndexed((index, title) {
-      list.add(
-        RaBurgerMenuItem(
-          title: title,
-          color: colors[index % colors.length],
-          onPressed: () {
-            selectedIndex.value = index;
-            links[index]();
-          },
-          chosen: selectedIndex.value == index,
-        ),
-      );
-    });
+    return navigationItems.entries.mapIndexed((index, entry) {
+      final MapEntry(key: pagePath, value: pageTitle) = entry;
 
-    return list;
+      return RaBurgerMenuItem(
+        title: pageTitle,
+        color: colors[index % colors.length],
+        onPressed: () {
+          onItemClicked?.call();
+          context.go(pagePath);
+        },
+        chosen: index == selectedIndex,
+      );
+    }).toList(growable: false);
   }
 
   @override
   Widget build(BuildContext context) {
-    final selected = useState(selectedIndex);
-
     return Container(
       color: context.colors.highlightGreen,
       padding: EdgeInsets.only(left: borderWidth),
@@ -71,7 +62,7 @@ class RaBurgerMenu extends HookWidget {
         shadowColor: Colors.transparent,
         backgroundColor: context.colors.backgroundDark,
         child: ListView(
-          children: _makeList(context, titles, links, selected),
+          children: _makeList(context),
         ),
       ),
     );
