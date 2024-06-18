@@ -6,8 +6,7 @@ class ArticleInfo {
         title = '',
         content = '',
         thumbnail = '',
-        fullImage = '',
-        imageTag = '';
+        fullImage = '';
 
   /// Creates a [ArticleInfo] object from a given Json map.
   ArticleInfo.fromJson(Map<String, dynamic> jsonData)
@@ -21,18 +20,16 @@ class ArticleInfo {
             ['media_details']['sizes']['thumbnail']['source_url'] as String,
         // ignore: avoid_dynamic_calls
         fullImage = jsonData['_embedded']['wp:featuredmedia'][0]
-            ['media_details']['sizes']['full']['source_url'] as String,
-        imageTag = jsonData['featured_media'].toString();
+            ['media_details']['sizes']['full']['source_url'] as String;
 
   final int id;
   final String title;
   final String content;
   final String thumbnail;
   final String fullImage;
-  final String imageTag;
 
   bool get isNotEmpty =>
-      title.isNotEmpty && content.isNotEmpty && imageTag.isNotEmpty;
+      title.isNotEmpty && content.isNotEmpty;
 
   @override
   String toString() {
@@ -42,7 +39,6 @@ class ArticleInfo {
       content: `$content`,
       thumbnail: `$thumbnail`,
       fullImage: `$fullImage`,
-      imageTag: `$imageTag`,
     }
     ''';
   }

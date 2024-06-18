@@ -77,8 +77,8 @@ class RaNavigationShell extends HookWidget {
             accentColor: context.colors.highlightGreen,
             iconButton: IconButton(
               onPressed: () => _scaffoldKey.currentState!.isEndDrawerOpen
-                  ? _scaffoldKey.currentState!.closeEndDrawer()
-                  : _scaffoldKey.currentState!.openEndDrawer(),
+                  ? _scaffoldKey.currentState?.closeEndDrawer()
+                  : _scaffoldKey.currentState?.openEndDrawer(),
               icon: AnimatedIcon(
                 icon: AnimatedIcons.menu_close,
                 progress: burgerMenuIconController,
@@ -108,8 +108,10 @@ class RaNavigationShell extends HookWidget {
               body: child,
             ),
           ),
-          bottomNavigationBar:
-              RaBottomNavigationBar(selectedPageIndex: selectedPageIndex),
+          bottomNavigationBar: RaBottomNavigationBar(
+            selectedPageIndex: selectedPageIndex,
+            onTap: burgerMenuIconController.reverse,
+          ),
           bottomSheet: const Padding(
             padding: RaPageConstraints.outerWidgetPagePadding,
             child: RadioPlayerWidget(),

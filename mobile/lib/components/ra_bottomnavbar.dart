@@ -11,12 +11,15 @@ class RaBottomNavigationBar extends HookWidget {
   const RaBottomNavigationBar({
     super.key,
     required this.selectedPageIndex,
+    this.onTap,
     this.startIconIndex = 0,
     this.borderWidth = 5.0,
   });
 
   /// Index of the currently selected page.
   final int selectedPageIndex;
+
+  final void Function()? onTap;
 
   /// Specifies the index of the icon
   /// that should be selected at first.
@@ -35,7 +38,6 @@ class RaBottomNavigationBar extends HookWidget {
   // static const widths = <double>[30, 21, 32.5, 27];
   // static const heights = <double>[26, 28.5, 32.5, 27];
 
-  // TODO: refactor to use routes from RaRoutes
   static const _navigationItems = [
     BottomNavigationBarItem(
       icon: Icon(Icons.home_outlined, size: 30),
@@ -80,7 +82,10 @@ class RaBottomNavigationBar extends HookWidget {
           selectedItemColor: context.colors.highlightGreen,
           unselectedItemColor: context.colors.highlightGreen,
           currentIndex: selectedPageIndex,
-          onTap: (index) => context.go(_navigationItems[index].label!),
+          onTap: (index) {
+            onTap?.call();
+            context.go(_navigationItems[index].label!);
+          },
           items: _navigationItems,
         ),
       ),
