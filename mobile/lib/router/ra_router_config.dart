@@ -4,9 +4,11 @@ import 'package:radioaktywne/components/ra_navigation_shell.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 import 'package:radioaktywne/main.dart';
 import 'package:radioaktywne/models/article_info.dart';
+
 import 'package:radioaktywne/pages/article_page.dart';
 import 'package:radioaktywne/pages/article_selection_page.dart';
 import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
+import 'package:radioaktywne/pages/recordings_selection_page.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
 final raRouter = GoRouter(
@@ -21,6 +23,10 @@ final raRouter = GoRouter(
         GoRoute(
           path: RaRoutes.albumOfTheWeek,
           builder: (context, state) => const PlytaTygodniaPage(),
+        ),
+        GoRoute(
+          path: RaRoutes.recordings,
+          builder: (context, state) => const RecordingsSelectionPage(),
         ),
         GoRoute(
           path: RaRoutes.articles,
