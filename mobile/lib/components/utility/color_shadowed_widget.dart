@@ -16,7 +16,7 @@ class ColorShadowedWidget extends StatelessWidget {
     return IntrinsicWidth(
       child: IntrinsicHeight(
         child: Stack(
-          children: <Widget>[
+          children: [
             ShadowedContainer(
               margin: const EdgeInsets.only(
                 left: 6,
@@ -24,7 +24,7 @@ class ColorShadowedWidget extends StatelessWidget {
               ),
               backgroundColor: shadowColor,
             ),
-            Container(
+            ShadowedContainer(
               margin: const EdgeInsets.only(
                 right: 6,
                 top: 6,
