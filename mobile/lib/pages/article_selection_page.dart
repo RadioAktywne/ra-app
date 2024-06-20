@@ -52,7 +52,7 @@ class ArticleSelectionPage extends StatelessWidget {
       builder: (context, articles) {
         return GridView.builder(
           padding: const EdgeInsets.only(
-            bottom: 1.5 * RaPageConstraints.radioPlayerHeight,
+            bottom: RaPageConstraints.radioPlayerPadding,
           ),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,

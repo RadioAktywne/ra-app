@@ -66,7 +66,7 @@ class ArticlePage extends StatelessWidget {
               ),
               htmlContent: article.content,
             ),
-            const SizedBox(height: 1.5 * RaPageConstraints.radioPlayerHeight),
+            const SizedBox(height: RaPageConstraints.radioPlayerPadding),
           ],
         ),
       ),

@@ -1,93 +1,119 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
-// TODO: Refactor into widget that determines
-// TODO: selected icon by current route path
 /// Represents aplication's bottom navigation bar.
-class RaBottomNavigationBar extends HookWidget {
+class RaBottomNavigationBar extends StatelessWidget {
   const RaBottomNavigationBar({
     super.key,
-    required this.selectedPageIndex,
-    this.onTap,
-    this.startIconIndex = 0,
+    required this.currentPath,
     this.borderWidth = 5.0,
+    this.onNavigate,
   });
 
-  /// Index of the currently selected page.
-  final int selectedPageIndex;
-
-  final void Function()? onTap;
-
-  /// Specifies the index of the icon
-  /// that should be selected at first.
-  ///
-  /// This has to be a value greater than
-  /// or equal to 0 and less than the number
-  /// of icons (4).
-  final int startIconIndex;
+  final String currentPath;
 
   /// Specifies the width of the green border
   /// of the widget (5.0 on default).
   final double borderWidth;
+
+  final void Function()? onNavigate;
 
   // Leaving this as a reminder...
   // static const labels = <String>['home', 'mic', 'album', 'article'];
   // static const widths = <double>[30, 21, 32.5, 27];
   // static const heights = <double>[26, 28.5, 32.5, 27];
 
-  static const _navigationItems = [
-    BottomNavigationBarItem(
-      icon: Icon(Icons.home_outlined, size: 30),
-      activeIcon: Icon(Icons.home, size: 30),
-      label: RaRoutes.home,
+  static const _itemInfo = [
+    (
+      pagePath: RaRoutes.home,
+      icon: Icons.home_outlined,
+      activeIcon: Icons.home,
+      iconSize: 30.0,
     ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.mic_none_outlined, size: 28.5),
-      activeIcon: Icon(Icons.mic, size: 28.5),
-      label: RaRoutes.recordings,
+    (
+      pagePath: RaRoutes.recordings,
+      icon: Icons.mic_none_outlined,
+      activeIcon: Icons.mic,
+      iconSize: 28.5,
     ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.album_outlined, size: 32.5),
-      activeIcon: Icon(Icons.album, size: 32.5),
-      label: RaRoutes.albumOfTheWeek,
+    (
+      pagePath: RaRoutes.albumOfTheWeek,
+      icon: Icons.album_outlined,
+      activeIcon: Icons.album,
+      iconSize: 32.5,
     ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.article_outlined, size: 27),
-      activeIcon: Icon(Icons.article, size: 27),
-      label: RaRoutes.articles,
+    (
+      pagePath: RaRoutes.articles,
+      icon: Icons.article_outlined,
+      activeIcon: Icons.article,
+      iconSize: 27.0,
     ),
   ];
 
+  List<Widget> _makeList() {
+    return _itemInfo
+        .map(
+          (item) => RaBottomNavigationBarItem(
+            activeIcon: Icon(item.activeIcon),
+            icon: Icon(item.icon),
+            iconSize: item.iconSize,
+            pagePath: item.pagePath,
+            isSelected: item.pagePath == currentPath,
+            onNavigate: onNavigate,
+          ),
+        )
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    assert(startIconIndex >= 0 && startIconIndex < 4);
     return Container(
       padding: EdgeInsets.only(top: borderWidth),
       color: context.colors.highlightGreen,
       child: Container(
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        // padding: const EdgeInsets.symmetric(horizontal: 5),
         color: context.colors.backgroundDark,
-        child: BottomNavigationBar(
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          elevation: 0,
-          selectedLabelStyle: const TextStyle(fontSize: 0),
-          unselectedLabelStyle: const TextStyle(fontSize: 0),
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: context.colors.backgroundDark,
-          selectedItemColor: context.colors.highlightGreen,
-          unselectedItemColor: context.colors.highlightGreen,
-          currentIndex: selectedPageIndex,
-          onTap: (index) {
-            onTap?.call();
-            context.go(_navigationItems[index].label!);
-          },
-          items: _navigationItems,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: _makeList(),
         ),
       ),
+    );
+  }
+}
+
+class RaBottomNavigationBarItem extends StatelessWidget {
+  const RaBottomNavigationBarItem({
+    super.key,
+    required this.activeIcon,
+    required this.icon,
+    required this.iconSize,
+    required this.pagePath,
+    required this.isSelected,
+    this.onNavigate,
+  });
+
+  final Icon activeIcon;
+  final Icon icon;
+  final double iconSize;
+  final String pagePath;
+  final bool isSelected;
+  final void Function()? onNavigate;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        if (!isSelected) {
+          onNavigate?.call();
+        }
+        context.go(pagePath);
+      },
+      icon: isSelected ? activeIcon : icon,
+      iconSize: iconSize,
+      color: context.colors.highlightGreen,
     );
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +9,6 @@ import 'package:radioaktywne/components/ra_burger_menu.dart';
 import 'package:radioaktywne/components/radio_player/radio_player_widget.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
-import 'package:radioaktywne/router/ra_routes.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
 class RaNavigationShell extends HookWidget {
@@ -26,26 +23,15 @@ class RaNavigationShell extends HookWidget {
 
   final _scaffoldKey = GlobalKey<ScaffoldState>(debugLabel: 'Inner scaffold');
 
-  static const _navigationItems = {
-    RaRoutes.home: 'Radio Aktywne',
-    RaRoutes.recordings: 'Nagrania',
-    RaRoutes.albumOfTheWeek: 'Płyta tygodnia',
-    RaRoutes.articles: 'Publicystyka',
-    RaRoutes.radioPeople: 'Radiowcy',
-    RaRoutes.ramowka: 'Ramówka',
-    RaRoutes.broadcasts: 'Audycje',
-    RaRoutes.about: 'O nas',
-  };
-
-  int _determineSelected() {
-    final index = _navigationItems.keys.toList().indexOf(
-          _navigationItems.keys.firstWhere(
-            (key) => key == state.fullPath,
-            orElse: () => RaRoutes.home,
-          ),
-        );
-    return max(index, 0);
-  }
+  // int _determineSelected() {
+  //   final index = RaRoutes.pageTitles.keys.toList().indexOf(
+  //         RaRoutes.pageTitles.keys.firstWhere(
+  //           (key) => key == state.fullPath,
+  //           orElse: () => RaRoutes.home,
+  //         ),
+  //       );
+  //   return max(index, 0);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +39,6 @@ class RaNavigationShell extends HookWidget {
       duration: const Duration(milliseconds: 450),
       reverseDuration: const Duration(milliseconds: 250),
     );
-
-    final selectedPageIndex = _determineSelected();
 
     return BlocProvider(
       create: (_) => AudioHandlerCubit(),
@@ -100,22 +84,22 @@ class RaNavigationShell extends HookWidget {
                   ? burgerMenuIconController.forward()
                   : burgerMenuIconController.reverse(),
               endDrawer: RaBurgerMenu(
-                onItemClicked: burgerMenuIconController.reverse,
-                selectedIndex: selectedPageIndex,
-                navigationItems: _navigationItems,
+                currentPath: state.fullPath!,
+                onNavigate: burgerMenuIconController.reverse,
               ),
               body: child,
+              resizeToAvoidBottomInset: false,
             ),
           ),
           bottomNavigationBar: RaBottomNavigationBar(
-            selectedPageIndex: selectedPageIndex,
-            onTap: burgerMenuIconController.reverse,
+            currentPath: state.fullPath!,
+            onNavigate: burgerMenuIconController.reverse,
           ),
           bottomSheet: const Padding(
             padding: RaPageConstraints.outerWidgetPagePadding,
             child: RadioPlayerWidget(),
           ),
-          resizeToAvoidBottomInset: true,
+          resizeToAvoidBottomInset: false,
         ),
       ),
     );
