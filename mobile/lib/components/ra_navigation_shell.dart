@@ -4,13 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
-import 'package:radioaktywne/components/ra_bottomnavbar.dart';
+import 'package:radioaktywne/components/ra_bottom_navigation_bar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
 import 'package:radioaktywne/components/radio_player/radio_player_widget.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
+/// Represents the part of the UI that stays unchanged
+/// on navigation: appbar, bottom navigation bar,
+/// the drawer and the player.
 class RaNavigationShell extends HookWidget {
   RaNavigationShell({
     super.key,
@@ -18,20 +21,16 @@ class RaNavigationShell extends HookWidget {
     required this.state,
   });
 
+  /// The other widgets in the application,
+  /// usually - the pages.
   final Widget child;
+
+  /// Internal state of the [GoRouter] for
+  /// determining e.g. the currently selected
+  /// page.
   final GoRouterState state;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>(debugLabel: 'Inner scaffold');
-
-  // int _determineSelected() {
-  //   final index = RaRoutes.pageTitles.keys.toList().indexOf(
-  //         RaRoutes.pageTitles.keys.firstWhere(
-  //           (key) => key == state.fullPath,
-  //           orElse: () => RaRoutes.home,
-  //         ),
-  //       );
-  //   return max(index, 0);
-  // }
 
   @override
   Widget build(BuildContext context) {

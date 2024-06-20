@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
@@ -16,14 +15,16 @@ class RaBurgerMenu extends HookWidget {
     this.onNavigate,
   });
 
-  /// Index of the currently selected page
+  /// Name of the current page provided by
+  /// the [GoRouter]'s state.
   final String currentPath;
 
-  /// Burger menu's border width
+  /// The width of this widget's green border.
   final double borderWidth;
 
-  /// Additional action to be performed when
-  /// a navigation item is clicked.
+  /// Optional function to be called on every
+  /// navigation to a route __different__ than
+  /// the current one.
   final void Function()? onNavigate;
 
   static const _pageTitles = [
@@ -37,23 +38,25 @@ class RaBurgerMenu extends HookWidget {
     (RaRoutes.about, 'O nas'),
   ];
 
-  List<RaBurgerMenuItem> _makeList(BuildContext context) {
-    return _pageTitles.mapIndexed((index, item) {
-      final (pagePath, pageTitle) = item;
+  List<RaBurgerMenuItem> _makeList(BuildContext context) => List.generate(
+        _pageTitles.length,
+        (index) {
+          final (pagePath, pageTitle) = _pageTitles[index];
 
-      return RaBurgerMenuItem(
-        title: pageTitle,
-        color: shadowColor(context, index),
-        onPressed: () {
-          if (pagePath != currentPath) {
-            onNavigate?.call();
-          }
-          context.go(pagePath);
+          return RaBurgerMenuItem(
+            title: pageTitle,
+            color: shadowColor(context, index),
+            onPressed: () {
+              if (pagePath != currentPath) {
+                onNavigate?.call();
+              }
+              context.go(pagePath);
+            },
+            isSelected: pagePath == currentPath,
+          );
         },
-        isSelected: pagePath == currentPath,
+        growable: false,
       );
-    }).toList(growable: false);
-  }
 
   @override
   Widget build(BuildContext context) {

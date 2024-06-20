@@ -8,16 +8,20 @@ class RaBottomNavigationBar extends StatelessWidget {
   const RaBottomNavigationBar({
     super.key,
     required this.currentPath,
-    this.borderWidth = 5.0,
+    this.borderWidth = 5,
     this.onNavigate,
   });
 
+  /// Name of the current page provided by
+  /// the [GoRouter]'s state.
   final String currentPath;
 
-  /// Specifies the width of the green border
-  /// of the widget (5.0 on default).
+  /// The width of this widget's green border.
   final double borderWidth;
 
+  /// Optional function to be called on every
+  /// navigation to a route __different__ than
+  /// the current one.
   final void Function()? onNavigate;
 
   // Leaving this as a reminder...
