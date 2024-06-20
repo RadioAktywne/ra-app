@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
+import 'package:radioaktywne/resources/shadow_color.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
 /// Represents the burger menu contained
@@ -37,19 +38,12 @@ class RaBurgerMenu extends HookWidget {
   ];
 
   List<RaBurgerMenuItem> _makeList(BuildContext context) {
-    final colors = <Color>[
-      context.colors.highlightRed,
-      context.colors.highlightYellow,
-      context.colors.highlightGreen,
-      context.colors.highlightBlue,
-    ];
-
     return _pageTitles.mapIndexed((index, item) {
       final (pagePath, pageTitle) = item;
 
       return RaBurgerMenuItem(
         title: pageTitle,
-        color: colors[index % colors.length],
+        color: shadowColor(context, index),
         onPressed: () {
           if (pagePath != currentPath) {
             onNavigate?.call();

@@ -10,6 +10,7 @@ import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
+import 'package:radioaktywne/resources/shadow_color.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
 class ArticleSelectionPage extends StatelessWidget {
@@ -36,13 +37,6 @@ class ArticleSelectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final shadowColors = <Color>[
-      context.colors.highlightRed,
-      context.colors.highlightYellow,
-      context.colors.highlightGreen,
-      context.colors.highlightBlue,
-    ];
-
     return RefreshableFetchWidget(
       onFetch: _fetchArticles,
       defaultData: const <ArticleInfo>[],
@@ -68,7 +62,7 @@ class ArticleSelectionPage extends StatelessWidget {
                   extra: article,
                 ),
                 child: ColorShadowedCard2(
-                  shadowColor: shadowColors[index % shadowColors.length],
+                  shadowColor: shadowColor(context, index),
                   footer: DefaultTextStyle(
                     style: context.textStyles.textSmall.copyWith(
                       color: context.colors.highlightGreen,
