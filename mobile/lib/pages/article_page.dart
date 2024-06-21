@@ -25,24 +25,24 @@ class ArticlePage extends StatelessWidget {
         child: ListView(
           children: [
             _spaceFromTop,
-            AspectRatio(
-              aspectRatio: 1,
-              child: Image.network(
-                article.fullImage,
-                loadingBuilder: (context, child, loadingProgress) =>
-                    loadingProgress == null
-                        ? FittedBox(
-                            fit: BoxFit.fitWidth,
-                            clipBehavior: Clip.hardEdge,
-                            child: child,
-                          )
-                        : Container(
+            Image.network(
+              article.fullImage,
+              loadingBuilder: (context, child, loadingProgress) =>
+                  loadingProgress == null
+                      ? FittedBox(
+                          fit: BoxFit.fitWidth,
+                          clipBehavior: Clip.hardEdge,
+                          child: child,
+                        )
+                      : AspectRatio(
+                          aspectRatio: 1,
+                          child: Container(
                             color: context.colors.backgroundDarkSecondary,
                             child: const RaProgressIndicator(),
                           ),
-                errorBuilder: (context, error, stackTrace) => Center(
-                  child: Image.asset('assets/defaultMedia.png'),
-                ),
+                        ),
+              errorBuilder: (context, error, stackTrace) => Center(
+                child: Image.asset('assets/defaultMedia.png'),
               ),
             ),
             _emptySpace,
