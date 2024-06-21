@@ -44,6 +44,7 @@ class RaNavigationShell extends HookWidget {
       child: AnnotatedRegion(
         value: SystemUiOverlayStyle(
           systemNavigationBarColor: context.colors.backgroundDark,
+          statusBarColor: context.colors.backgroundDark,
         ),
         child: Scaffold(
           appBar: RaAppBar(
