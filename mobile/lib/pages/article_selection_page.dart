@@ -45,37 +45,36 @@ class _ArticleSelectionPageState extends State<ArticleSelectionPage> {
     super.dispose();
   }
 
-Future<Iterable<ArticleInfo>> _fetchArticles() async {
-  if (_isLoading || !_hasMore) {
-    return [];
+  Future<Iterable<ArticleInfo>> _fetchArticles() async {
+    if (_isLoading || !_hasMore) {
+      return [];
+    }
+    setState(() => _isLoading = true);
+
+    final pageUri = Uri.parse(
+      'https://radioaktywne.pl/wp-json/wp/v2/posts?_embed=true&page=$_currentPage&per_page=16',
+    );
+
+    try {
+      final newArticles = await fetchData(pageUri, ArticleInfo.fromJson);
+      setState(() {
+        _articles.addAll(newArticles);
+        _currentPage++;
+        _isLoading = false;
+        _hasMore = newArticles.isNotEmpty;
+      });
+      return newArticles;
+    } on TimeoutException catch (_) {
+      setState(() => _isLoading = false);
+      return [];
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _hasMore = false;
+      });
+      return [];
+    }
   }
-  setState(() => _isLoading = true);
-
-  final pageUri = Uri.parse(
-    'https://radioaktywne.pl/wp-json/wp/v2/posts?_embed=true&page=$_currentPage&per_page=16',
-  );
-
-  try {
-    final newArticles = await fetchData(pageUri, ArticleInfo.fromJson);
-    setState(() {
-      _articles.addAll(newArticles);
-      _currentPage++;
-      _isLoading = false;
-      _hasMore = newArticles.isNotEmpty;
-    });
-    return newArticles;
-  } on TimeoutException catch (_) {
-    setState(() => _isLoading = false);
-    return [];
-  } catch (e) {
-    setState(() {
-      _isLoading = false;
-      _hasMore = false;
-    });
-    return [];
-  }
-}
-
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
