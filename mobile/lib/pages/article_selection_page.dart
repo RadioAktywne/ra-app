@@ -105,14 +105,14 @@ class _ArticleSelectionPageState extends State<ArticleSelectionPage> {
         if (_isLoading) {
           return const _ArticleSelectionWaiting();
         } else {
-          return Container(); // Return an empty container if not loading
+          return Container();
         }
       },
       errorBuilder: (context) {
         if (_hasError) {
           return const _ArticleSelectionNoData();
         } else {
-          return Container(); // Return an empty container if no error
+          return Container();
         }
       },
       builder: (context, articles) {
