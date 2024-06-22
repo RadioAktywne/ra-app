@@ -29,33 +29,28 @@ class ArticlePage extends StatelessWidget {
               article.fullImage,
               loadingBuilder: (context, child, loadingProgress) =>
                   loadingProgress == null
-                      ? FittedBox(
-                          fit: BoxFit.fitWidth,
-                          clipBehavior: Clip.hardEdge,
-                          child: child,
-                        )
-                      : AspectRatio(
-                          aspectRatio: 1,
-                          child: Container(
-                            color: context.colors.backgroundDarkSecondary,
-                            child: const RaProgressIndicator(),
-                          ),
-                        ),
+                      ? child
+                      : Container(
+                        color: context.colors.backgroundDarkSecondary,
+                        child: const RaProgressIndicator(),
+                      ),
               errorBuilder: (context, error, stackTrace) => Center(
                 child: Image.asset('assets/defaultMedia.png'),
               ),
             ),
             _emptySpace,
             Container(
-              height: 31,
               color: context.colors.backgroundDark,
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: CustomPaddingHtmlWidget(
-                  style: context.textStyles.textMedium.copyWith(
-                    color: context.colors.backgroundLight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: CustomPaddingHtmlWidget(
+                    style: context.textStyles.textMedium.copyWith(
+                      color: context.colors.backgroundLight,
+                    ),
+                    htmlContent: article.title,
                   ),
-                  htmlContent: article.title,
                 ),
               ),
             ),
