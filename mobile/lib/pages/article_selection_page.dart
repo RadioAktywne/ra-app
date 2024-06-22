@@ -117,42 +117,44 @@ class _ArticleSelectionPageState extends State<ArticleSelectionPage> {
       },
       builder: (context, articles) {
         return Padding(
-          padding: const EdgeInsets.only(bottom: 40),
+          padding: const EdgeInsets.only(bottom: 50), // Helps with the player not covering the last article
           child: GridView.builder(
             controller: _scrollController,
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(20), // Space around the grid
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
+              crossAxisSpacing: 20, // Space between columns
+              mainAxisSpacing: 20, // Space between rows
             ),
             itemCount: _articles.length,
             itemBuilder: (context, index) {
               final article = _articles.elementAt(index);
-              return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: GestureDetector(
-                  onTap: () => context.push(
-                    RaRoutes.articleId(article.id),
-                    extra: article,
-                  ),
-                  child: ColorShadowedCard2(
-                    shadowColor: shadowColor(context, index),
-                    footer: DefaultTextStyle(
-                      style: context.textStyles.textSmall.copyWith(
-                        color: context.colors.highlightGreen,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: HtmlWidget(article.title),
-                      ),
+              return GestureDetector(
+                onTap: () => context.push(
+                  RaRoutes.articleId(article.id),
+                  extra: article,
+                ),
+                child: ColorShadowedCard2(
+                  shadowColor: shadowColor(context, index),
+                  footer: DefaultTextStyle(
+                    style: context.textStyles.textSmall.copyWith(
+                      color: context.colors.highlightGreen,
                     ),
-                    child: Image.network(
-                      article.thumbnail,
-                      errorBuilder: (context, error, stackTrace) => AspectRatio(
-                        aspectRatio: 1,
-                        child: Center(
-                          child: Image.asset('assets/defaultMedia.png'),
-                        ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: HtmlWidget(article.title),
+                    ),
+                  ),
+                  child: Image.network(
+                    article.thumbnail,
+                    fit: BoxFit.fill,
+                    errorBuilder: (context, error, stackTrace) => AspectRatio(
+                      aspectRatio: 1,
+                      child: Center(
+                        child: Image.asset(
+                          'assets/defaultMedia.png',
+                          fit: BoxFit.fill,
+                          ),
                       ),
                     ),
                   ),
