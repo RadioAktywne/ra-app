@@ -74,14 +74,19 @@ class RaBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: borderWidth),
-      color: context.colors.highlightGreen,
-      child: Container(
-        // padding: const EdgeInsets.symmetric(horizontal: 5),
-        color: context.colors.backgroundDark,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: _makeList(),
+      color: context.colors.backgroundDark,
+      child: SafeArea(
+        child: Container(
+          padding: EdgeInsets.only(top: borderWidth),
+          color: context.colors.highlightGreen,
+          child: Container(
+            // padding: const EdgeInsets.symmetric(horizontal: 5),
+            color: context.colors.backgroundDark,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: _makeList(),
+            ),
+          ),
         ),
       ),
     );
