@@ -1,19 +1,19 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
-import 'package:radioaktywne/components/ra_bottomnavbar.dart';
+import 'package:radioaktywne/components/ra_bottom_navigation_bar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
 import 'package:radioaktywne/components/radio_player/radio_player_widget.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
-import 'package:radioaktywne/router/ra_routes.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
+/// Represents the part of the UI that stays unchanged
+/// on navigation: appbar, bottom navigation bar,
+/// the drawer and the player.
 class RaNavigationShell extends HookWidget {
   RaNavigationShell({
     super.key,
@@ -21,31 +21,16 @@ class RaNavigationShell extends HookWidget {
     required this.state,
   });
 
+  /// The other widgets in the application,
+  /// usually - the pages.
   final Widget child;
+
+  /// Internal state of the [GoRouter] for
+  /// determining e.g. the currently selected
+  /// page.
   final GoRouterState state;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>(debugLabel: 'Inner scaffold');
-
-  static const _navigationItems = {
-    RaRoutes.home: 'Radio Aktywne',
-    RaRoutes.recordings: 'Nagrania',
-    RaRoutes.albumOfTheWeek: 'Płyta tygodnia',
-    RaRoutes.articles: 'Publicystyka',
-    RaRoutes.radioPeople: 'Radiowcy',
-    RaRoutes.ramowka: 'Ramówka',
-    RaRoutes.broadcasts: 'Audycje',
-    RaRoutes.about: 'O nas',
-  };
-
-  int _determineSelected() {
-    final index = _navigationItems.keys.toList().indexOf(
-          _navigationItems.keys.firstWhere(
-            (key) => key == state.fullPath,
-            orElse: () => RaRoutes.home,
-          ),
-        );
-    return max(index, 0);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +39,12 @@ class RaNavigationShell extends HookWidget {
       reverseDuration: const Duration(milliseconds: 250),
     );
 
-    final selectedPageIndex = _determineSelected();
-
     return BlocProvider(
       create: (_) => AudioHandlerCubit(),
       child: AnnotatedRegion(
         value: SystemUiOverlayStyle(
           systemNavigationBarColor: context.colors.backgroundDark,
+          statusBarColor: context.colors.backgroundDark,
         ),
         child: Scaffold(
           appBar: RaAppBar(
@@ -100,22 +84,22 @@ class RaNavigationShell extends HookWidget {
                   ? burgerMenuIconController.forward()
                   : burgerMenuIconController.reverse(),
               endDrawer: RaBurgerMenu(
-                onItemClicked: burgerMenuIconController.reverse,
-                selectedIndex: selectedPageIndex,
-                navigationItems: _navigationItems,
+                currentPath: state.fullPath!,
+                onNavigate: burgerMenuIconController.reverse,
               ),
               body: child,
+              resizeToAvoidBottomInset: false,
             ),
           ),
           bottomNavigationBar: RaBottomNavigationBar(
-            selectedPageIndex: selectedPageIndex,
-            onTap: burgerMenuIconController.reverse,
+            currentPath: state.fullPath!,
+            onNavigate: burgerMenuIconController.reverse,
           ),
           bottomSheet: const Padding(
             padding: RaPageConstraints.outerWidgetPagePadding,
             child: RadioPlayerWidget(),
           ),
-          resizeToAvoidBottomInset: true,
+          resizeToAvoidBottomInset: false,
         ),
       ),
     );

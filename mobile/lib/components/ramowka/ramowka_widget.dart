@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_list.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
+import 'package:radioaktywne/components/utility/ra_splash.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
+import 'package:radioaktywne/router/ra_routes.dart';
 
 /// Widget representing Ramówka
 ///
@@ -24,36 +27,27 @@ class RamowkaWidget extends StatelessWidget {
         padding: const EdgeInsets.only(left: 3),
         child: SizedBox(
           height: 31,
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              // TODO: (optional) nagivation to Ramowka page
-              onTap: () {},
-              highlightColor: Colors.transparent,
-              splashColor: context.colors.highlightGreen.withOpacity(0.3),
-              radius: 100,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    // TODO: nagivation to Ramowka page
-                    onTap: () {},
-                    child: Text(
-                      context.l10n.ramowka,
-                      style: context.textStyles.textMedium,
-                    ),
+          child: RaSplash(
+            onPressed: () => context.push(RaRoutes.ramowka),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () => context.push(RaRoutes.ramowka),
+                  child: Text(
+                    context.l10n.ramowka,
+                    style: context.textStyles.textMedium,
                   ),
-                  GestureDetector(
-                    // TODO: nagivation to Ramowka page
-                    onTap: () {},
-                    child: Icon(
-                      Icons.menu,
-                      size: 28,
-                      color: context.colors.highlightGreen,
-                    ),
+                ),
+                GestureDetector(
+                  onTap: () => context.push(RaRoutes.ramowka),
+                  child: Icon(
+                    Icons.menu,
+                    size: 28,
+                    color: context.colors.highlightGreen,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

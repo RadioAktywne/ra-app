@@ -1,56 +1,62 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
+import 'package:radioaktywne/resources/shadow_color.dart';
+import 'package:radioaktywne/router/ra_routes.dart';
 
-// TODO: Refactor into widget that determines
-// TODO: selected icon by current route path
 /// Represents the burger menu contained
 /// in the right side drawer.
 class RaBurgerMenu extends HookWidget {
   const RaBurgerMenu({
     super.key,
-    required this.navigationItems,
-    required this.selectedIndex,
+    required this.currentPath,
     this.borderWidth = 5.0,
-    this.onItemClicked,
+    this.onNavigate,
   });
 
-  /// Map of navigation links for the [GoRouter]
-  /// with their corresponding names.
-  final Map<String, String> navigationItems;
+  /// Name of the current page provided by
+  /// the [GoRouter]'s state.
+  final String currentPath;
 
-  final void Function()? onItemClicked;
-
-  /// Burger menu border width
+  /// The width of this widget's green border.
   final double borderWidth;
 
-  /// Index of the currently selected page
-  final int selectedIndex;
+  /// Optional function to be called on every
+  /// navigation to a route __different__ than
+  /// the current one.
+  final void Function()? onNavigate;
 
-  List<RaBurgerMenuItem> _makeList(BuildContext context) {
-    final colors = <Color>[
-      context.colors.highlightRed,
-      context.colors.highlightYellow,
-      context.colors.highlightGreen,
-      context.colors.highlightBlue,
-    ];
+  static const _pageTitles = [
+    (RaRoutes.home, 'Radio Aktywne'),
+    (RaRoutes.recordings, 'Nagrania'),
+    (RaRoutes.albumOfTheWeek, 'Płyta tygodnia'),
+    (RaRoutes.articles, 'Publicystyka'),
+    (RaRoutes.radioPeople, 'Radiowcy'),
+    (RaRoutes.ramowka, 'Ramówka'),
+    (RaRoutes.broadcasts, 'Audycje'),
+    (RaRoutes.about, 'O nas'),
+  ];
 
-    return navigationItems.entries.mapIndexed((index, entry) {
-      final MapEntry(key: pagePath, value: pageTitle) = entry;
+  List<RaBurgerMenuItem> _makeList(BuildContext context) => List.generate(
+        _pageTitles.length,
+        (index) {
+          final (pagePath, pageTitle) = _pageTitles[index];
 
-      return RaBurgerMenuItem(
-        title: pageTitle,
-        color: colors[index % colors.length],
-        onPressed: () {
-          onItemClicked?.call();
-          context.go(pagePath);
+          return RaBurgerMenuItem(
+            title: pageTitle,
+            color: shadowColor(context, index),
+            onPressed: () {
+              if (pagePath != currentPath) {
+                onNavigate?.call();
+              }
+              context.go(pagePath);
+            },
+            isSelected: pagePath == currentPath,
+          );
         },
-        chosen: index == selectedIndex,
+        growable: false,
       );
-    }).toList(growable: false);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,13 +82,13 @@ class RaBurgerMenuItem extends StatelessWidget {
     required this.title,
     required this.color,
     required this.onPressed,
-    required this.chosen,
+    required this.isSelected,
   });
 
   final String title;
   final Color color;
   final void Function()? onPressed;
-  final bool chosen;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +114,7 @@ class RaBurgerMenuItem extends StatelessWidget {
               width: 10,
             ),
             AnimatedContainer(
-              width: chosen ? 18 : 6,
+              width: isSelected ? 18 : 6,
               height: 38,
               color: color,
               duration: const Duration(milliseconds: 200),

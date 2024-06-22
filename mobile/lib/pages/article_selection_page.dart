@@ -10,6 +10,7 @@ import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
+import 'package:radioaktywne/resources/shadow_color.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
 class ArticleSelectionPage extends StatefulWidget {
@@ -40,8 +41,9 @@ class _ArticleSelectionPageState extends State<ArticleSelectionPage> {
 
   @override
   void dispose() {
-    _scrollController..removeListener(_onScroll)
-    ..dispose();
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
     super.dispose();
   }
 
@@ -78,20 +80,14 @@ class _ArticleSelectionPageState extends State<ArticleSelectionPage> {
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200 && !_isLoading) {
+            _scrollController.position.maxScrollExtent - 200 &&
+        !_isLoading) {
       _fetchArticles();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final shadowColors = <Color>[
-      context.colors.highlightRed,
-      context.colors.highlightYellow,
-      context.colors.highlightGreen,
-      context.colors.highlightBlue,
-    ];
-
     return RefreshableFetchWidget(
       onFetch: _fetchArticles,
       defaultData: const <ArticleInfo>[],
@@ -111,14 +107,15 @@ class _ArticleSelectionPageState extends State<ArticleSelectionPage> {
             itemBuilder: (context, index) {
               final article = _articles.elementAt(index);
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 child: GestureDetector(
                   onTap: () => context.push(
                     RaRoutes.articleId(article.id),
                     extra: article,
                   ),
                   child: ColorShadowedCard2(
-                    shadowColor: shadowColors[index % shadowColors.length],
+                    shadowColor: shadowColor(context, index),
                     footer: DefaultTextStyle(
                       style: context.textStyles.textSmall.copyWith(
                         color: context.colors.highlightGreen,

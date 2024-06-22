@@ -9,7 +9,6 @@ abstract class RaPageConstraints {
       EdgeInsets.symmetric(horizontal: 16);
   static const EdgeInsets outerTextPagePadding =
       EdgeInsets.symmetric(horizontal: 26);
-  // TODO: change for some padding (e.g. 1.5 * this) for
-  // TODO: more clarity about it's purpose
   static const double radioPlayerHeight = 50;
+  static const double radioPlayerPadding = 1.5 * radioPlayerHeight;
 }
