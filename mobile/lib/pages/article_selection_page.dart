@@ -100,48 +100,49 @@ Future<Iterable<ArticleInfo>> _fetchArticles() async {
       loadingBuilder: (context, snapshot) => const _ArticleSelectionWaiting(),
       errorBuilder: (context) => const _ArticleSelectionNoData(),
       builder: (context, articles) {
-        return GridView.builder(
-          controller: _scrollController,
-          padding: const EdgeInsets.only(
-            bottom: 1.5 * RaPageConstraints.radioPlayerHeight,
-          ),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-          ),
-          itemCount: _articles.length,
-          itemBuilder: (context, index) {
-            final article = _articles.elementAt(index);
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              child: GestureDetector(
-                onTap: () => context.push(
-                  RaRoutes.articleId(article.id),
-                  extra: article,
-                ),
-                child: ColorShadowedCard2(
-                  shadowColor: shadowColors[index % shadowColors.length],
-                  footer: DefaultTextStyle(
-                    style: context.textStyles.textSmall.copyWith(
-                      color: context.colors.highlightGreen,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: HtmlWidget(article.title),
-                    ),
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 40),
+          child: GridView.builder(
+            controller: _scrollController,
+            padding: const EdgeInsets.all(10),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+            ),
+            itemCount: _articles.length,
+            itemBuilder: (context, index) {
+              final article = _articles.elementAt(index);
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: GestureDetector(
+                  onTap: () => context.push(
+                    RaRoutes.articleId(article.id),
+                    extra: article,
                   ),
-                  child: Image.network(
-                    article.thumbnail,
-                    errorBuilder: (context, error, stackTrace) => AspectRatio(
-                      aspectRatio: 1,
-                      child: Center(
-                        child: Image.asset('assets/defaultMedia.png'),
+                  child: ColorShadowedCard2(
+                    shadowColor: shadowColors[index % shadowColors.length],
+                    footer: DefaultTextStyle(
+                      style: context.textStyles.textSmall.copyWith(
+                        color: context.colors.highlightGreen,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: HtmlWidget(article.title),
+                      ),
+                    ),
+                    child: Image.network(
+                      article.thumbnail,
+                      errorBuilder: (context, error, stackTrace) => AspectRatio(
+                        aspectRatio: 1,
+                        child: Center(
+                          child: Image.asset('assets/defaultMedia.png'),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         );
       },
     );
