@@ -31,6 +31,7 @@ class _ArticleSelectionPageState extends State<ArticleSelectionPage> {
   int _currentPage = 1;
   bool _isLoading = false;
   bool _hasMore = true;
+  bool _hasError = false;
 
   @override
   void initState() {
@@ -51,7 +52,10 @@ class _ArticleSelectionPageState extends State<ArticleSelectionPage> {
     if (_isLoading || !_hasMore) {
       return [];
     }
-    setState(() => _isLoading = true);
+    setState(() {
+      _isLoading = true;
+      _hasError = false;
+    });
 
     final pageUri = Uri.parse(
       'https://radioaktywne.pl/wp-json/wp/v2/posts?_embed=true&page=$_currentPage&per_page=16',
@@ -67,16 +71,21 @@ class _ArticleSelectionPageState extends State<ArticleSelectionPage> {
       });
       return newArticles;
     } on TimeoutException catch (_) {
-      setState(() => _isLoading = false);
+      setState(() {
+        _isLoading = false;
+        _hasError = true;
+      });
       return [];
     } catch (e) {
       setState(() {
         _isLoading = false;
+        _hasError = true;
         _hasMore = false;
       });
       return [];
     }
   }
+
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
@@ -90,10 +99,22 @@ class _ArticleSelectionPageState extends State<ArticleSelectionPage> {
   Widget build(BuildContext context) {
     return RefreshableFetchWidget(
       onFetch: _fetchArticles,
-      defaultData: const <ArticleInfo>[],
+      defaultData: [ArticleInfo.empty()],
       hasData: (articles) => _articles.isNotEmpty,
-      loadingBuilder: (context, snapshot) => const _ArticleSelectionWaiting(),
-      errorBuilder: (context) => const _ArticleSelectionNoData(),
+      loadingBuilder: (context, snapshot) {
+        if (_isLoading) {
+          return const _ArticleSelectionWaiting();
+        } else {
+          return Container(); // Return an empty container if not loading
+        }
+      },
+      errorBuilder: (context) {
+        if (_hasError) {
+          return const _ArticleSelectionNoData();
+        } else {
+          return Container(); // Return an empty container if no error
+        }
+      },
       builder: (context, articles) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 40),
