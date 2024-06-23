@@ -2,16 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
-import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_widget.dart';
-import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card_2.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
+import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/router/ra_router_config.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
@@ -55,17 +53,6 @@ class MainPage extends HookWidget {
     super.key,
   });
 
-  static final Uri _infoUrl = Uri.parse(
-    'https://radioaktywne.pl/wp-json/wp/v2/posts?_embed=true&page=1&per_page=16',
-  );
-
-  Future<Iterable<ArticleInfo>> _fetchArticles() async {
-    try {
-      return await fetchData(_infoUrl, ArticleInfo.fromJson);
-    } on TimeoutException catch (_) {
-      return [];
-    }
-  }
 
   static const _widgetPadding = EdgeInsets.symmetric(
     vertical: 8,
