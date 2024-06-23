@@ -30,17 +30,17 @@ class ColorShadowedCard2 extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                if (header != null)
-                  Container(
-                    color: context.colors.backgroundDark,
-                    child: header,
-                  ),
                 Container(
                   color: context.colors.backgroundDarkSecondary,
                   child: child,
                 ),
               ],
             ),
+            if (header != null)
+              Container(
+                color: context.colors.backgroundDark,
+                child: header,
+              ),
             if (footer != null)
               Positioned(
                 bottom: indicator != null ? 8 : 0,

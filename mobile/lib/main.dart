@@ -147,14 +147,9 @@ class MainPage extends StatelessWidget {
                             ),
                           ),
                           indicator: 0,
-                          child: SizedBox(
-                            height: 139,
-                            child: ClipRect(
-                              child: Image.asset(
-                                'assets/defaultMedia.png',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                          child: Image.asset(
+                            'assets/defaultMedia.png',
+                            fit: BoxFit.fill,
                           ),
                         );
                       } else {
@@ -179,12 +174,9 @@ class MainPage extends StatelessWidget {
                               ),
                             ),
                             indicator: 0,
-                            child: SizedBox(
-                              height: 139,
-                              child: Image.asset(
-                                'assets/defaultMedia.png',
-                                fit: BoxFit.cover,
-                              ),
+                            child: Image.asset(
+                              'assets/defaultMedia.png',
+                              fit: BoxFit.fill,
                             ),
                           ),
                         );
