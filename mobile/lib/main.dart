@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_widget.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
+import 'package:radioaktywne/components/utility/color_shadowed_card_2.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 import 'package:radioaktywne/router/ra_router_config.dart';
@@ -57,139 +59,213 @@ class MainPage extends StatelessWidget {
       color: context.colors.backgroundLight,
       width: double.infinity,
       height: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: SingleChildScrollView(
+        child: Padding(
+            padding: const EdgeInsets.only(bottom: 50),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              /// Ramówka widget
-              const Padding(
-                padding: _widgetPadding,
-                child: RamowkaWidget(),
-              ),
-
-              /// Old Ramowka
-              Padding(
-                padding: _widgetPadding,
-                child: ColorShadowedCard(
-                  shadowColor: context.colors.highlightYellow,
-                  header: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Text(
-                      'Ramówka na dziś',
-                      style: context.textStyles.textMedium,
-                    ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  /// Ramówka widget
+                  const Padding(
+                    padding: _widgetPadding,
+                    child: RamowkaWidget(),
                   ),
-                  footer: Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 2,
-                          ),
-                          child: Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              color: Colors.grey,
-                              shape: BoxShape.circle,
+                  Padding(
+                    padding: _widgetPadding,
+                    child: ColorShadowedCard2(
+                      shadowColor: context.colors.highlightRed,
+                      footer: DefaultTextStyle(
+                        style: context.textStyles.textSmall.copyWith(
+                          color: context.colors.highlightGreen,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Teraz gramy \n',
+                                  style: context.textStyles.textMedium.copyWith(
+                                    color: context.colors.highlightGreen,
+                                    height: 1.5,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: 'Lorem Ipsum', // TODO: Place for the song title
+                                  style: context.textStyles.textSmall.copyWith(
+                                    color: context.colors.highlightGreen,
+                                    height: 1.5,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 2,
-                          ),
-                          child: Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 2,
-                          ),
-                          child: Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              color: Colors.grey,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(
-                      'Lorem ipsum',
-                      style: context.textStyles.textSmall,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: _widgetPadding,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ColorShadowedCard(
-                        shadowColor: context.colors.highlightPurple,
-                        header: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 2,
-                          ),
-                          child: Text(
-                            'Nagłówek',
-                            style: context.textStyles.textMedium,
-                          ),
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          child: Text(
-                            'Lorem ipsum',
-                            style: context.textStyles.textSmall,
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: ColorShadowedCard(
-                        shadowColor: context.colors.highlightBlue,
-                        footer: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 2,
-                          ),
-                          child: Text(
-                            'Stopka',
-                            style: context.textStyles.textSmall,
-                          ),
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          child: Text(
-                            'Lorem ipsum',
-                            style: context.textStyles.textSmall,
-                          ),
+                      child: Container(
+                        padding: const EdgeInsets.all(80),
+                        child: Text( // TODO: Place for the spining vyinyl record
+                          '',
+                          style: context.textStyles.textSmall,
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  GridView.builder(
+                    padding: const EdgeInsets.all(15),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 15,
+                      mainAxisSpacing: 15,
+                      ),
+                    itemCount: 2,
+                    itemBuilder: (context, index) {
+                      if (index == 0) {
+                        return ColorShadowedCard(
+                          shadowColor: context.colors.highlightGreen,
+                          header: Padding(
+                            padding: const EdgeInsets.all(3),
+                            child: Text(
+                              'Najnowsze nagrania',
+                              style: context.textStyles.textSmall,
+                            ),
+                          ),
+                          footer: Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 2,
+                                    ),
+                                    child: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.grey,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 2,
+                                    ),
+                                    child: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 2,
+                                    ),
+                                    child: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.grey,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          child: Container(
+                            padding: const EdgeInsets.all(45),
+                            child: Text(
+                              'Lorem ipsum',
+                              style: context.textStyles.textSmall,
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Padding(
+                          padding: EdgeInsets.zero,
+                          child: ColorShadowedCard(
+                            shadowColor: context.colors.highlightYellow,
+                            header: Padding(
+                              padding: const EdgeInsets.all(3),
+                              child: Text(
+                                'Najnowsze artykuły',
+                                style: context.textStyles.textSmall,
+                              ),
+                            ),
+                            footer: Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 2,
+                                    ),
+                                    child: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.grey,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 2,
+                                    ),
+                                    child: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 2,
+                                    ),
+                                    child: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.grey,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.all(45),
+                              child: Text(
+                                'Lorem ipsum',
+                                style: context.textStyles.textSmall,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
