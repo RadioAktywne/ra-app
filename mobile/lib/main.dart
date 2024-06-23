@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
+import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_widget.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card_2.dart';
@@ -122,11 +124,11 @@ class MainPage extends StatelessWidget {
                       crossAxisCount: 2,
                       crossAxisSpacing: 15,
                       mainAxisSpacing: 15,
-                      ),
+                    ),
                     itemCount: 2,
                     itemBuilder: (context, index) {
                       if (index == 0) {
-                        return ColorShadowedCard(
+                        return ColorShadowedCard2(
                           shadowColor: context.colors.highlightGreen,
                           header: Padding(
                             padding: const EdgeInsets.all(3),
@@ -135,65 +137,30 @@ class MainPage extends StatelessWidget {
                               style: context.textStyles.textSmall,
                             ),
                           ),
-                          footer: Padding(
-                              padding: const EdgeInsets.only(top: 4),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 2,
-                                    ),
-                                    child: Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.grey,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 2,
-                                    ),
-                                    child: Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.white,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 2,
-                                    ),
-                                    child: Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.grey,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                          footer: DefaultTextStyle(
+                            style: context.textStyles.textSmall.copyWith(
+                              color: context.colors.highlightGreen,
                             ),
-                          child: Container(
-                            padding: const EdgeInsets.all(45),
-                            child: Text(
-                              'Lorem ipsum',
-                              style: context.textStyles.textSmall,
+                            child: const Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Text('Lorem ipsum'),
+                            ),
+                          ),
+                          indicator: 0,
+                          child: SizedBox(
+                            height: 139,
+                            child: ClipRect(
+                              child: Image.asset(
+                                'assets/defaultMedia.png',
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         );
                       } else {
                         return Padding(
                           padding: EdgeInsets.zero,
-                          child: ColorShadowedCard(
+                          child: ColorShadowedCard2(
                             shadowColor: context.colors.highlightYellow,
                             header: Padding(
                               padding: const EdgeInsets.all(3),
@@ -202,58 +169,21 @@ class MainPage extends StatelessWidget {
                                 style: context.textStyles.textSmall,
                               ),
                             ),
-                            footer: Padding(
-                              padding: const EdgeInsets.only(top: 4),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 2,
-                                    ),
-                                    child: Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.grey,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 2,
-                                    ),
-                                    child: Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.white,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 2,
-                                    ),
-                                    child: Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.grey,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                            footer: DefaultTextStyle(
+                              style: context.textStyles.textSmall.copyWith(
+                                color: context.colors.highlightGreen,
+                              ),
+                            child: const Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Text('Lorem ipsum'),
                               ),
                             ),
-                            child: Container(
-                              padding: const EdgeInsets.all(45),
-                              child: Text(
-                                'Lorem ipsum',
-                                style: context.textStyles.textSmall,
+                            indicator: 0,
+                            child: SizedBox(
+                              height: 139,
+                              child: Image.asset(
+                                'assets/defaultMedia.png',
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),

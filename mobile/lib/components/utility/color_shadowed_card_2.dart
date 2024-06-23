@@ -7,7 +7,6 @@ class ColorShadowedCard2 extends StatelessWidget {
     super.key,
     required this.child,
     required this.shadowColor,
-    this.index,
     this.header,
     this.footer,
     this.indicator,
@@ -15,10 +14,9 @@ class ColorShadowedCard2 extends StatelessWidget {
 
   final Widget child;
   final Color shadowColor;
-  final int? index;
   final Widget? header;
   final Widget? footer;
-  final Widget? indicator;
+  final int? indicator;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +43,7 @@ class ColorShadowedCard2 extends StatelessWidget {
             ),
             if (footer != null)
               Positioned(
-                bottom: 0,
+                bottom: indicator != null ? 8 : 0,
                 left: 0,
                 right: 0,
                 child: Opacity(
@@ -56,54 +54,59 @@ class ColorShadowedCard2 extends StatelessWidget {
                   ),
                 ),
               ),
-            if (indicator != null && index != null)
-              Container(
-                color: context.colors.backgroundDark,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 2,
-                      ),
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: index == 0 ? Colors.grey : Colors.white,
-                          shape: BoxShape.circle,
+              if (indicator != null)
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    color: context.colors.backgroundDark,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 2,
+                          ),
+                          child: Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: indicator == 0 ? context.colors.highlightGreen : Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 2,
-                      ),
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: index == 1 ? Colors.grey : Colors.white,
-                          shape: BoxShape.circle,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 2,
+                          ),
+                          child: Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: indicator == 1 ? context.colors.highlightGreen : Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 2,
-                      ),
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          color: index == 2 ? Colors.grey : Colors.white,
-                          shape: BoxShape.circle,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 2,
+                          ),
+                          child: Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: indicator == 2 ? context.colors.highlightGreen : Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
           ],
         ),
       ),
