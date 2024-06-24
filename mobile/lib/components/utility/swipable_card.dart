@@ -11,11 +11,13 @@ class SwipableCard extends HookWidget {
   const SwipableCard({
     super.key,
     required this.articles,
+    required this.isLoading,
     required this.shadowColor,
     this.header,
   });
 
   final Iterable<ArticleInfo> articles;
+  final bool isLoading;
   final Color shadowColor;
   final Widget? header;
 
@@ -59,10 +61,14 @@ class SwipableCard extends HookWidget {
                         Positioned.fill(
                           child: Container(
                             color: context.colors.backgroundDarkSecondary,
-                            child: Image.network(
-                              article.thumbnail,
-                              fit: BoxFit.cover,
-                            ),
+                            child: isLoading ? 
+                              Image.asset(
+                                'assets/defaultMedia.png',
+                                fit: BoxFit.fill,
+                              ) : Image.network(
+                                article.thumbnail,
+                                fit: BoxFit.fill,
+                              ),
                           ),
                         ),
                         Positioned(

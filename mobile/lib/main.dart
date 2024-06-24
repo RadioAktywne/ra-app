@@ -187,6 +187,7 @@ class MainPage extends HookWidget {
                       } else {
                         return SwipableCard(
                           articles: articles.value, 
+                          isLoading: isLoading.value,
                           shadowColor: context.colors.highlightYellow,
                           header: Padding(
                             padding: const EdgeInsets.all(3),
