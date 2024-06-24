@@ -26,18 +26,6 @@ class SwipableCard extends HookWidget {
     final pageController = usePageController();
     final currentPage = useState(0);
 
-    useEffect(() {
-      void pageListener() {
-        final newPage = pageController.page?.round() ?? 0;
-        if (newPage != currentPage.value) {
-          currentPage.value = newPage;
-        }
-      }
-
-      pageController.addListener(pageListener);
-      return () => pageController.removeListener(pageListener);
-    }, [pageController],);
-
     return ColorShadowedWidget(
       shadowColor: shadowColor,
       child: Container(
@@ -49,6 +37,7 @@ class SwipableCard extends HookWidget {
               child: PageView.builder(
                 controller: pageController,
                 itemCount: articles.length,
+                onPageChanged: (index) => currentPage.value = index,
                 itemBuilder: (context, index) {
                   final article = articles.elementAt(index);
                   return GestureDetector(
