@@ -2,17 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_widget.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card_2.dart';
+import 'package:radioaktywne/components/utility/swipable_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/router/ra_router_config.dart';
-import 'package:radioaktywne/router/ra_routes.dart';
 
 void main() {
   /// Setup so the orientation stays in portrait mode
@@ -187,44 +185,16 @@ class MainPage extends HookWidget {
                           ),
                         );
                       } else {
-                        return PageView.builder(
-                          itemCount: articles.value.length,
-                          itemBuilder: (context, index) {
-                            final article = articles.value.elementAt(index);
-                            return GestureDetector(
-                              onTap: () => context.push(
-                                RaRoutes.articleId(article.id),
-                                extra: article,
-                              ),
-                              child: ColorShadowedCard2(
-                                shadowColor: context.colors.highlightYellow,
-                                header: Padding(
-                                  padding: const EdgeInsets.all(3),
-                                  child: Text(
-                                    'Najnowsze artykuły',
-                                    style: context.textStyles.textSmall,
-                                  ),
-                                ),
-                                footer: DefaultTextStyle(
-                                  style: context.textStyles.textSmall.copyWith(
-                                    color: context.colors.highlightGreen,
-                                  ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: HtmlWidget(article.title),
-                                  ),
-                                ),
-                                indicator: index,
-                                child: isLoading.value ? Image.asset(
-                                  'assets/defaultMedia.png',
-                                  fit: BoxFit.fill,
-                                ) : Image.network(
-                                  article.thumbnail,
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            );
-                          },
+                        return SwipableCard(
+                          articles: articles.value, 
+                          shadowColor: context.colors.highlightYellow,
+                          header: Padding(
+                            padding: const EdgeInsets.all(3),
+                            child: Text(
+                              'Najnowsze artykuły',
+                              style: context.textStyles.textSmall,
+                            ),
+                          ),
                         );
                       }
                     },
