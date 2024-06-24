@@ -9,12 +9,14 @@ class ColorShadowedCard2 extends StatelessWidget {
     required this.shadowColor,
     this.header,
     this.footer,
+    this.indicator,
   });
 
   final Widget child;
   final Color shadowColor;
   final Widget? header;
   final Widget? footer;
+  final int? indicator;
 
   @override
   Widget build(BuildContext context) {
@@ -28,20 +30,25 @@ class ColorShadowedCard2 extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                if (header != null)
-                  Container(
-                    color: context.colors.backgroundDark,
-                    child: header,
-                  ),
                 Container(
                   color: context.colors.backgroundDarkSecondary,
                   child: child,
                 ),
               ],
             ),
+            if (header != null)
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  color: context.colors.backgroundDark,
+                  child: header,
+                ),
+              ),
             if (footer != null)
               Positioned(
-                bottom: 0,
+                bottom: indicator != null ? 12 : 0,
                 left: 0,
                 right: 0,
                 child: Opacity(
@@ -52,6 +59,62 @@ class ColorShadowedCard2 extends StatelessWidget {
                   ),
                 ),
               ),
+              if (indicator != null)
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    color: context.colors.backgroundDark,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 2,
+                            ),
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: indicator == 0 ? context.colors.highlightGreen : Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 2,
+                            ),
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: indicator == 1 ? context.colors.highlightGreen : Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 2,
+                            ),
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: indicator == 2 ? context.colors.highlightGreen : Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
           ],
         ),
       ),
