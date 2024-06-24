@@ -148,7 +148,7 @@ class MainPage extends HookWidget {
                       ),
                     ),
                   ),
-                  GridView.builder(
+                  GridView.builder( // Najnowsze nagrania i artykuły
                     padding: const EdgeInsets.all(15),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
