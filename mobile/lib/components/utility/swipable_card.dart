@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:go_router/go_router.dart';
+import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_widget.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
-class SwipableCard extends StatefulWidget {
+class SwipableCard extends HookWidget {
   const SwipableCard({
     super.key,
     required this.articles,
@@ -19,34 +20,24 @@ class SwipableCard extends StatefulWidget {
   final Widget? header;
 
   @override
-  _SwipableCardState createState() => _SwipableCardState();
-}
-
-class _SwipableCardState extends State<SwipableCard> {
-  late final PageController _pageController;
-  int _currentPage = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController()
-      ..addListener(() {
-        setState(() {
-          _currentPage = _pageController.page?.round() ?? 0;
-        });
-      });
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final pageController = usePageController();
+    final currentPage = useState(0);
+
+    useEffect(() {
+      void pageListener() {
+        final newPage = pageController.page?.round() ?? 0;
+        if (newPage != currentPage.value) {
+          currentPage.value = newPage;
+        }
+      }
+
+      pageController.addListener(pageListener);
+      return () => pageController.removeListener(pageListener);
+    }, [pageController],);
+
     return ColorShadowedWidget(
-      shadowColor: widget.shadowColor,
+      shadowColor: shadowColor,
       child: Container(
         color: context.colors.backgroundDark,
         padding: const EdgeInsets.all(3),
@@ -54,10 +45,10 @@ class _SwipableCardState extends State<SwipableCard> {
           children: <Widget>[
             Positioned.fill(
               child: PageView.builder(
-                controller: _pageController,
-                itemCount: widget.articles.length,
+                controller: pageController,
+                itemCount: articles.length,
                 itemBuilder: (context, index) {
-                  final article = widget.articles.elementAt(index);
+                  final article = articles.elementAt(index);
                   return GestureDetector(
                     onTap: () => context.push(
                       RaRoutes.articleId(article.id),
@@ -110,14 +101,14 @@ class _SwipableCardState extends State<SwipableCard> {
                   padding: const EdgeInsets.only(top: 4),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(widget.articles.length, (index) {
+                    children: List.generate(articles.length, (index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 2),
                         child: Container(
                           width: 8,
                           height: 8,
                           decoration: BoxDecoration(
-                            color: _currentPage == index
+                            color: currentPage.value == index
                                 ? context.colors.highlightGreen
                                 : Colors.white,
                             shape: BoxShape.circle,
@@ -129,14 +120,14 @@ class _SwipableCardState extends State<SwipableCard> {
                 ),
               ),
             ),
-            if (widget.header != null)
+            if (header != null)
               Positioned(
                 top: 0,
                 left: 0,
                 right: 0,
                 child: Container(
                   color: context.colors.backgroundDark,
-                  child: widget.header,
+                  child: header,
                 ),
               ),
           ],
