@@ -148,7 +148,7 @@ class MainPage extends HookWidget {
                       child: Container(
                         padding: const EdgeInsets.all(80),
                         child: Text(
-                          // TODO: Place for the spining vyinyl record
+                          // TODO: Place for the spinning vinyl record
                           '',
                           style: context.textStyles.textSmall,
                         ),
