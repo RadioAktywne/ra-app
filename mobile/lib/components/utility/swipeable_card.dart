@@ -1,22 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_widget.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
-import 'package:radioaktywne/models/article_info.dart';
-import 'package:radioaktywne/router/ra_routes.dart';
 
-class SwipableCard extends HookWidget {
-  const SwipableCard({
+class SwipeableCardItem {
+
+  SwipeableCardItem({
+    required this.id,
+    required this.thumbnailPath,
+    required this.title,
+    this.onTap,
+  });
+  final int id;
+  final String thumbnailPath;
+  final String title;
+  final void Function()? onTap;
+}
+
+
+class SwipeableCard extends HookWidget {
+  const SwipeableCard({
     super.key,
-    required this.articles,
+    required this.items,
     required this.isLoading,
     required this.shadowColor,
     this.header,
   });
 
-  final Iterable<ArticleInfo> articles;
+  final Iterable<SwipeableCardItem> items;
   final bool isLoading;
   final Color shadowColor;
   final Widget? header;
@@ -36,15 +48,12 @@ class SwipableCard extends HookWidget {
             Positioned.fill(
               child: PageView.builder(
                 controller: pageController,
-                itemCount: articles.length,
+                itemCount: items.length,
                 onPageChanged: (index) => currentPage.value = index,
                 itemBuilder: (context, index) {
-                  final article = articles.elementAt(index);
+                  final item = items.elementAt(index);
                   return GestureDetector(
-                    onTap: () => context.push(
-                      RaRoutes.articleId(article.id),
-                      extra: article,
-                    ),
+                    onTap: item.onTap,
                     child: Stack(
                       children: <Widget>[
                         Positioned.fill(
@@ -55,7 +64,7 @@ class SwipableCard extends HookWidget {
                                 'assets/defaultMedia.png',
                                 fit: BoxFit.fill,
                               ) : Image.network(
-                                article.thumbnail,
+                                item.thumbnailPath,
                                 fit: BoxFit.fill,
                               ),
                           ),
@@ -74,7 +83,7 @@ class SwipableCard extends HookWidget {
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(5),
-                                  child: HtmlWidget(article.title),
+                                  child: HtmlWidget(item.title),
                                 ),
                               ),
                             ),
@@ -96,7 +105,7 @@ class SwipableCard extends HookWidget {
                   padding: const EdgeInsets.only(top: 4),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(articles.length, (index) {
+                    children: List.generate(items.length, (index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 2),
                         child: Container(

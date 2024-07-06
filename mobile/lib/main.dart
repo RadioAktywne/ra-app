@@ -1,16 +1,19 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_widget.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card_2.dart';
-import 'package:radioaktywne/components/utility/swipable_card.dart';
+import 'package:radioaktywne/components/utility/swipeable_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/router/ra_router_config.dart';
+import 'package:radioaktywne/router/ra_routes.dart';
 
 void main() {
   /// Setup so the orientation stays in portrait mode
@@ -51,7 +54,6 @@ class MainPage extends HookWidget {
     super.key,
   });
 
-
   static const _widgetPadding = EdgeInsets.symmetric(
     vertical: 8,
     horizontal: 16,
@@ -85,17 +87,20 @@ class MainPage extends HookWidget {
       }
     }
 
-    useEffect(() {
-      fetchArticles();
-      return null;
-    }, [],);
+    useEffect(
+      () {
+        fetchArticles();
+        return null;
+      },
+      [],
+    );
     return Container(
       color: context.colors.backgroundLight,
       width: double.infinity,
       height: double.infinity,
       child: SingleChildScrollView(
         child: Padding(
-            padding: const EdgeInsets.only(bottom: 50),
+          padding: const EdgeInsets.only(bottom: 50),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -128,7 +133,8 @@ class MainPage extends HookWidget {
                                   ),
                                 ),
                                 TextSpan(
-                                  text: 'Lorem Ipsum', // TODO: Place for the song title
+                                  text:
+                                      'Lorem Ipsum', // TODO: Place for the song title
                                   style: context.textStyles.textSmall.copyWith(
                                     color: context.colors.highlightGreen,
                                     height: 1.5,
@@ -141,7 +147,8 @@ class MainPage extends HookWidget {
                       ),
                       child: Container(
                         padding: const EdgeInsets.all(80),
-                        child: Text( // TODO: Place for the spining vyinyl record
+                        child: Text(
+                          // TODO: Place for the spining vyinyl record
                           '',
                           style: context.textStyles.textSmall,
                         ),
@@ -149,41 +156,58 @@ class MainPage extends HookWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Row(
                       children: [
                         Expanded(
                           child: ColorShadowedCard2(
-                              shadowColor: context.colors.highlightGreen,
-                              header: Padding(
-                                padding: const EdgeInsets.all(3),
-                                child: Text(
-                                  'Najnowsze nagrania',
-                                  style: context.textStyles.textSmall,
-                                ),
-                              ),
-                              footer: DefaultTextStyle(
-                                style: context.textStyles.textSmall.copyWith(
-                                  color: context.colors.highlightGreen,
-                                ),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Text('Lorem ipsum'),
-                                ),
-                              ),
-                              indicator: 0,
-                              child: Image.asset(
-                                'assets/defaultMedia.png',
-                                fit: BoxFit.fill,
+                            shadowColor: context.colors.highlightGreen,
+                            header: Padding(
+                              padding: const EdgeInsets.all(3),
+                              child: Text(
+                                'Najnowsze nagrania',
+                                style: context.textStyles.textSmall,
                               ),
                             ),
+                            footer: DefaultTextStyle(
+                              style: context.textStyles.textSmall.copyWith(
+                                color: context.colors.highlightGreen,
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.all(5),
+                                child: Text('Lorem ipsum'),
+                              ),
+                            ),
+                            indicator: 0,
+                            child: Image.asset(
+                              'assets/defaultMedia.png',
+                              fit: BoxFit.fill,
+                            ),
+                          ),
                         ),
-                       const SizedBox(width: 16,),
+                        const SizedBox(
+                          width: 16,
+                        ),
                         Expanded(
                           child: AspectRatio(
                             aspectRatio: 1,
-                            child: SwipableCard(
-                              articles: articles.value, 
+                            child: SwipeableCard(
+                              items: articles.value.mapIndexed(
+                                (index, item) {
+                                  return SwipeableCardItem(
+                                    id: item.id,
+                                    thumbnailPath: item.thumbnail,
+                                    title: item.title,
+                                    onTap: () {
+                                      context.push(
+                                        RaRoutes.articleId(item.id),
+                                        extra: item,
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
                               isLoading: isLoading.value,
                               shadowColor: context.colors.highlightYellow,
                               header: Padding(
