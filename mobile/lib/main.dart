@@ -156,8 +156,7 @@ class MainPage extends HookWidget {
                     ),
                   ),
                   Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: _widgetPadding,
                     child: Row(
                       children: [
                         Expanded(

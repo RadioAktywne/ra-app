@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
-import 'package:radioaktywne/components/utility/color_shadowed_widget.dart';
+import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
-import 'color_shadowed_card.dart';
 
 class SwipeableCardItem {
   SwipeableCardItem({
