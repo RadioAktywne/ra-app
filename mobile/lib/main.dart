@@ -148,57 +148,56 @@ class MainPage extends HookWidget {
                       ),
                     ),
                   ),
-                  GridView.builder( // Najnowsze nagrania i artykuły
-                    padding: const EdgeInsets.all(15),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 15,
-                      mainAxisSpacing: 15,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ColorShadowedCard2(
+                              shadowColor: context.colors.highlightGreen,
+                              header: Padding(
+                                padding: const EdgeInsets.all(3),
+                                child: Text(
+                                  'Najnowsze nagrania',
+                                  style: context.textStyles.textSmall,
+                                ),
+                              ),
+                              footer: DefaultTextStyle(
+                                style: context.textStyles.textSmall.copyWith(
+                                  color: context.colors.highlightGreen,
+                                ),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: Text('Lorem ipsum'),
+                                ),
+                              ),
+                              indicator: 0,
+                              child: Image.asset(
+                                'assets/defaultMedia.png',
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                        ),
+                       const SizedBox(width: 16,),
+                        Expanded(
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: SwipableCard(
+                              articles: articles.value, 
+                              isLoading: isLoading.value,
+                              shadowColor: context.colors.highlightYellow,
+                              header: Padding(
+                                padding: const EdgeInsets.all(3),
+                                child: Text(
+                                  'Najnowsze artykuły',
+                                  style: context.textStyles.textSmall,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    itemCount: 2,
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return ColorShadowedCard2(
-                          shadowColor: context.colors.highlightGreen,
-                          header: Padding(
-                            padding: const EdgeInsets.all(3),
-                            child: Text(
-                              'Najnowsze nagrania',
-                              style: context.textStyles.textSmall,
-                            ),
-                          ),
-                          footer: DefaultTextStyle(
-                            style: context.textStyles.textSmall.copyWith(
-                              color: context.colors.highlightGreen,
-                            ),
-                            child: const Padding(
-                              padding: EdgeInsets.all(5),
-                              child: Text('Lorem ipsum'),
-                            ),
-                          ),
-                          indicator: 0,
-                          child: Image.asset(
-                            'assets/defaultMedia.png',
-                            fit: BoxFit.fill,
-                          ),
-                        );
-                      } else {
-                        return SwipableCard(
-                          articles: articles.value, 
-                          isLoading: isLoading.value,
-                          shadowColor: context.colors.highlightYellow,
-                          header: Padding(
-                            padding: const EdgeInsets.all(3),
-                            child: Text(
-                              'Najnowsze artykuły',
-                              style: context.textStyles.textSmall,
-                            ),
-                          ),
-                        );
-                      }
-                    },
                   ),
                 ],
               ),
