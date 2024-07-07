@@ -23,6 +23,63 @@ class ArticleSelectionPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hooks = _useArticleSelectionHooks();
+
+    if (hooks.isLoading.value && hooks.articles.value.isEmpty) {
+      return const _ArticleSelectionWaiting();
+    } else if (hooks.hasError.value && hooks.articles.value.isEmpty) {
+      return const _ArticleSelectionNoData();
+    }
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 50), // Helps with the player not covering the last article
+      child: GridView.builder(
+        controller: hooks.scrollController,
+        padding: const EdgeInsets.all(20), // Space around the grid
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 20, // Space between columns
+          mainAxisSpacing: 20, // Space between rows
+        ),
+        itemCount: hooks.articles.value.length,
+        itemBuilder: (context, index) {
+          final article = hooks.articles.value.elementAt(index);
+          return GestureDetector(
+            onTap: () => context.push(
+              RaRoutes.articleId(article.id),
+              extra: article,
+            ),
+            child: ColorShadowedCard2(
+              shadowColor: shadowColor(context, index),
+              footer: DefaultTextStyle(
+                style: context.textStyles.textSmall.copyWith(
+                  color: context.colors.highlightGreen,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: HtmlWidget(article.title),
+                ),
+              ),
+              child: Image.network(
+                article.thumbnail,
+                fit: BoxFit.fill,
+                errorBuilder: (context, error, stackTrace) => AspectRatio(
+                  aspectRatio: 1,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/defaultMedia.png',
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  _ArticleSelectionHooks _useArticleSelectionHooks() {
     final scrollController = useScrollController();
     final articles = useState<Iterable<ArticleInfo>>([]);
     final currentPage = useState(1);
@@ -71,59 +128,36 @@ class ArticleSelectionPage extends HookWidget {
       return () => scrollController.dispose;
     }, [],);
 
-    if (isLoading.value && articles.value.isEmpty) {
-      return const _ArticleSelectionWaiting();
-    } else if (hasError.value && articles.value.isEmpty) {
-      return const _ArticleSelectionNoData();
-    }
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 50), // Helps with the player not covering the last article
-      child: GridView.builder(
-        controller: scrollController,
-        padding: const EdgeInsets.all(20), // Space around the grid
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 20, // Space between columns
-          mainAxisSpacing: 20, // Space between rows
-        ),
-        itemCount: articles.value.length,
-        itemBuilder: (context, index) {
-          final article = articles.value.elementAt(index);
-          return GestureDetector(
-            onTap: () => context.push(
-              RaRoutes.articleId(article.id),
-              extra: article,
-            ),
-            child: ColorShadowedCard2(
-              shadowColor: shadowColor(context, index),
-              footer: DefaultTextStyle(
-                style: context.textStyles.textSmall.copyWith(
-                  color: context.colors.highlightGreen,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: HtmlWidget(article.title),
-                ),
-              ),
-              child: Image.network(
-                article.thumbnail,
-                fit: BoxFit.fill,
-                errorBuilder: (context, error, stackTrace) => AspectRatio(
-                  aspectRatio: 1,
-                  child: Center(
-                    child: Image.asset(
-                      'assets/defaultMedia.png',
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
+    return _ArticleSelectionHooks(
+      scrollController: scrollController,
+      articles: articles,
+      currentPage: currentPage,
+      isLoading: isLoading,
+      hasMore: hasMore,
+      hasError: hasError,
+      fetchArticles: fetchArticles,
     );
   }
+}
+
+class _ArticleSelectionHooks {
+
+  _ArticleSelectionHooks({
+    required this.scrollController,
+    required this.articles,
+    required this.currentPage,
+    required this.isLoading,
+    required this.hasMore,
+    required this.hasError,
+    required this.fetchArticles,
+  });
+  final ScrollController scrollController;
+  final ValueNotifier<Iterable<ArticleInfo>> articles;
+  final ValueNotifier<int> currentPage;
+  final ValueNotifier<bool> isLoading;
+  final ValueNotifier<bool> hasMore;
+  final ValueNotifier<bool> hasError;
+  final Future<void> Function() fetchArticles;
 }
 
 class _ArticleSelectionNoData extends StatelessWidget {
