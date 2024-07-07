@@ -34,14 +34,14 @@ class ArticleSelectionPage extends HookWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 50), // Helps with the player not covering the last article
+      padding: const EdgeInsets.only(bottom: RaPageConstraints.radioPlayerHeight), // Helps with the player not covering the last article
       child: GridView.builder(
         controller: hooks.scrollController,
-        padding: const EdgeInsets.all(20), // Space around the grid
+        padding: const EdgeInsets.all(20),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 20, // Space between columns
-          mainAxisSpacing: 20, // Space between rows
+          crossAxisSpacing: 20,
+          mainAxisSpacing: 20,
         ),
         itemCount: hooks.articles.length,
         itemBuilder: (context, index) {
