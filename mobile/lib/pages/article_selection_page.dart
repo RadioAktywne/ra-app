@@ -65,6 +65,8 @@ class ArticleSelectionPage extends HookWidget {
               child: Image.network(
                 article.thumbnail,
                 fit: BoxFit.fill,
+                loadingBuilder: (context, child, loadingProgress) =>
+                  loadingProgress != null ? const Center(child: RaProgressIndicator()) : child,
                 errorBuilder: (context, error, stackTrace) => AspectRatio(
                   aspectRatio: 1,
                   child: Center(
