@@ -27,9 +27,12 @@ class ArticleSelectionPage extends HookWidget {
 
     if (hooks.isLoading && hooks.articles.isEmpty) {
       return const _ArticleSelectionWaiting();
-    } else if (hooks.hasError && hooks.articles.isEmpty) {
+    } 
+    
+    if (hooks.hasError && hooks.articles.isEmpty) {
       return const _ArticleSelectionNoData();
     }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 50), // Helps with the player not covering the last article
       child: GridView.builder(
