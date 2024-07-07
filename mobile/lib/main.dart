@@ -8,6 +8,7 @@ import 'package:radioaktywne/components/utility/color_shadowed_card_2.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 import 'package:radioaktywne/models/article_info.dart';
+import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/router/ra_router_config.dart';
 
 void main() {
@@ -79,7 +80,7 @@ class MainPage extends HookWidget {
       height: double.infinity,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 50),
+          padding: const EdgeInsets.only(bottom: RaPageConstraints.radioPlayerHeight),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
