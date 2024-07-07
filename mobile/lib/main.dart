@@ -1,19 +1,14 @@
-import 'dart:async';
-
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
+import 'package:radioaktywne/components/newest_article/newest_article_widget.dart';
+import 'package:radioaktywne/components/newest_article/newest_articles_fetch.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_widget.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card_2.dart';
-import 'package:radioaktywne/components/utility/swipeable_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 import 'package:radioaktywne/models/article_info.dart';
-import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/router/ra_router_config.dart';
-import 'package:radioaktywne/router/ra_routes.dart';
 
 void main() {
   /// Setup so the orientation stays in portrait mode
@@ -65,31 +60,15 @@ class MainPage extends HookWidget {
     final isLoading = useState(false);
     final hasError = useState(false);
 
-    Future<void> fetchArticles() async {
-      if (isLoading.value) {
-        return;
-      }
-      isLoading.value = true;
-
-      final pageUri = Uri.parse(
-        'https://radioaktywne.pl/wp-json/wp/v2/posts?_embed=true&page=1&per_page=3',
-      );
-
-      try {
-        final newArticles = await fetchData(pageUri, ArticleInfo.fromJson);
-        articles.value = newArticles;
-      } on TimeoutException catch (_) {
-        hasError.value = true;
-      } catch (e) {
-        hasError.value = true;
-      } finally {
-        isLoading.value = false;
-      }
-    }
-
     useEffect(
       () {
-        fetchArticles();
+        final newestArticleFetch = NewestArticleFetch();
+        isLoading.value = true;
+        newestArticleFetch.loadArticles().then((_) {
+          articles.value = newestArticleFetch.articles;
+          isLoading.value = newestArticleFetch.isLoading;
+          hasError.value = newestArticleFetch.hasError;
+        });
         return null;
       },
       [],
@@ -189,36 +168,10 @@ class MainPage extends HookWidget {
                         const SizedBox(
                           width: 16,
                         ),
-                        Expanded(
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: SwipeableCard(
-                              items: articles.value.mapIndexed(
-                                (index, item) {
-                                  return SwipeableCardItem(
-                                    id: item.id,
-                                    thumbnailPath: item.thumbnail,
-                                    title: item.title,
-                                    onTap: () {
-                                      context.push(
-                                        RaRoutes.articleId(item.id),
-                                        extra: item,
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                              isLoading: isLoading.value,
-                              shadowColor: context.colors.highlightYellow,
-                              header: Padding(
-                                padding: const EdgeInsets.all(3),
-                                child: Text(
-                                  'Najnowsze artykuły',
-                                  style: context.textStyles.textSmall,
-                                ),
-                              ),
-                            ),
-                          ),
+                        NewestArticleWidget(
+                          articles: articles.value,
+                          isLoading: isLoading.value,
+                          hasError: hasError.value,
                         ),
                       ],
                     ),
