@@ -25,9 +25,9 @@ class ArticleSelectionPage extends HookWidget {
   Widget build(BuildContext context) {
     final hooks = _useArticleSelectionHooks();
 
-    if (hooks.isLoading.value && hooks.articles.value.isEmpty) {
+    if (hooks.isLoading && hooks.articles.isEmpty) {
       return const _ArticleSelectionWaiting();
-    } else if (hooks.hasError.value && hooks.articles.value.isEmpty) {
+    } else if (hooks.hasError && hooks.articles.isEmpty) {
       return const _ArticleSelectionNoData();
     }
     return Padding(
@@ -40,9 +40,9 @@ class ArticleSelectionPage extends HookWidget {
           crossAxisSpacing: 20, // Space between columns
           mainAxisSpacing: 20, // Space between rows
         ),
-        itemCount: hooks.articles.value.length,
+        itemCount: hooks.articles.length,
         itemBuilder: (context, index) {
-          final article = hooks.articles.value.elementAt(index);
+          final article = hooks.articles.elementAt(index);
           return GestureDetector(
             onTap: () => context.push(
               RaRoutes.articleId(article.id),
@@ -125,7 +125,7 @@ class ArticleSelectionPage extends HookWidget {
           fetchArticles();
         }
       });
-      return () => scrollController.dispose;
+      return scrollController.dispose;
     }, [],);
 
     return _ArticleSelectionHooks(
@@ -144,20 +144,30 @@ class _ArticleSelectionHooks {
 
   _ArticleSelectionHooks({
     required this.scrollController,
-    required this.articles,
-    required this.currentPage,
-    required this.isLoading,
-    required this.hasMore,
-    required this.hasError,
+    required ValueNotifier<Iterable<ArticleInfo>> articles,
+    required ValueNotifier<int> currentPage,
+    required ValueNotifier<bool> isLoading,
+    required ValueNotifier<bool> hasMore,
+    required ValueNotifier<bool> hasError,
     required this.fetchArticles,
-  });
+  })  : _articles = articles,
+        _currentPage = currentPage,
+        _isLoading = isLoading,
+        _hasMore = hasMore,
+        _hasError = hasError;
   final ScrollController scrollController;
-  final ValueNotifier<Iterable<ArticleInfo>> articles;
-  final ValueNotifier<int> currentPage;
-  final ValueNotifier<bool> isLoading;
-  final ValueNotifier<bool> hasMore;
-  final ValueNotifier<bool> hasError;
+  final ValueNotifier<Iterable<ArticleInfo>> _articles;
+  final ValueNotifier<int> _currentPage;
+  final ValueNotifier<bool> _isLoading;
+  final ValueNotifier<bool> _hasMore;
+  final ValueNotifier<bool> _hasError;
   final Future<void> Function() fetchArticles;
+
+  Iterable<ArticleInfo> get articles => _articles.value;
+  int get currentPage => _currentPage.value;
+  bool get isLoading => _isLoading.value;
+  bool get hasMore => _hasMore.value;
+  bool get hasError => _hasError.value;
 }
 
 class _ArticleSelectionNoData extends StatelessWidget {
