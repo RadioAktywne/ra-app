@@ -127,7 +127,7 @@ class MainPage extends HookWidget {
                       child: Container(
                         padding: const EdgeInsets.all(80),
                         child: Text(
-                          // TODO: Place for the spining vyinyl record
+                          // TODO: Place for the spinning vinyl record
                           '',
                           style: context.textStyles.textSmall,
                         ),
@@ -135,8 +135,7 @@ class MainPage extends HookWidget {
                     ),
                   ),
                   Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: _widgetPadding,
                     child: Row(
                       children: [
                         Expanded(
