@@ -120,6 +120,48 @@ abstract class AppLocalizations {
   /// In pl, this message translates to:
   /// **'Ramówka'**
   String get ramowka;
+
+  /// No description provided for @monday.
+  ///
+  /// In pl, this message translates to:
+  /// **'Poniedziałek'**
+  String get monday;
+
+  /// No description provided for @tuesday.
+  ///
+  /// In pl, this message translates to:
+  /// **'Wtorek'**
+  String get tuesday;
+
+  /// No description provided for @wednesday.
+  ///
+  /// In pl, this message translates to:
+  /// **'Środa'**
+  String get wednesday;
+
+  /// No description provided for @thursday.
+  ///
+  /// In pl, this message translates to:
+  /// **'Czwartek'**
+  String get thursday;
+
+  /// No description provided for @friday.
+  ///
+  /// In pl, this message translates to:
+  /// **'Piątek'**
+  String get friday;
+
+  /// No description provided for @saturday.
+  ///
+  /// In pl, this message translates to:
+  /// **'Sobota'**
+  String get saturday;
+
+  /// No description provided for @sunday.
+  ///
+  /// In pl, this message translates to:
+  /// **'Niedziela'**
+  String get sunday;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

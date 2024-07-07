@@ -7,6 +7,7 @@ import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/pages/article_page.dart';
 import 'package:radioaktywne/pages/article_selection_page.dart';
 import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
+import 'package:radioaktywne/pages/ramowka_page.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
 final raRouter = GoRouter(
@@ -43,7 +44,10 @@ final raRouter = GoRouter(
         ),
         GoRoute(
           path: RaRoutes.ramowka,
-          builder: (context, state) => DummyRoute(state: state),
+          builder: (context, state) {
+            print("RAMOWKA PAGE!!!!");
+            return const RamowkaPage();
+          },
         ),
         GoRoute(
           path: RaRoutes.broadcasts,

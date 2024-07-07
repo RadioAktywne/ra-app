@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 abstract class RaPageConstraints {
   const RaPageConstraints._();
 
+  static const double pagePadding = 16;
   static const EdgeInsets outerWidgetPagePadding =
-      EdgeInsets.symmetric(horizontal: 16);
+      EdgeInsets.symmetric(horizontal: pagePadding);
   static const EdgeInsets outerTextPagePadding =
       EdgeInsets.symmetric(horizontal: 26);
   static const double radioPlayerHeight = 50;

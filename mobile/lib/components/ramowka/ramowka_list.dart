@@ -4,17 +4,17 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:radioaktywne/components/ra_list_widget.dart';
+import 'package:radioaktywne/components/ramowka/fetch_ramowka.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/ramowka_info.dart';
 import 'package:radioaktywne/resources/day.dart';
-import 'package:radioaktywne/resources/fetch_data.dart';
 
 /// Widget representing a list of Ramowka entries.
 class RamowkaList extends StatelessWidget {
   const RamowkaList({
     super.key,
-    required this.timeout,
+    this.timeout = const Duration(seconds: 7),
     this.rows = 7,
     this.rowHeight = 22.0,
   });
@@ -30,11 +30,6 @@ class RamowkaList extends StatelessWidget {
 
   double get height => rows * rowHeight;
 
-  static final Uri _url = Uri.parse(
-    'https://radioaktywne.pl/wp-json/wp/v2/event?_embed=true&page=1&per_page=100',
-  );
-  static const _headers = {'Content-Type': 'application/json'};
-
   static String get _currentTime =>
       DateFormat(DateFormat.HOUR24_MINUTE).format(DateTime.now());
 
@@ -44,12 +39,7 @@ class RamowkaList extends StatelessWidget {
 
   Future<List<RamowkaInfo>> _fetchRamowka() async {
     try {
-      final data = await fetchData(
-        _url,
-        RamowkaInfo.fromJson,
-        timeout: timeout,
-        headers: _headers,
-      );
+      final data = await fetchRamowka(timeout: timeout);
 
       final ramowka = _parseRamowka(
         data,
@@ -97,7 +87,7 @@ class RamowkaList extends StatelessWidget {
       data
           .where((e) => e.day == day)
           .where(additionalChecks ?? (_) => true)
-          .sorted((a, b) => a.startTime.compareTo(b.startTime));
+          .sorted();
 
   @override
   Widget build(BuildContext context) {

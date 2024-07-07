@@ -18,4 +18,25 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get ramowka => 'Ramówka';
+
+  @override
+  String get monday => 'Poniedziałek';
+
+  @override
+  String get tuesday => 'Wtorek';
+
+  @override
+  String get wednesday => 'Środa';
+
+  @override
+  String get thursday => 'Czwartek';
+
+  @override
+  String get friday => 'Piątek';
+
+  @override
+  String get saturday => 'Sobota';
+
+  @override
+  String get sunday => 'Niedziela';
 }

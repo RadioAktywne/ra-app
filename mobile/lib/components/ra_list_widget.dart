@@ -8,12 +8,12 @@ import 'package:radioaktywne/extensions/extensions.dart';
 /// Can be reused for Ramowka widgets of different
 /// days of the week
 class RaListWidget extends StatelessWidget {
-  const RaListWidget({
-    super.key,
-    required this.items,
-    required this.rows,
-    this.rowHeight = 22.0,
-  });
+  const RaListWidget(
+      {super.key,
+      required this.items,
+      required this.rows,
+      this.rowHeight = 22.0,
+      this.scrollPhysics});
 
   /// List of items to be displayed in each row
   final List<Widget> items;
@@ -23,6 +23,8 @@ class RaListWidget extends StatelessWidget {
 
   /// Single row's height
   final double rowHeight;
+
+  final ScrollPhysics? scrollPhysics;
 
   /// Calculate current color from current index in the list
   Color _color(BuildContext context, int index) => index.isEven
@@ -35,6 +37,7 @@ class RaListWidget extends StatelessWidget {
     return SizedBox(
       height: height,
       child: ListView.builder(
+        physics: scrollPhysics,
         itemCount: min(items.length, rows),
         itemBuilder: (context, index) => _RaListWidgetItem(
           item: items[index],
