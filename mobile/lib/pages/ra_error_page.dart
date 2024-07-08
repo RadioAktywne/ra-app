@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
+/// Simple error page for when the page data cannot be loaded.
 class RaErrorPage extends StatelessWidget {
   const RaErrorPage({super.key});
 
