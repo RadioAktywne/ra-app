@@ -44,10 +44,7 @@ final raRouter = GoRouter(
         ),
         GoRoute(
           path: RaRoutes.ramowka,
-          builder: (context, state) {
-            print("RAMOWKA PAGE!!!!");
-            return const RamowkaPage();
-          },
+          builder: (context, state) => const RamowkaPage(),
         ),
         GoRoute(
           path: RaRoutes.broadcasts,
