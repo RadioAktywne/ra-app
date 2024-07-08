@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 abstract class RaPageConstraints {
   const RaPageConstraints._();
 
+  static const double ramowkaListRowHeight = 22;
   static const double pagePadding = 16;
   static const EdgeInsets outerWidgetPagePadding =
       EdgeInsets.symmetric(horizontal: pagePadding);

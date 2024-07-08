@@ -131,7 +131,7 @@ class PlytaTygodniaPage extends StatelessWidget {
               padding: _textPadding,
               child: SelectableText(
                 plytaTygodnia.description + plytaTygodnia.description,
-                style: context.textStyles.textSmall.copyWith(
+                style: context.textStyles.textSmallGreen.copyWith(
                   color: context.colors.backgroundDark,
                 ),
               ),

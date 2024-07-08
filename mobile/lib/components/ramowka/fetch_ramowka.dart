@@ -8,13 +8,14 @@ final Uri url = Uri.parse(
 );
 const headers = {'Content-Type': 'application/json'};
 
-Future<Iterable<RamowkaInfo>> fetchRamowka({Duration? timeout}) async {
-  final data = await fetchData(
-    url,
-    RamowkaInfo.fromJson,
-    timeout: timeout ?? const Duration(seconds: 7),
-    headers: headers,
-  );
-
-  return data;
-}
+/// A conviniance wrapper around [fetchData] for fetching
+/// all of Ramowka.
+Future<Iterable<RamowkaInfo>> fetchRamowka({
+  Duration timeout = const Duration(seconds: 7),
+}) async =>
+    fetchData(
+      url,
+      RamowkaInfo.fromJson,
+      timeout: timeout,
+      headers: headers,
+    );

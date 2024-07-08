@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:radioaktywne/components/ra_list_widget.dart';
 import 'package:radioaktywne/components/ramowka/fetch_ramowka.dart';
+import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/ramowka_info.dart';
 import 'package:radioaktywne/resources/day.dart';
+import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
 /// Widget representing a list of Ramowka entries.
 class RamowkaList extends StatelessWidget {
@@ -16,7 +18,7 @@ class RamowkaList extends StatelessWidget {
     super.key,
     this.timeout = const Duration(seconds: 7),
     this.rows = 7,
-    this.rowHeight = 22.0,
+    this.rowHeight = RaPageConstraints.ramowkaListRowHeight,
   });
 
   /// Timeout for the fetching function.
@@ -103,7 +105,7 @@ class RamowkaList extends StatelessWidget {
         rowHeight: rowHeight,
         items: ramowkaInfoList
             .map(
-              (ramowkaInfo) => _RamowkaListItem(
+              (ramowkaInfo) => RamowkaListItem(
                 info: ramowkaInfo,
                 rowHeight: rowHeight,
               ),
@@ -126,21 +128,9 @@ class _RamowkaListWaiting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaListWidget(
-      rows: 1,
-      rowHeight: height,
-      items: [
-        Center(
-          child: SizedBox(
-            width: 30,
-            height: 30,
-            child: CircularProgressIndicator(
-              color: context.colors.highlightGreen,
-              backgroundColor: context.colors.backgroundDark,
-            ),
-          ),
-        ),
-      ],
+    return SizedBox(
+      height: height,
+      child: const RaProgressIndicator(),
     );
   }
 }
@@ -162,7 +152,7 @@ class _RamowkaListNoData extends StatelessWidget {
         Center(
           child: Text(
             context.l10n.dataLoadError,
-            style: context.textStyles.textSmall,
+            style: context.textStyles.textSmallGreen,
           ),
         ),
       ],
@@ -171,8 +161,9 @@ class _RamowkaListNoData extends StatelessWidget {
 }
 
 /// A single [RamowkaList] entry widget.
-class _RamowkaListItem extends StatelessWidget {
-  const _RamowkaListItem({
+class RamowkaListItem extends StatelessWidget {
+  const RamowkaListItem({
+    super.key,
     required this.info,
     required this.rowHeight,
   });
@@ -203,7 +194,7 @@ class _RamowkaListItem extends StatelessWidget {
                 aspectRatio: aspectRatio(context),
                 child: Text(
                   info.title,
-                  style: context.textStyles.textSmall,
+                  style: context.textStyles.textSmallWhite,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
@@ -212,7 +203,7 @@ class _RamowkaListItem extends StatelessWidget {
           ),
           Text(
             info.startTime,
-            style: context.textStyles.textSmall,
+            style: context.textStyles.textSmallWhite,
           ),
         ],
       ),

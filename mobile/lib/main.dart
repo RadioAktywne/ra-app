@@ -132,7 +132,7 @@ class MainPage extends StatelessWidget {
                     padding: const EdgeInsets.all(20),
                     child: Text(
                       'Lorem ipsum',
-                      style: context.textStyles.textSmall,
+                      style: context.textStyles.textSmallGreen,
                     ),
                   ),
                 ),
@@ -157,7 +157,7 @@ class MainPage extends StatelessWidget {
                           padding: const EdgeInsets.all(20),
                           child: Text(
                             'Lorem ipsum',
-                            style: context.textStyles.textSmall,
+                            style: context.textStyles.textSmallGreen,
                           ),
                         ),
                       ),
@@ -172,14 +172,14 @@ class MainPage extends StatelessWidget {
                           ),
                           child: Text(
                             'Stopka',
-                            style: context.textStyles.textSmall,
+                            style: context.textStyles.textSmallGreen,
                           ),
                         ),
                         child: Container(
                           padding: const EdgeInsets.all(20),
                           child: Text(
                             'Lorem ipsum',
-                            style: context.textStyles.textSmall,
+                            style: context.textStyles.textSmallGreen,
                           ),
                         ),
                       ),

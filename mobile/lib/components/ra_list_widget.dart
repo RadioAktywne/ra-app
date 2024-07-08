@@ -2,18 +2,17 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
+import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
-/// A scrollable list widget with alternating-colored items
-///
-/// Can be reused for Ramowka widgets of different
-/// days of the week
+/// A scrollable list widget with alternating-colored items.
 class RaListWidget extends StatelessWidget {
-  const RaListWidget(
-      {super.key,
-      required this.items,
-      required this.rows,
-      this.rowHeight = 22.0,
-      this.scrollPhysics});
+  const RaListWidget({
+    super.key,
+    required this.items,
+    required this.rows,
+    this.rowHeight = RaPageConstraints.ramowkaListRowHeight,
+    this.scrollPhysics,
+  });
 
   /// List of items to be displayed in each row
   final List<Widget> items;
