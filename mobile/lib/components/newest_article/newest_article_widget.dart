@@ -1,31 +1,43 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:leancode_hooks/leancode_hooks.dart';
+import 'package:radioaktywne/components/newest_article/newest_articles_fetch.dart';
 import 'package:radioaktywne/components/utility/swipeable_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
-class NewestArticleWidget extends StatelessWidget {
-
+class NewestArticleWidget extends HookWidget {
   const NewestArticleWidget({
     super.key,
-    required this.articles,
-    required this.isLoading,
-    required this.hasError,
   });
-  final Iterable<ArticleInfo> articles;
-  final bool isLoading;
-  final bool hasError;
 
   @override
   Widget build(BuildContext context) {
+    final articles = useState<Iterable<ArticleInfo>>([]);
+    final isLoading = useState(false);
+    final hasError = useState(false);
+
+    useEffect(
+      () {
+        final newestArticleFetch = NewestArticleFetch();
+        isLoading.value = true;
+        newestArticleFetch.loadArticles().then((_) {
+          articles.value = newestArticleFetch.articles;
+          isLoading.value = newestArticleFetch.isLoading;
+          hasError.value = newestArticleFetch.hasError;
+        });
+        return null;
+      },
+      [],
+    );
 
     return Expanded(
       child: AspectRatio(
         aspectRatio: 1,
         child: SwipeableCard(
-          items: articles.mapIndexed(
+          items: articles.value.mapIndexed(
             (index, item) {
               return SwipeableCardItem(
                 id: item.id,
@@ -40,7 +52,7 @@ class NewestArticleWidget extends StatelessWidget {
               );
             },
           ),
-          isLoading: isLoading,
+          isLoading: isLoading.value,
           shadowColor: context.colors.highlightYellow,
           header: Padding(
             padding: const EdgeInsets.all(3),

@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/newest_article/newest_article_widget.dart';
-import 'package:radioaktywne/components/newest_article/newest_articles_fetch.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_widget.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card_2.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
-import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/router/ra_router_config.dart';
 
@@ -45,7 +43,7 @@ class MainApp extends HookWidget {
 }
 
 // TODO: needs major refactor
-class MainPage extends HookWidget {
+class MainPage extends StatelessWidget {
   const MainPage({
     super.key,
   });
@@ -57,23 +55,6 @@ class MainPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final articles = useState<Iterable<ArticleInfo>>([]);
-    final isLoading = useState(false);
-    final hasError = useState(false);
-
-    useEffect(
-      () {
-        final newestArticleFetch = NewestArticleFetch();
-        isLoading.value = true;
-        newestArticleFetch.loadArticles().then((_) {
-          articles.value = newestArticleFetch.articles;
-          isLoading.value = newestArticleFetch.isLoading;
-          hasError.value = newestArticleFetch.hasError;
-        });
-        return null;
-      },
-      [],
-    );
     return Container(
       color: context.colors.backgroundLight,
       width: double.infinity,
@@ -168,11 +149,7 @@ class MainPage extends HookWidget {
                         const SizedBox(
                           width: 16,
                         ),
-                        NewestArticleWidget(
-                          articles: articles.value,
-                          isLoading: isLoading.value,
-                          hasError: hasError.value,
-                        ),
+                        const NewestArticleWidget(),
                       ],
                     ),
                   ),
