@@ -33,34 +33,29 @@ class NewestArticleWidget extends HookWidget {
       [],
     );
 
-    return Expanded(
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: SwipeableCard(
-          items: articles.value.mapIndexed(
-            (index, item) {
-              return SwipeableCardItem(
-                id: item.id,
-                thumbnailPath: item.thumbnail,
-                title: item.title,
-                onTap: () {
-                  context.push(
-                    RaRoutes.articleId(item.id),
-                    extra: item,
-                  );
-                },
+    return SwipeableCard(
+      items: articles.value.mapIndexed(
+        (index, item) {
+          return SwipeableCardItem(
+            id: item.id,
+            thumbnailPath: item.thumbnail,
+            title: item.title,
+            onTap: () {
+              context.push(
+                RaRoutes.articleId(item.id),
+                extra: item,
               );
             },
-          ),
-          isLoading: isLoading.value,
-          shadowColor: context.colors.highlightYellow,
-          header: Padding(
-            padding: const EdgeInsets.all(3),
-            child: Text(
-              'Najnowsze artykuły',
-              style: context.textStyles.textSmall,
-            ),
-          ),
+          );
+        },
+      ),
+      isLoading: isLoading.value,
+      shadowColor: context.colors.highlightYellow,
+      header: Padding(
+        padding: const EdgeInsets.all(3),
+        child: Text(
+          'Najnowsze artykuły',
+          style: context.textStyles.textSmall,
         ),
       ),
     );

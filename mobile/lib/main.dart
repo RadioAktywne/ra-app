@@ -149,7 +149,12 @@ class MainPage extends StatelessWidget {
                         const SizedBox(
                           width: 16,
                         ),
-                        const NewestArticleWidget(),
+                        const Expanded(
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: NewestArticleWidget(),
+                          ),
+                        ),
                       ],
                     ),
                   ),
