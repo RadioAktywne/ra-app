@@ -52,7 +52,7 @@ class NewestArticleWidget extends HookWidget {
       isLoading: isLoading.value,
       shadowColor: context.colors.highlightYellow,
       header: Padding(
-        padding: const EdgeInsets.all(3),
+        padding: const EdgeInsets.all(4),
         child: Text(
           'Najnowsze artykuły',
           style: context.textStyles.textSmall,
