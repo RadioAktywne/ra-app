@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:go_router/go_router.dart';
+import 'package:html_unescape/html_unescape.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card_2.dart';
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
@@ -30,18 +31,19 @@ class ArticleSelectionPage extends HookWidget {
     }
 
     if (hooks.hasError && hooks.articles.isEmpty) {
-      return RefreshIndicator(onRefresh:() async {
-        hooks.hasMore = true;
-        await hooks.fetchArticles();
-        
+      return RefreshIndicator(
+        onRefresh: () async {
+          hooks.hasMore = true;
+          await hooks.fetchArticles();
         },
-      child: const _ArticleSelectionNoData(),);
+        child: const _ArticleSelectionNoData(),
+      );
     }
 
     return Padding(
       padding: const EdgeInsets.only(
-          bottom: RaPageConstraints
-              .radioPlayerHeight,), // Helps with the player not covering the last article
+        bottom: RaPageConstraints.radioPlayerHeight,
+      ), // Helps with the player not covering the last article
       child: GridView.builder(
         controller: hooks.scrollController,
         padding: const EdgeInsets.all(20),
@@ -60,13 +62,15 @@ class ArticleSelectionPage extends HookWidget {
             ),
             child: ColorShadowedCard2(
               shadowColor: shadowColor(context, index),
-              footer: DefaultTextStyle(
-                style: context.textStyles.textSmall.copyWith(
-                  color: context.colors.highlightGreen,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: HtmlWidget(article.title),
+              footer: Padding(
+                padding: const EdgeInsets.all(5),
+                child: Text(
+                  HtmlUnescape().convert(article.title),
+                  style: context.textStyles.textSmall.copyWith(
+                    color: context.colors.highlightGreen,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 4,
                 ),
               ),
               child: Image.network(
