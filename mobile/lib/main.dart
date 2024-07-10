@@ -136,7 +136,7 @@ class MainPage extends StatelessWidget {
                                 color: context.colors.highlightGreen,
                               ),
                               child: const Padding(
-                                padding: EdgeInsets.all(5),
+                                padding: EdgeInsets.all(4),
                                 child: Text('Lorem ipsum'),
                               ),
                             ),
