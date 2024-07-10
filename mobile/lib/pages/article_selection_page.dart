@@ -27,14 +27,21 @@ class ArticleSelectionPage extends HookWidget {
 
     if (hooks.isLoading && hooks.articles.isEmpty) {
       return const _ArticleSelectionWaiting();
-    } 
-    
+    }
+
     if (hooks.hasError && hooks.articles.isEmpty) {
-      return const _ArticleSelectionNoData();
+      return RefreshIndicator(onRefresh:() async {
+        hooks.hasMore = true;
+        await hooks.fetchArticles();
+        
+        },
+      child: const _ArticleSelectionNoData(),);
     }
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: RaPageConstraints.radioPlayerHeight), // Helps with the player not covering the last article
+      padding: const EdgeInsets.only(
+          bottom: RaPageConstraints
+              .radioPlayerHeight,), // Helps with the player not covering the last article
       child: GridView.builder(
         controller: hooks.scrollController,
         padding: const EdgeInsets.all(20),
@@ -66,7 +73,9 @@ class ArticleSelectionPage extends HookWidget {
                 article.thumbnail,
                 fit: BoxFit.fill,
                 loadingBuilder: (context, child, loadingProgress) =>
-                  loadingProgress != null ? const Center(child: RaProgressIndicator()) : child,
+                    loadingProgress != null
+                        ? const Center(child: RaProgressIndicator())
+                        : child,
                 errorBuilder: (context, error, stackTrace) => AspectRatio(
                   aspectRatio: 1,
                   child: Center(
@@ -121,17 +130,21 @@ class ArticleSelectionPage extends HookWidget {
       }
     }
 
-    useEffect(() {
-      fetchArticles();
-      scrollController.addListener(() {
-        if (scrollController.position.pixels >=
-                scrollController.position.maxScrollExtent - 200 &&
-            !isLoading.value && hasMore.value) {
-          fetchArticles();
-        }
-      });
-      return scrollController.dispose;
-    }, [],);
+    useEffect(
+      () {
+        fetchArticles();
+        scrollController.addListener(() {
+          if (scrollController.position.pixels >=
+                  scrollController.position.maxScrollExtent - 200 &&
+              !isLoading.value &&
+              hasMore.value) {
+            fetchArticles();
+          }
+        });
+        return scrollController.dispose;
+      },
+      [],
+    );
 
     return _ArticleSelectionHooks(
       scrollController: scrollController,
@@ -146,7 +159,6 @@ class ArticleSelectionPage extends HookWidget {
 }
 
 class _ArticleSelectionHooks {
-
   _ArticleSelectionHooks({
     required this.scrollController,
     required ValueNotifier<Iterable<ArticleInfo>> articles,
@@ -173,6 +185,8 @@ class _ArticleSelectionHooks {
   bool get isLoading => _isLoading.value;
   bool get hasMore => _hasMore.value;
   bool get hasError => _hasError.value;
+
+  set hasMore(bool value) => _hasMore.value = value;
 }
 
 class _ArticleSelectionNoData extends StatelessWidget {
