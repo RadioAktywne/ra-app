@@ -125,7 +125,7 @@ class MainPage extends StatelessWidget {
                           child: ColorShadowedCard2(
                             shadowColor: context.colors.highlightGreen,
                             header: Padding(
-                              padding: const EdgeInsets.all(3),
+                              padding: const EdgeInsets.all(4),
                               child: Text(
                                 'Najnowsze nagrania',
                                 style: context.textStyles.textSmall,
