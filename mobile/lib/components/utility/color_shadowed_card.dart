@@ -31,9 +31,11 @@ class ColorShadowedCard extends StatelessWidget {
                 color: context.colors.backgroundDark,
                 child: header,
               ),
-            Container(
-              color: context.colors.backgroundDarkSecondary,
-              child: child,
+            Expanded(
+              child: Container(
+                color: context.colors.backgroundDarkSecondary,
+                child: child,
+              ),
             ),
             if (footer != null)
               Container(
