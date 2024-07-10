@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:go_router/go_router.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
