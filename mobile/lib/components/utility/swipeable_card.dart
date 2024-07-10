@@ -107,7 +107,7 @@ class SwipeableCard extends HookWidget {
                                 color: context.colors.highlightGreen,
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.all(5),
+                                padding: const EdgeInsets.all(4),
                                 child: HtmlWidget(item.title),
                               ),
                             ),
