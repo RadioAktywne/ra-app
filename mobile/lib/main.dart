@@ -82,7 +82,7 @@ class MainPage extends StatelessWidget {
                           color: context.colors.highlightGreen,
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(8),
                           child: RichText(
                             text: TextSpan(
                               children: [
