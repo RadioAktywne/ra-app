@@ -31,6 +31,8 @@ class ArticleSelectionPage extends HookWidget {
 
     if (hooks.hasError && hooks.articles.isEmpty) {
       return RefreshIndicator(
+        color: context.colors.highlightGreen,
+        backgroundColor: context.colors.backgroundDark,
         onRefresh: () async {
           hooks.hasMore = true;
           await hooks.fetchArticles();
