@@ -107,6 +107,7 @@ class MainPage extends StatelessWidget {
                         ),
                       ),
                       child: Container(
+                        // TODO: redo this layout in a prettier way
                         padding: const EdgeInsets.all(80),
                         child: Text(
                           // TODO: Place for the spinning vinyl record
