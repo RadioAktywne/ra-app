@@ -62,7 +62,8 @@ class MainPage extends StatelessWidget {
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(
-              bottom: RaPageConstraints.radioPlayerHeight),
+            bottom: RaPageConstraints.radioPlayerHeight,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
