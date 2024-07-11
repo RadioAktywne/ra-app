@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/newest_article/newest_article_widget.dart';
+import 'package:radioaktywne/components/newest_recording/newest_recording_widget.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_widget.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card_2.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
@@ -63,6 +64,7 @@ class MainPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(
             bottom: RaPageConstraints.radioPlayerHeight,
+            top: 8,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,27 +124,9 @@ class MainPage extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          child: ColorShadowedCard2(
-                            shadowColor: context.colors.highlightGreen,
-                            header: Padding(
-                              padding: const EdgeInsets.all(4),
-                              child: Text(
-                                'Najnowsze nagrania',
-                                style: context.textStyles.textSmallGreen,
-                              ),
-                            ),
-                            footer: DefaultTextStyle(
-                              style: context.textStyles.textSmallGreen,
-                              child: const Padding(
-                                padding: EdgeInsets.all(4),
-                                child: Text('Lorem ipsum'),
-                              ),
-                            ),
-                            indicator: 0,
-                            child: Image.asset(
-                              'assets/defaultMedia.png',
-                              fit: BoxFit.fill,
-                            ),
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: NewestRecordingWidget(),
                           ),
                         ),
                         const SizedBox(
