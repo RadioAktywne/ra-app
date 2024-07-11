@@ -49,9 +49,10 @@ class MainPage extends StatelessWidget {
     super.key,
   });
 
-  static const _widgetPadding = EdgeInsets.symmetric(
-    vertical: 8,
-    horizontal: 16,
+  static const _widgetPadding = EdgeInsets.only(
+    top: RaPageConstraints.pagePadding,
+    left: RaPageConstraints.pagePadding,
+    right: RaPageConstraints.pagePadding,
   );
 
   @override
@@ -63,8 +64,7 @@ class MainPage extends StatelessWidget {
       child: const SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
-            bottom: RaPageConstraints.radioPlayerHeight,
-            top: 8,
+            bottom: RaPageConstraints.radioPlayerPadding,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

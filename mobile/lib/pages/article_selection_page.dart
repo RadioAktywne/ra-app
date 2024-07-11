@@ -43,44 +43,40 @@ class ArticleSelectionPage extends HookWidget {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.only(
-        bottom: RaPageConstraints.radioPlayerHeight,
-      ), // Helps with the player not covering the last article
-      child: GridView.builder(
-        controller: hooks.scrollController,
-        padding: RaPageConstraints.outerWidgetPagePadding.copyWith(
-          top: RaPageConstraints.pagePadding,
-        ),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: RaPageConstraints.pagePadding,
-          mainAxisSpacing: RaPageConstraints.pagePadding,
-        ),
-        itemCount: hooks.articles.length,
-        itemBuilder: (context, index) {
-          final article = hooks.articles.elementAt(index);
-          return GestureDetector(
-            onTap: () => context.push(
-              RaRoutes.articleId(article.id),
-              extra: article,
-            ),
-            child: ColorShadowedCard(
-              shadowColor: shadowColor(context, index),
-              child: ImageWithOverlay(
-                thumbnailPath: article.thumbnail,
-                titleOverlay: Text(
-                  HtmlUnescape().convert(article.title),
-                  // possibly context.textStyles.textSmallGreen, up to RA to decide
-                  style: context.textStyles.textMedium,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 4,
-                ),
+    return GridView.builder(
+      controller: hooks.scrollController,
+      padding: RaPageConstraints.outerWidgetPagePadding.copyWith(
+        top: RaPageConstraints.pagePadding,
+        bottom: RaPageConstraints.radioPlayerPadding,
+      ),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: RaPageConstraints.pagePadding,
+        mainAxisSpacing: RaPageConstraints.pagePadding,
+      ),
+      itemCount: hooks.articles.length,
+      itemBuilder: (context, index) {
+        final article = hooks.articles.elementAt(index);
+        return GestureDetector(
+          onTap: () => context.push(
+            RaRoutes.articleId(article.id),
+            extra: article,
+          ),
+          child: ColorShadowedCard(
+            shadowColor: shadowColor(context, index),
+            child: ImageWithOverlay(
+              thumbnailPath: article.thumbnail,
+              titleOverlay: Text(
+                HtmlUnescape().convert(article.title),
+                // possibly context.textStyles.textSmallGreen, up to RA to decide
+                style: context.textStyles.textMedium,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 4,
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 

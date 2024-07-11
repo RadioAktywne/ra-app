@@ -5,6 +5,7 @@ import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/utility/image_with_overlay.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 
+/// TODO: This is still a dummy widget, needs implementing fetching logic
 /// Widget representing what's currently played on the radio
 ///
 /// Consists of a [ColorShadowedCard] with an image, icon ant text overlay.

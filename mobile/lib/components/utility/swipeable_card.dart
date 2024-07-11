@@ -8,13 +8,10 @@ import 'package:radioaktywne/extensions/build_context.dart';
 /// Widget representing a horizontally swipeable card.
 class SwipeableCardItem {
   SwipeableCardItem({
-    required this.id,
     required this.thumbnailPath,
     required this.title,
     this.onTap,
   });
-
-  final int id;
 
   /// Path for image source
   final String thumbnailPath;

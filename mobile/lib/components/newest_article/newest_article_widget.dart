@@ -43,7 +43,6 @@ class NewestArticleWidget extends HookWidget {
       items: articles.value.mapIndexed(
         (index, item) {
           return SwipeableCardItem(
-            id: item.id,
             thumbnailPath: item.thumbnail,
             title: item.title,
             onTap: () {
