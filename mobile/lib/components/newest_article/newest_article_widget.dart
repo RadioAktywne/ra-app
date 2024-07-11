@@ -11,7 +11,11 @@ import 'package:radioaktywne/router/ra_routes.dart';
 class NewestArticleWidget extends HookWidget {
   const NewestArticleWidget({
     super.key,
+    this.shadowColor,
   });
+
+  /// Shadow color for the card.
+  final Color? shadowColor;
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +37,12 @@ class NewestArticleWidget extends HookWidget {
       [],
     );
 
+    final defaultShadowColor = context.colors.highlightYellow;
+
     return SwipeableCard(
       items: articles.value.mapIndexed(
         (index, item) {
           return SwipeableCardItem(
-            id: item.id,
             thumbnailPath: item.thumbnail,
             title: item.title,
             onTap: () {
@@ -50,7 +55,7 @@ class NewestArticleWidget extends HookWidget {
         },
       ),
       isLoading: isLoading.value,
-      shadowColor: context.colors.highlightYellow,
+      shadowColor: shadowColor ?? defaultShadowColor,
       header: Padding(
         padding: const EdgeInsets.all(4),
         child: Text(
