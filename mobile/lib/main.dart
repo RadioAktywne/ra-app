@@ -4,7 +4,7 @@ import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/newest_article/newest_article_widget.dart';
 import 'package:radioaktywne/components/newest_recording/newest_recording_widget.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_widget.dart';
-import 'package:radioaktywne/components/utility/color_shadowed_card_2.dart';
+import 'package:radioaktywne/components/teraz_gramy/teraz_gramy_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
@@ -60,9 +60,9 @@ class MainPage extends StatelessWidget {
       color: context.colors.backgroundLight,
       width: double.infinity,
       height: double.infinity,
-      child: SingleChildScrollView(
+      child: const SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(
+          padding: EdgeInsets.only(
             bottom: RaPageConstraints.radioPlayerHeight,
             top: 8,
           ),
@@ -73,52 +73,19 @@ class MainPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   /// Ramówka widget
-                  const Padding(
+                  Padding(
                     padding: _widgetPadding,
                     child: RamowkaWidget(),
                   ),
+                  /// Teraz Gramy widget
                   Padding(
                     padding: _widgetPadding,
-                    child: ColorShadowedCard2(
-                      shadowColor: context.colors.highlightRed,
-                      footer: DefaultTextStyle(
-                        style: context.textStyles.textSmallGreen,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'Teraz gramy \n',
-                                  style: context.textStyles.textMedium.copyWith(
-                                    color: context.colors.highlightGreen,
-                                    height: 1.5,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text:
-                                      'Lorem Ipsum', // TODO: Place for the song title
-                                  style: context.textStyles.textSmallGreen
-                                      .copyWith(
-                                    height: 1.5,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      child: Container(
-                        // TODO: redo this layout in a prettier way
-                        padding: const EdgeInsets.all(80),
-                        child: Text(
-                          // TODO: Place for the spinning vinyl record
-                          '',
-                          style: context.textStyles.textSmallGreen,
-                        ),
-                      ),
+                    child: AspectRatio(
+                      aspectRatio: 1.7,
+                      child: TerazGramyWidget(),
                     ),
                   ),
+                  /// Najnowsze Nagrania widget & Najnowsze Artykuły Widget
                   Padding(
                     padding: _widgetPadding,
                     child: Row(
@@ -129,10 +96,10 @@ class MainPage extends StatelessWidget {
                             child: NewestRecordingWidget(),
                           ),
                         ),
-                        const SizedBox(
-                          width: 16,
+                        SizedBox(
+                          width: RaPageConstraints.pagePadding,
                         ),
-                        const Expanded(
+                        Expanded(
                           child: AspectRatio(
                             aspectRatio: 1,
                             child: NewestArticleWidget(),
