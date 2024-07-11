@@ -6,10 +6,16 @@ import 'package:radioaktywne/extensions/build_context.dart';
 class NewestRecordingWidget extends StatelessWidget {
   const NewestRecordingWidget({
     super.key,
+    this.shadowColor,
   });
+
+  /// Shadow color for the card.
+  final Color? shadowColor;
 
   @override
   Widget build(BuildContext context) {
+    final defaultShadowColor = context.colors.highlightGreen;
+
     return SwipeableCard(
       items: [
         SwipeableCardItem(
@@ -32,7 +38,7 @@ class NewestRecordingWidget extends StatelessWidget {
         ),
       ],
       isLoading: true,
-      shadowColor: context.colors.highlightGreen,
+      shadowColor: shadowColor ?? defaultShadowColor,
       header: Padding(
         padding: const EdgeInsets.all(4),
         child: Text(

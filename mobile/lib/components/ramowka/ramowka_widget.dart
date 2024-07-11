@@ -14,15 +14,21 @@ class RamowkaWidget extends StatelessWidget {
   const RamowkaWidget({
     super.key,
     this.timeout = const Duration(seconds: 7),
+    this.shadowColor,
   });
 
   /// Timeout for the fetching function.
   final Duration timeout;
 
+  /// Shadow color for the card.
+  final Color? shadowColor;
+
   @override
   Widget build(BuildContext context) {
+    final defaultShadowColor = context.colors.highlightBlue;
+
     return ColorShadowedCard(
-      shadowColor: context.colors.highlightBlue,
+      shadowColor: shadowColor ?? defaultShadowColor,
       header: Padding(
         padding: const EdgeInsets.only(left: 3),
         child: SizedBox(

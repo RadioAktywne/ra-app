@@ -11,12 +11,18 @@ import 'package:radioaktywne/extensions/build_context.dart';
 class TerazGramyWidget extends StatelessWidget {
   const TerazGramyWidget({
     super.key,
+    this.shadowColor,
   });
+
+  /// Shadow color for the card.
+  final Color? shadowColor;
 
   @override
   Widget build(BuildContext context) {
+    final defaultShadowColor = context.colors.highlightRed;
+
     return ColorShadowedCard(
-      shadowColor: context.colors.highlightRed,
+      shadowColor: shadowColor ?? defaultShadowColor,
       child: ImageWithOverlay(
         isLoading: false,
         imageConstructor: Image.asset,
