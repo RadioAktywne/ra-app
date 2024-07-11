@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
+import 'package:radioaktywne/components/utility/image_with_overlay.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 
+/// Widget representing a horizontally swipeable card.
 class SwipeableCardItem {
   SwipeableCardItem({
     required this.id,
@@ -13,8 +15,14 @@ class SwipeableCardItem {
   });
 
   final int id;
+
+  /// Path for image source
   final String thumbnailPath;
+
+  /// Title to overlay on the bottom of the image
   final String title;
+
+  /// Function used when widget is tapped. Usually used for navigation.
   final void Function()? onTap;
 }
 
@@ -78,41 +86,10 @@ class SwipeableCard extends HookWidget {
                 final item = items.elementAt(index);
                 return GestureDetector(
                   onTap: item.onTap,
-                  child: Stack(
-                    children: <Widget>[
-                      Positioned.fill(
-                        child: Container(
-                          color: context.colors.backgroundDarkSecondary,
-                          child: isLoading
-                              ? Image.asset(
-                                  'assets/defaultMedia.png',
-                                  fit: BoxFit.cover,
-                                )
-                              : Image.network(
-                                  item.thumbnailPath,
-                                  fit: BoxFit.cover,
-                                ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Opacity(
-                          opacity: 0.8,
-                          child: Container(
-                            color: context.colors.backgroundDark,
-                            child: DefaultTextStyle(
-                              style: context.textStyles.textSmallGreen,
-                              child: Padding(
-                                padding: const EdgeInsets.all(4),
-                                child: HtmlWidget(item.title),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: ImageWithOverlay(
+                    isLoading: isLoading,
+                    thumbnailPath: item.thumbnailPath,
+                    titleOverlay: HtmlWidget(item.title),
                   ),
                 );
               },
