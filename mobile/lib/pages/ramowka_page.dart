@@ -82,7 +82,7 @@ class RamowkaPage extends StatelessWidget {
               ),
             );
           },
-          separatorBuilder: (context, index) => const SizedBox(height: 20),
+          separatorBuilder: (context, index) => const SizedBox(height: RaPageConstraints.pagePadding),
           itemCount: Day.values.length,
         ),
       ),
