@@ -103,9 +103,7 @@ class SwipeableCard extends HookWidget {
                           child: Container(
                             color: context.colors.backgroundDark,
                             child: DefaultTextStyle(
-                              style: context.textStyles.textSmall.copyWith(
-                                color: context.colors.highlightGreen,
-                              ),
+                              style: context.textStyles.textSmallGreen,
                               child: Padding(
                                 padding: const EdgeInsets.all(4),
                                 child: HtmlWidget(item.title),

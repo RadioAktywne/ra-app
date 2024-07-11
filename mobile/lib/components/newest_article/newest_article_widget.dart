@@ -55,7 +55,7 @@ class NewestArticleWidget extends HookWidget {
         padding: const EdgeInsets.all(4),
         child: Text(
           'Najnowsze artykuły',
-          style: context.textStyles.textSmall,
+          style: context.textStyles.textSmallGreen,
         ),
       ),
     );

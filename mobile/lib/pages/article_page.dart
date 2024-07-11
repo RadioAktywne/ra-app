@@ -56,7 +56,7 @@ class ArticlePage extends StatelessWidget {
             ),
             _emptySpace,
             CustomPaddingHtmlWidget(
-              style: context.textStyles.textSmall.copyWith(
+              style: context.textStyles.textSmallGreen.copyWith(
                 color: context.colors.backgroundDark,
               ),
               htmlContent: article.content,

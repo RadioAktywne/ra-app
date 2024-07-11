@@ -5,6 +5,7 @@ import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/plyta_tygodnia_info.dart';
+import 'package:radioaktywne/pages/ra_error_page.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
@@ -130,7 +131,7 @@ class PlytaTygodniaPage extends StatelessWidget {
               padding: _textPadding,
               child: SelectableText(
                 plytaTygodnia.description + plytaTygodnia.description,
-                style: context.textStyles.textSmall.copyWith(
+                style: context.textStyles.textSmallGreen.copyWith(
                   color: context.colors.backgroundDark,
                 ),
               ),
@@ -150,30 +151,7 @@ class _PlytaTygodniaNoData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) => SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: constraints.maxHeight,
-            maxHeight: constraints.maxHeight,
-          ),
-          child: Center(
-            child: Padding(
-              padding: RaPageConstraints.outerTextPagePadding,
-              child: Text(
-                context.l10n.dataLoadError,
-                style: context.textStyles.textMedium.copyWith(
-                  color: context.colors.highlightGreen,
-                ),
-                textAlign: TextAlign.center,
-                softWrap: true,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+    return const RaErrorPage();
   }
 }
 

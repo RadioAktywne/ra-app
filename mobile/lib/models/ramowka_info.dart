@@ -2,7 +2,7 @@ import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/resources/day.dart';
 
 /// Information about a single Ramowka entry.
-class RamowkaInfo {
+class RamowkaInfo implements Comparable<RamowkaInfo> {
   /// Creates an empty [RamowkaInfo] object.
   RamowkaInfo.empty()
       : title = '',
@@ -51,4 +51,7 @@ class RamowkaInfo {
     )
     ''';
   }
+
+  @override
+  int compareTo(RamowkaInfo other) => startTime.compareTo(other.startTime);
 }

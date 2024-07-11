@@ -8,6 +8,7 @@ import 'package:radioaktywne/components/utility/color_shadowed_card_2.dart';
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
+import 'package:radioaktywne/pages/ra_error_page.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/resources/shadow_color.dart';
@@ -67,9 +68,7 @@ class ArticleSelectionPage extends HookWidget {
                 padding: const EdgeInsets.all(5),
                 child: Text(
                   HtmlUnescape().convert(article.title),
-                  style: context.textStyles.textSmall.copyWith(
-                    color: context.colors.highlightGreen,
-                  ),
+                  style: context.textStyles.textSmallGreen,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 4,
                 ),
@@ -199,30 +198,7 @@ class _ArticleSelectionNoData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) => SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: constraints.maxHeight,
-            maxHeight: constraints.maxHeight,
-          ),
-          child: Center(
-            child: Padding(
-              padding: RaPageConstraints.outerTextPagePadding,
-              child: Text(
-                context.l10n.dataLoadError,
-                style: context.textStyles.textMedium.copyWith(
-                  color: context.colors.highlightGreen,
-                ),
-                textAlign: TextAlign.center,
-                softWrap: true,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+    return const RaErrorPage();
   }
 }
 

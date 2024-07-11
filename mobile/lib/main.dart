@@ -61,7 +61,9 @@ class MainPage extends StatelessWidget {
       height: double.infinity,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(bottom: RaPageConstraints.radioPlayerHeight),
+          padding: const EdgeInsets.only(
+            bottom: RaPageConstraints.radioPlayerHeight,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -78,9 +80,7 @@ class MainPage extends StatelessWidget {
                     child: ColorShadowedCard2(
                       shadowColor: context.colors.highlightRed,
                       footer: DefaultTextStyle(
-                        style: context.textStyles.textSmall.copyWith(
-                          color: context.colors.highlightGreen,
-                        ),
+                        style: context.textStyles.textSmallGreen,
                         child: Padding(
                           padding: const EdgeInsets.all(8),
                           child: RichText(
@@ -96,8 +96,8 @@ class MainPage extends StatelessWidget {
                                 TextSpan(
                                   text:
                                       'Lorem Ipsum', // TODO: Place for the song title
-                                  style: context.textStyles.textSmall.copyWith(
-                                    color: context.colors.highlightGreen,
+                                  style: context.textStyles.textSmallGreen
+                                      .copyWith(
                                     height: 1.5,
                                   ),
                                 ),
@@ -112,7 +112,7 @@ class MainPage extends StatelessWidget {
                         child: Text(
                           // TODO: Place for the spinning vinyl record
                           '',
-                          style: context.textStyles.textSmall,
+                          style: context.textStyles.textSmallGreen,
                         ),
                       ),
                     ),
@@ -128,13 +128,11 @@ class MainPage extends StatelessWidget {
                               padding: const EdgeInsets.all(4),
                               child: Text(
                                 'Najnowsze nagrania',
-                                style: context.textStyles.textSmall,
+                                style: context.textStyles.textSmallGreen,
                               ),
                             ),
                             footer: DefaultTextStyle(
-                              style: context.textStyles.textSmall.copyWith(
-                                color: context.colors.highlightGreen,
-                              ),
+                              style: context.textStyles.textSmallGreen,
                               child: const Padding(
                                 padding: EdgeInsets.all(4),
                                 child: Text('Lorem ipsum'),
