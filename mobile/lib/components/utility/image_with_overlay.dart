@@ -1,16 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/extensions/build_context.dart';
 
 /// Widget representing an image with overlaid text on the bottom of the image.
 class ImageWithOverlay extends StatelessWidget {
   const ImageWithOverlay({
     super.key,
-    this.child,
     required this.thumbnailPath,
-    this.imageConstructor = Image.network,
+    this.child,
+    this.imageBuilder = Image.network,
     this.titleOverlay,
-    required this.isLoading,
     this.titleOverlayPadding = const EdgeInsets.all(4),
   });
 
@@ -22,13 +21,10 @@ class ImageWithOverlay extends StatelessWidget {
 
   /// Function used to display the image (used mainly to be able to switch
   /// between network and local images). Defaults to network image.
-  final Image Function(String, {BoxFit fit}) imageConstructor;
+  final Image Function(String) imageBuilder;
 
   /// Title to display over the image, on the bottom.
   final Widget? titleOverlay;
-
-  /// Boolean value used to display default image when image hasn't loaded yet.
-  final bool isLoading;
 
   /// lets optionally change padding around the title.
   final EdgeInsets titleOverlayPadding;
@@ -40,27 +36,26 @@ class ImageWithOverlay extends StatelessWidget {
         Positioned.fill(
           child: Container(
             color: context.colors.backgroundDarkSecondary,
-            child: isLoading
-                ? Image.asset(
-                    'assets/defaultMedia.png',
-                    fit: BoxFit.cover,
-                  )
-                : imageConstructor(
-                    thumbnailPath,
-                    fit: BoxFit.cover,
-                  ),
+            child: Image(
+              image: imageBuilder(thumbnailPath).image,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Image.asset(
+                'assets/defaultMedia.png',
+                fit: BoxFit.cover,
+              ),
+              loadingBuilder: (context, child, loadingProgress) =>
+                loadingProgress != null ? const Center(
+                  child: RaProgressIndicator(),
+                ) : child,
+            ),
           ),
         ),
-        // if (child != null)
-        //   Positioned.fill(
-        //     child: child!,
-        //   ),
         Positioned.fill(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                child: child ?? Container(),
+                child: child ?? const SizedBox.shrink(),
               ),
               if (titleOverlay != null)
                 Opacity(

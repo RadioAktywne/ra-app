@@ -24,8 +24,7 @@ class TerazGramyWidget extends StatelessWidget {
     return ColorShadowedCard(
       shadowColor: shadowColor ?? defaultShadowColor,
       child: ImageWithOverlay(
-        isLoading: false,
-        imageConstructor: Image.asset,
+        imageBuilder: Image.asset,
         thumbnailPath: 'assets/teraz_gramy_background.webp',
         titleOverlay: RichText(
           text: TextSpan(

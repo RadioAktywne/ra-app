@@ -87,7 +87,6 @@ class SwipeableCard extends HookWidget {
                 return GestureDetector(
                   onTap: item.onTap,
                   child: ImageWithOverlay(
-                    isLoading: isLoading,
                     thumbnailPath: item.thumbnailPath,
                     titleOverlay: HtmlWidget(item.title),
                   ),

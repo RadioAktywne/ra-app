@@ -69,7 +69,6 @@ class ArticleSelectionPage extends HookWidget {
               shadowColor: shadowColor(context, index),
               child: ImageWithOverlay(
                 thumbnailPath: article.thumbnail,
-                isLoading: false,
                 titleOverlay: Text(
                   HtmlUnescape().convert(article.title),
                   // possibly context.textStyles.textSmallGreen, up to RA to decide
