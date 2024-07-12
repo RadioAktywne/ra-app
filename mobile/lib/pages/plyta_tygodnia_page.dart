@@ -72,8 +72,8 @@ class PlytaTygodniaPage extends StatelessWidget {
       onFetch: _fetchPlytaTygodnia,
       defaultData: PlytaTygodniaInfo.empty(),
       hasData: (plytaTygodnia) => plytaTygodnia.isNotEmpty,
-      loadingBuilder: (context, snapshot) => const _PlytaTygodniaWaiting(),
-      errorBuilder: (context) => const _PlytaTygodniaNoData(),
+      loadingBuilder: (context, snapshot) => const RaProgressIndicator(),
+      errorBuilder: (context) => const RaErrorPage(),
       builder: (context, plytaTygodnia) => Padding(
         padding: RaPageConstraints.outerTextPagePadding,
         child: ListView(
@@ -141,27 +141,5 @@ class PlytaTygodniaPage extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-/// Empty variant of the [PlytaTygodniaPage], to be
-/// displayed when data cannot be fetched.
-class _PlytaTygodniaNoData extends StatelessWidget {
-  const _PlytaTygodniaNoData();
-
-  @override
-  Widget build(BuildContext context) {
-    return const RaErrorPage();
-  }
-}
-
-/// Loading variant of [PlytaTygodniaPage], displaying
-/// loading animation.
-class _PlytaTygodniaWaiting extends StatelessWidget {
-  const _PlytaTygodniaWaiting();
-
-  @override
-  Widget build(BuildContext context) {
-    return const RaProgressIndicator();
   }
 }

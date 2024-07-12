@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:radioaktywne/components/utility/swipeable_card.dart';
-import 'package:radioaktywne/extensions/build_context.dart';
+import 'package:radioaktywne/extensions/themes.dart';
 
 /// TODO: This is still a dummy widget, needs implementing fetching logic
 /// Widget representing three most recent recordings.

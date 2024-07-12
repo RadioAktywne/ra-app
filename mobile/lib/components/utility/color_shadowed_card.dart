@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_widget.dart';
-import 'package:radioaktywne/extensions/build_context.dart';
+import 'package:radioaktywne/extensions/themes.dart';
 
 class ColorShadowedCard extends StatelessWidget {
   const ColorShadowedCard({
