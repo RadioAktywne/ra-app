@@ -36,7 +36,6 @@ class NewestRecordingWidget extends StatelessWidget {
           onTap: () {},
         ),
       ],
-      isLoading: false, // TODO: Change this to a real value
       shadowColor: shadowColor ?? defaultShadowColor,
       header: Padding(
         padding: const EdgeInsets.all(4),
