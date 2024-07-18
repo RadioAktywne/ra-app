@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:radioaktywne/components/ra_playbutton.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/utility/image_with_overlay.dart';
-import 'package:radioaktywne/extensions/build_context.dart';
+import 'package:radioaktywne/extensions/themes.dart';
 
 /// TODO: This is still a dummy widget, needs implementing fetching logic
 /// Widget representing what's currently played on the radio

@@ -9,6 +9,7 @@ import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/ramowka_info.dart';
+import 'package:radioaktywne/pages/ra_error_page.dart';
 import 'package:radioaktywne/resources/day.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
@@ -97,9 +98,14 @@ class RamowkaList extends StatelessWidget {
       defaultData: const <RamowkaInfo>[],
       onFetch: _fetchRamowka,
       hasData: (ramowka) => ramowka.isNotEmpty,
-      loadingBuilder: (context, snapshot) =>
-          _RamowkaListWaiting(height: height),
-      errorBuilder: (context) => _RamowkaListNoData(height: height),
+      loadingBuilder: (context, snapshot) => SizedBox(
+        height: height,
+        child: const RaProgressIndicator(),
+      ),
+      errorBuilder: (context) => SizedBox(
+        height: height,
+        child: const RaErrorPage(),
+      ),
       builder: (context, ramowkaInfoList) => RaListWidget(
         rows: rows,
         rowHeight: rowHeight,
@@ -112,50 +118,6 @@ class RamowkaList extends StatelessWidget {
             )
             .toList(),
       ),
-    );
-  }
-}
-
-/// Variant of the [RamowkaList] containing
-/// a waiting animation.
-///
-/// Displayed when the widget is waiting
-/// for the data.
-class _RamowkaListWaiting extends StatelessWidget {
-  const _RamowkaListWaiting({required this.height});
-
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      child: const RaProgressIndicator(),
-    );
-  }
-}
-
-/// Empty variant of [RamowkaList].
-///
-/// Displayed when the data can't be loaded.
-class _RamowkaListNoData extends StatelessWidget {
-  const _RamowkaListNoData({required this.height});
-
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return RaListWidget(
-      rows: 1,
-      rowHeight: height,
-      items: [
-        Center(
-          child: Text(
-            context.l10n.dataLoadError,
-            style: context.textStyles.textSmallGreen,
-          ),
-        ),
-      ],
     );
   }
 }

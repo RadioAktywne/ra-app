@@ -21,9 +21,7 @@ class RaErrorPage extends StatelessWidget {
               padding: RaPageConstraints.outerTextPagePadding,
               child: Text(
                 context.l10n.dataLoadError,
-                style: context.textStyles.textMedium.copyWith(
-                  color: context.colors.highlightGreen,
-                ),
+                style: context.textStyles.textSmallGreen,
                 textAlign: TextAlign.center,
                 softWrap: true,
               ),

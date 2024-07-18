@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
-import 'package:radioaktywne/extensions/build_context.dart';
+import 'package:radioaktywne/components/utility/ra_refresh_indicator.dart';
 
 /// A widget that can be used to easily build elements
 /// that pull data from an async source and need to be
@@ -20,8 +20,6 @@ class RefreshableFetchWidget<T> extends HookWidget {
     required this.errorBuilder,
     required this.builder,
     required this.hasData,
-    this.refreshIndicatorColor,
-    this.refreshIndicatorBackgroundColor,
   });
 
   /// The default value of the data that is going to be fetched.
@@ -46,18 +44,11 @@ class RefreshableFetchWidget<T> extends HookWidget {
   /// Determines if the data was successfully loaded.
   final bool Function(T) hasData;
 
-  final Color? refreshIndicatorColor;
-  final Color? refreshIndicatorBackgroundColor;
-
   @override
   Widget build(BuildContext context) {
     final data = _useRefreshableFetchController(defaultData, onFetch);
 
-    return RefreshIndicator(
-      color: refreshIndicatorColor ?? context.colors.highlightGreen,
-      backgroundColor:
-          refreshIndicatorBackgroundColor ?? context.colors.backgroundDark,
-      displacement: 0,
+    return RaRefreshIndicator(
       onRefresh: () async => data.state.value = await onFetch(),
       child: data.snapshot.connectionState == ConnectionState.waiting
           ? loadingBuilder(context, data.snapshot)

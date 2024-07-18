@@ -3,38 +3,24 @@ import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/utility/image_with_overlay.dart';
-import 'package:radioaktywne/extensions/build_context.dart';
+import 'package:radioaktywne/extensions/themes.dart';
 
 /// Widget representing a horizontally swipeable card.
-class SwipeableCardItem {
-  SwipeableCardItem({
-    required this.thumbnailPath,
-    required this.title,
-    this.onTap,
-  });
-
-  /// Path for image source
-  final String thumbnailPath;
-
-  /// Title to overlay on the bottom of the image
-  final String title;
-
-  /// Function used when widget is tapped. Usually used for navigation.
-  final void Function()? onTap;
-}
-
 class SwipeableCard extends HookWidget {
   const SwipeableCard({
     super.key,
     required this.items,
-    required this.isLoading,
     required this.shadowColor,
     this.header,
   });
 
+  /// Cards to be displayed by this widget.
   final Iterable<SwipeableCardItem> items;
-  final bool isLoading;
+
+  /// Color of the container behind this widget.
   final Color shadowColor;
+
+  /// Optional header of the widget.
   final Widget? header;
 
   @override
@@ -95,4 +81,22 @@ class SwipeableCard extends HookWidget {
       ),
     );
   }
+}
+
+/// Info about a single card in the [SwipeableCard]
+class SwipeableCardItem {
+  SwipeableCardItem({
+    required this.thumbnailPath,
+    required this.title,
+    this.onTap,
+  });
+
+  /// Path for image source
+  final String thumbnailPath;
+
+  /// Title to overlay on the bottom of the image
+  final String title;
+
+  /// Function used when widget is tapped. Usually used for navigation.
+  final void Function()? onTap;
 }
