@@ -154,13 +154,11 @@ class StreamTitle extends StatelessWidget {
     super.key,
     required this.audioHandler,
     this.width,
-    this.height,
     this.style,
   });
 
   final AudioHandler audioHandler;
   final double? width;
-  final double? height;
   final TextStyle? style;
 
   @override
@@ -170,7 +168,6 @@ class StreamTitle extends StatelessWidget {
       builder: (context, snapshot) {
         final mediaItem = snapshot.data;
         return SizedBox(
-          height: height,
           width: width ?? MediaQuery.of(context).size.width / 1.4,
           child: TextScroll(
             (mediaItem?.title != null && mediaItem!.title.isNotEmpty == true)
