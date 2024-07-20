@@ -10,7 +10,6 @@ import 'package:radioaktywne/models/ramowka_info.dart';
 import 'package:radioaktywne/pages/ra_error_page.dart';
 import 'package:radioaktywne/resources/day.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
-import 'package:radioaktywne/resources/shadow_color.dart';
 
 /// Page displaying Ramowka from all days of the week.
 class RamowkaPage extends StatelessWidget {
@@ -67,7 +66,7 @@ class RamowkaPage extends StatelessWidget {
                 ramowkaForDay[index].day.toL10nString(context),
                 style: context.textStyles.textMedium,
               ),
-              shadowColor: shadowColor(context, index),
+              shadowColor: context.shadowColor(index),
               child: RaListWidget(
                 scrollPhysics: const NeverScrollableScrollPhysics(),
                 rows: ramowkaForDay.length,
@@ -82,7 +81,8 @@ class RamowkaPage extends StatelessWidget {
               ),
             );
           },
-          separatorBuilder: (context, index) => const SizedBox(height: RaPageConstraints.pagePadding),
+          separatorBuilder: (context, index) =>
+              const SizedBox(height: RaPageConstraints.pagePadding),
           itemCount: Day.values.length,
         ),
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:radioaktywne/extensions/build_context.dart';
+import 'package:radioaktywne/extensions/themes.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
 /// Represents aplication's bottom navigation bar.

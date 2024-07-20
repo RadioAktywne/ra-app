@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:radioaktywne/components/ra_navigation_shell.dart';
-import 'package:radioaktywne/extensions/build_context.dart';
+import 'package:radioaktywne/extensions/themes.dart';
 import 'package:radioaktywne/main.dart';
 import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/pages/article_page.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
-import 'package:radioaktywne/extensions/build_context.dart';
+import 'package:radioaktywne/extensions/themes.dart';
 
 /// Widget representing an image with overlaid text on the bottom of the image.
 class ImageWithOverlay extends StatelessWidget {
@@ -44,9 +44,11 @@ class ImageWithOverlay extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
               loadingBuilder: (context, child, loadingProgress) =>
-                loadingProgress != null ? const Center(
-                  child: RaProgressIndicator(),
-                ) : child,
+                  loadingProgress != null
+                      ? const Center(
+                          child: RaProgressIndicator(),
+                        )
+                      : child,
             ),
           ),
         ),

@@ -20,16 +20,13 @@ class NewestArticleWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final articles = useState<Iterable<ArticleInfo>>([]);
-    final isLoading = useState(false);
     final hasError = useState(false);
 
     useEffect(
       () {
         final newestArticleFetch = NewestArticleFetch();
-        isLoading.value = true;
         newestArticleFetch.loadArticles().then((_) {
           articles.value = newestArticleFetch.articles;
-          isLoading.value = newestArticleFetch.isLoading;
           hasError.value = newestArticleFetch.hasError;
         });
         return null;
@@ -54,7 +51,6 @@ class NewestArticleWidget extends HookWidget {
           );
         },
       ),
-      isLoading: isLoading.value,
       shadowColor: shadowColor ?? defaultShadowColor,
       header: Padding(
         padding: const EdgeInsets.all(4),

@@ -7,12 +7,12 @@ import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/utility/image_with_overlay.dart';
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
+import 'package:radioaktywne/components/utility/ra_refresh_indicator.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/pages/ra_error_page.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
-import 'package:radioaktywne/resources/shadow_color.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
 class ArticleSelectionPage extends HookWidget {
@@ -28,18 +28,16 @@ class ArticleSelectionPage extends HookWidget {
     final hooks = _useArticleSelectionHooks();
 
     if (hooks.isLoading && hooks.articles.isEmpty) {
-      return const _ArticleSelectionWaiting();
+      return const RaProgressIndicator();
     }
 
     if (hooks.hasError && hooks.articles.isEmpty) {
-      return RefreshIndicator(
-        color: context.colors.highlightGreen,
-        backgroundColor: context.colors.backgroundDark,
+      return RaRefreshIndicator(
         onRefresh: () async {
           hooks.hasMore = true;
           await hooks.fetchArticles();
         },
-        child: const _ArticleSelectionNoData(),
+        child: const RaErrorPage(),
       );
     }
 
@@ -63,7 +61,7 @@ class ArticleSelectionPage extends HookWidget {
             extra: article,
           ),
           child: ColorShadowedCard(
-            shadowColor: shadowColor(context, index),
+            shadowColor: context.shadowColor(index),
             child: ImageWithOverlay(
               thumbnailPath: article.thumbnail,
               titleOverlay: Text(
@@ -159,6 +157,7 @@ class _ArticleSelectionHooks {
         _isLoading = isLoading,
         _hasMore = hasMore,
         _hasError = hasError;
+
   final ScrollController scrollController;
   final ValueNotifier<Iterable<ArticleInfo>> _articles;
   final ValueNotifier<int> _currentPage;
@@ -174,22 +173,4 @@ class _ArticleSelectionHooks {
   bool get hasError => _hasError.value;
 
   set hasMore(bool value) => _hasMore.value = value;
-}
-
-class _ArticleSelectionNoData extends StatelessWidget {
-  const _ArticleSelectionNoData();
-
-  @override
-  Widget build(BuildContext context) {
-    return const RaErrorPage();
-  }
-}
-
-class _ArticleSelectionWaiting extends StatelessWidget {
-  const _ArticleSelectionWaiting();
-
-  @override
-  Widget build(BuildContext context) {
-    return const RaProgressIndicator();
-  }
 }
