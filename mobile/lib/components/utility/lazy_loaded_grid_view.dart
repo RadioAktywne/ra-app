@@ -16,9 +16,8 @@ class LazyLoadedGridView<T> extends HookWidget {
     super.key,
     required this.dataUri,
     required this.fromJson,
+    required this.transformItem,
     required this.onItemTap,
-    required this.thumbnailPath,
-    required this.title,
     this.timeout = const Duration(seconds: 15),
     this.padding = RaPageConstraints.pagePadding,
     this.gridDelegate = const SliverGridDelegateWithFixedCrossAxisCount(
@@ -31,10 +30,8 @@ class LazyLoadedGridView<T> extends HookWidget {
   final Uri dataUri;
 
   final T Function(Map<String, dynamic>) fromJson;
+  final LazyLoadedGridViewItem Function(T) transformItem;
   final void Function(T data, int index) onItemTap;
-
-  final String Function(T) thumbnailPath;
-  final String Function(T) title;
 
   final Duration timeout;
 
@@ -70,14 +67,15 @@ class LazyLoadedGridView<T> extends HookWidget {
       itemCount: lazyLoadingController.items.length,
       itemBuilder: (context, index) {
         final item = lazyLoadingController.items.elementAt(index);
+        final gridItem = transformItem(item);
         return GestureDetector(
           onTap: () => onItemTap(item, index),
           child: ColorShadowedCard(
             shadowColor: context.shadowColor(index),
             child: ImageWithOverlay(
-              thumbnailPath: thumbnailPath(item),
+              thumbnailPath: gridItem.thumbnailPath,
               titleOverlay: Text(
-                htmlUnescape.convert(title(item)),
+                htmlUnescape.convert(gridItem.title),
                 // possibly context.textStyles.textSmallGreen, up to RA to decide
                 style: context.textStyles.textMedium,
                 overflow: TextOverflow.ellipsis,

@@ -21,12 +21,14 @@ class ArticleSelectionPage extends StatelessWidget {
     return LazyLoadedGridView(
       dataUri: _articlesUri,
       fromJson: ArticleInfo.fromJson,
+      transformItem: (article) => LazyLoadedGridViewItem(
+        title: article.title,
+        thumbnailPath: article.thumbnail,
+      ),
       onItemTap: (article, index) => context.push(
         RaRoutes.articleId(article.id),
         extra: article,
       ),
-      thumbnailPath: (article) => article.thumbnail,
-      title: (article) => article.title,
       timeout: timeout,
     );
   }
