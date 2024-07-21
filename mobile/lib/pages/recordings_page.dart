@@ -16,20 +16,25 @@ class RecordingsPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Page `RecordingsPage` loaded');
     return LazyLoadedGridView(
       fetchPage: (page) async {
-        print('fetchPage called from recordings_page.dart');
         final pageUrl = _recordingsUrl(page);
-        print('before fetchData, pageUrl=$pageUrl');
-        final pageData = await fetchData(pageUrl, RecordingInfo.fromJson);
-        print('after fetchData, data=$pageData');
+        final data = await fetchData(pageUrl, RecordingInfo.fromJson);
 
-        // for (final data in pageData) {
-        //   data.recordingPath = '';
-        // }
-
-        print('pageData=$pageData');
+        final pageData = <RecordingInfo>[];
+        for (final element in data) {
+          element
+            ..recordingPath = await fetchSingle(
+              _recordingUrl(element.recordingPath),
+              (jsonData) => jsonData['source_url'] as String,
+            )
+            ..thumbnailPath = await fetchSingle(
+              _recordingUrl(element.thumbnailPath),
+              (jsonData) => jsonData['media_details']['sizes']['thumbnail']
+                  ['source_url'] as String,
+            );
+          pageData.add(element);
+        }
 
         return pageData;
       },

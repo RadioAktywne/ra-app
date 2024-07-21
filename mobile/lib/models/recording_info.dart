@@ -12,4 +12,14 @@ class RecordingInfo {
   final String title;
   String thumbnailPath;
   String recordingPath;
+
+  @override
+  String toString() {
+    return '''
+RecordingInfo {
+  title=$title,
+  thumbnailPath=$thumbnailPath,
+  recordingPath=$recordingPath,
+}''';
+  }
 }
