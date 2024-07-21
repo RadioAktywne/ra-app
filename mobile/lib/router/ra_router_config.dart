@@ -85,6 +85,23 @@ final raRouter = GoRouter(
           path: RaRoutes.about,
           builder: (context, state) => DummyRoute(state: state),
         ),
+        // TODO: Implement following pages:
+        GoRoute(
+          path: RaRoutes.radioPeople,
+          builder: (context, state) => DummyRoute(state: state),
+        ),
+        GoRoute(
+          path: RaRoutes.ramowka,
+          builder: (context, state) => const RamowkaPage(),
+        ),
+        GoRoute(
+          path: RaRoutes.broadcasts,
+          builder: (context, state) => DummyRoute(state: state),
+        ),
+        GoRoute(
+          path: RaRoutes.about,
+          builder: (context, state) => DummyRoute(state: state),
+        ),
       ],
       builder: (context, state, child) =>
           RaNavigationShell(state: state, child: child),

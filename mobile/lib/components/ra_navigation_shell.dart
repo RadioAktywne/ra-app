@@ -15,6 +15,9 @@ import 'package:radioaktywne/state/audio_handler_cubit.dart';
 /// Represents the part of the UI that stays unchanged
 /// on navigation: appbar, bottom navigation bar,
 /// the drawer and the player.
+/// Represents the part of the UI that stays unchanged
+/// on navigation: appbar, bottom navigation bar,
+/// the drawer and the player.
 class RaNavigationShell extends HookWidget {
   RaNavigationShell({
     super.key,
@@ -24,7 +27,13 @@ class RaNavigationShell extends HookWidget {
 
   /// The other widgets in the application,
   /// usually - the pages.
+  /// The other widgets in the application,
+  /// usually - the pages.
   final Widget child;
+
+  /// Internal state of the [GoRouter] for
+  /// determining e.g. the currently selected
+  /// page.
 
   /// Internal state of the [GoRouter] for
   /// determining e.g. the currently selected
