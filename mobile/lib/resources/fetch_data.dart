@@ -31,9 +31,9 @@ Future<Iterable<T>> fetchData<T>(
   try {
     final jsonData = jsonDecode(response.body) as List<dynamic>;
     return jsonData.map(
-      (dynamic data) => fromJson(data as Map<String, dynamic>),
+      (data) => fromJson(data as Map<String, dynamic>),
     );
-  } catch (_) {
+  } catch (e) {
     final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
     return [fromJson(jsonData)];
   }

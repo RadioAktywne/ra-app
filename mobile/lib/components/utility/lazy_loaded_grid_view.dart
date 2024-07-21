@@ -7,15 +7,13 @@ import 'package:radioaktywne/components/utility/image_with_overlay.dart';
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/pages/ra_error_page.dart';
-import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/resources/resources.dart';
 
 class LazyLoadedGridView<T> extends HookWidget {
   const LazyLoadedGridView({
     super.key,
-    required this.dataUri,
-    required this.fromJson,
+    required this.fetchPage,
     required this.transformItem,
     required this.onItemTap,
     this.timeout = const Duration(seconds: 15),
@@ -27,9 +25,7 @@ class LazyLoadedGridView<T> extends HookWidget {
     ),
   });
 
-  final Uri dataUri;
-
-  final T Function(Map<String, dynamic>) fromJson;
+  final Future<Iterable<T>> Function(int) fetchPage;
   final LazyLoadedGridViewItem Function(T) transformItem;
   final void Function(T data, int index) onItemTap;
 
@@ -41,7 +37,7 @@ class LazyLoadedGridView<T> extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lazyLoadingController = useLazyLoadingController(dataUri, fromJson);
+    final lazyLoadingController = useLazyLoadingController(fetchPage);
 
     if (lazyLoadingController.isLoading &&
         lazyLoadingController.items.isEmpty) {
@@ -91,8 +87,7 @@ class LazyLoadedGridView<T> extends HookWidget {
 
 // TODO: return a list of [LazyLoadedGridViewItem]s
 _LazyLoadingController<T> useLazyLoadingController<T>(
-  Uri uri,
-  T Function(Map<String, dynamic>) fromJson,
+  Future<Iterable<T>> Function(int) fetchPage,
 ) {
   final scrollController = useScrollController();
   final items = useState<Iterable<T>>([]);
@@ -108,12 +103,8 @@ _LazyLoadingController<T> useLazyLoadingController<T>(
     isLoading.value = true;
     hasError.value = false;
 
-    final pageUri = Uri.parse(
-      '$uri&page=${currentPage.value}&per_page=16',
-    );
-
     try {
-      final newItems = await fetchData(pageUri, fromJson);
+      final newItems = await fetchPage(currentPage.value);
       if (newItems.isNotEmpty) {
         currentPage.value++;
         items.value = [...items.value, ...newItems];

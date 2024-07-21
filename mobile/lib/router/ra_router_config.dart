@@ -10,6 +10,7 @@ import 'package:radioaktywne/pages/article_page.dart';
 import 'package:radioaktywne/pages/article_selection_page.dart';
 import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
 import 'package:radioaktywne/pages/ramowka_page.dart';
+import 'package:radioaktywne/pages/recordings_page.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
@@ -29,35 +30,36 @@ final raRouter = GoRouter(
         // TODO: This is just a mock. Replace with proper page.
         GoRoute(
           path: RaRoutes.recordings,
-          builder: (context, state) => Container(
-            color: context.colors.backgroundLight,
-            child: Center(
-              child: BlocBuilder<AudioHandlerCubit, AudioHandler?>(
-                builder: (context, audioHandler) {
-                  return TextButton(
-                    onPressed: () {
-                      audioHandler?.playMediaItem(
-                        MediaItem(
-                          id: 'https://radioaktywne.pl/wp-content/uploads/2024/06/ola-olczyk.mp3',
-                          title:
-                              'Stream title not provided', // TODO: zmienić na 'Radio Aktywne'
-                          album:
-                              'Stream name not provided', // TODO: zmienić na 'Radio Aktywne'
-                          artUri: Uri.parse(
-                            'https://cdn-profiles.tunein.com/s10187/images/logod.png',
-                          ),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Przełącz na `ola-olczyk.mp3`',
-                      style: context.textStyles.textSmallGreen,
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
+          builder: (context, state) => const RecordingsPage(),
+          // Container(
+          //   color: context.colors.backgroundLight,
+          //   child: Center(
+          //     child: BlocBuilder<AudioHandlerCubit, AudioHandler?>(
+          //       builder: (context, audioHandler) {
+          //         return TextButton(
+          //           onPressed: () {
+          //             audioHandler?.playMediaItem(
+          //               MediaItem(
+          //                 id: 'https://radioaktywne.pl/wp-content/uploads/2024/06/ola-olczyk.mp3',
+          //                 title:
+          //                     'Stream title not provided', // TODO: zmienić na 'Radio Aktywne'
+          //                 album:
+          //                     'Stream name not provided', // TODO: zmienić na 'Radio Aktywne'
+          //                 artUri: Uri.parse(
+          //                   'https://cdn-profiles.tunein.com/s10187/images/logod.png',
+          //                 ),
+          //               ),
+          //             );
+          //           },
+          //           child: Text(
+          //             'Przełącz na `ola-olczyk.mp3`',
+          //             style: context.textStyles.textSmallGreen,
+          //           ),
+          //         );
+          //       },
+          //     ),
+          //   ),
+          // ),
         ),
         GoRoute(
           path: RaRoutes.articles,
@@ -71,7 +73,7 @@ final raRouter = GoRouter(
         // TODO: Implement following pages:
         GoRoute(
           path: RaRoutes.radioPeople,
-          builder: (context, state) => DummyRoute(state: state),
+          builder: (context, state) => _DummyRoute(state: state),
         ),
         GoRoute(
           path: RaRoutes.ramowka,
@@ -79,16 +81,16 @@ final raRouter = GoRouter(
         ),
         GoRoute(
           path: RaRoutes.broadcasts,
-          builder: (context, state) => DummyRoute(state: state),
+          builder: (context, state) => _DummyRoute(state: state),
         ),
         GoRoute(
           path: RaRoutes.about,
-          builder: (context, state) => DummyRoute(state: state),
+          builder: (context, state) => _DummyRoute(state: state),
         ),
         // TODO: Implement following pages:
         GoRoute(
           path: RaRoutes.radioPeople,
-          builder: (context, state) => DummyRoute(state: state),
+          builder: (context, state) => _DummyRoute(state: state),
         ),
         GoRoute(
           path: RaRoutes.ramowka,
@@ -96,11 +98,11 @@ final raRouter = GoRouter(
         ),
         GoRoute(
           path: RaRoutes.broadcasts,
-          builder: (context, state) => DummyRoute(state: state),
+          builder: (context, state) => _DummyRoute(state: state),
         ),
         GoRoute(
           path: RaRoutes.about,
-          builder: (context, state) => DummyRoute(state: state),
+          builder: (context, state) => _DummyRoute(state: state),
         ),
       ],
       builder: (context, state, child) =>
@@ -109,9 +111,8 @@ final raRouter = GoRouter(
   ],
 );
 
-class DummyRoute extends StatelessWidget {
-  const DummyRoute({
-    super.key,
+class _DummyRoute extends StatelessWidget {
+  const _DummyRoute({
     required this.state,
   });
 

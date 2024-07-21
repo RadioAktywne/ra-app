@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:radioaktywne/components/utility/lazy_loaded_grid_view.dart';
 import 'package:radioaktywne/models/article_info.dart';
+import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
 class ArticleSelectionPage extends StatelessWidget {
@@ -19,8 +20,10 @@ class ArticleSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LazyLoadedGridView(
-      dataUri: _articlesUri,
-      fromJson: ArticleInfo.fromJson,
+      fetchPage: (page) async {
+        final pageUri = Uri.parse('$_articlesUri&page=$page&per_page=16');
+        return fetchData(pageUri, ArticleInfo.fromJson);
+      },
       transformItem: (article) => LazyLoadedGridViewItem(
         title: article.title,
         thumbnailPath: article.thumbnail,
