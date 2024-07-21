@@ -4,19 +4,22 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:radioaktywne/components/ra_list_widget.dart';
+import 'package:radioaktywne/components/ramowka/fetch_ramowka.dart';
+import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/ramowka_info.dart';
+import 'package:radioaktywne/pages/ra_error_page.dart';
 import 'package:radioaktywne/resources/day.dart';
-import 'package:radioaktywne/resources/fetch_data.dart';
+import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
 /// Widget representing a list of Ramowka entries.
 class RamowkaList extends StatelessWidget {
   const RamowkaList({
     super.key,
-    required this.timeout,
+    this.timeout = const Duration(seconds: 7),
     this.rows = 7,
-    this.rowHeight = 22.0,
+    this.rowHeight = RaPageConstraints.ramowkaListRowHeight,
   });
 
   /// Timeout for the fetching function.
@@ -30,11 +33,6 @@ class RamowkaList extends StatelessWidget {
 
   double get height => rows * rowHeight;
 
-  static final Uri _url = Uri.parse(
-    'https://radioaktywne.pl/wp-json/wp/v2/event?_embed=true&page=1&per_page=100',
-  );
-  static const _headers = {'Content-Type': 'application/json'};
-
   static String get _currentTime =>
       DateFormat(DateFormat.HOUR24_MINUTE).format(DateTime.now());
 
@@ -44,12 +42,7 @@ class RamowkaList extends StatelessWidget {
 
   Future<List<RamowkaInfo>> _fetchRamowka() async {
     try {
-      final data = await fetchData(
-        _url,
-        RamowkaInfo.fromJson,
-        timeout: timeout,
-        headers: _headers,
-      );
+      final data = await fetchRamowka(timeout: timeout);
 
       final ramowka = _parseRamowka(
         data,
@@ -97,7 +90,7 @@ class RamowkaList extends StatelessWidget {
       data
           .where((e) => e.day == day)
           .where(additionalChecks ?? (_) => true)
-          .sorted((a, b) => a.startTime.compareTo(b.startTime));
+          .sorted();
 
   @override
   Widget build(BuildContext context) {
@@ -105,15 +98,20 @@ class RamowkaList extends StatelessWidget {
       defaultData: const <RamowkaInfo>[],
       onFetch: _fetchRamowka,
       hasData: (ramowka) => ramowka.isNotEmpty,
-      loadingBuilder: (context, snapshot) =>
-          _RamowkaListWaiting(height: height),
-      errorBuilder: (context) => _RamowkaListNoData(height: height),
+      loadingBuilder: (context, snapshot) => SizedBox(
+        height: height,
+        child: const RaProgressIndicator(),
+      ),
+      errorBuilder: (context) => SizedBox(
+        height: height,
+        child: const RaErrorPage(),
+      ),
       builder: (context, ramowkaInfoList) => RaListWidget(
         rows: rows,
         rowHeight: rowHeight,
         items: ramowkaInfoList
             .map(
-              (ramowkaInfo) => _RamowkaListItem(
+              (ramowkaInfo) => RamowkaListItem(
                 info: ramowkaInfo,
                 rowHeight: rowHeight,
               ),
@@ -124,65 +122,10 @@ class RamowkaList extends StatelessWidget {
   }
 }
 
-/// Variant of the [RamowkaList] containing
-/// a waiting animation.
-///
-/// Displayed when the widget is waiting
-/// for the data.
-class _RamowkaListWaiting extends StatelessWidget {
-  const _RamowkaListWaiting({required this.height});
-
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return RaListWidget(
-      rows: 1,
-      rowHeight: height,
-      items: [
-        Center(
-          child: SizedBox(
-            width: 30,
-            height: 30,
-            child: CircularProgressIndicator(
-              color: context.colors.highlightGreen,
-              backgroundColor: context.colors.backgroundDark,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// Empty variant of [RamowkaList].
-///
-/// Displayed when the data can't be loaded.
-class _RamowkaListNoData extends StatelessWidget {
-  const _RamowkaListNoData({required this.height});
-
-  final double height;
-
-  @override
-  Widget build(BuildContext context) {
-    return RaListWidget(
-      rows: 1,
-      rowHeight: height,
-      items: [
-        Center(
-          child: Text(
-            context.l10n.dataLoadError,
-            style: context.textStyles.textSmall,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 /// A single [RamowkaList] entry widget.
-class _RamowkaListItem extends StatelessWidget {
-  const _RamowkaListItem({
+class RamowkaListItem extends StatelessWidget {
+  const RamowkaListItem({
+    super.key,
     required this.info,
     required this.rowHeight,
   });
@@ -213,7 +156,7 @@ class _RamowkaListItem extends StatelessWidget {
                 aspectRatio: aspectRatio(context),
                 child: Text(
                   info.title,
-                  style: context.textStyles.textSmall,
+                  style: context.textStyles.textSmallWhite,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
@@ -222,7 +165,7 @@ class _RamowkaListItem extends StatelessWidget {
           ),
           Text(
             info.startTime,
-            style: context.textStyles.textSmall,
+            style: context.textStyles.textSmallWhite,
           ),
         ],
       ),

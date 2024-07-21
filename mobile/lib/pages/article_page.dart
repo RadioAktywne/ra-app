@@ -25,48 +25,43 @@ class ArticlePage extends StatelessWidget {
         child: ListView(
           children: [
             _spaceFromTop,
-            AspectRatio(
-              aspectRatio: 1,
-              child: Image.network(
-                article.fullImage,
-                loadingBuilder: (context, child, loadingProgress) =>
-                    loadingProgress == null
-                        ? FittedBox(
-                            fit: BoxFit.fitWidth,
-                            clipBehavior: Clip.hardEdge,
-                            child: child,
-                          )
-                        : Container(
-                            color: context.colors.backgroundDarkSecondary,
-                            child: const RaProgressIndicator(),
-                          ),
-                errorBuilder: (context, error, stackTrace) => Center(
-                  child: Image.asset('assets/defaultMedia.png'),
-                ),
+            Image.network(
+              article.fullImage,
+              loadingBuilder: (context, child, loadingProgress) =>
+                  loadingProgress == null
+                      ? child
+                      : Container(
+                        color: context.colors.backgroundDarkSecondary,
+                        child: const RaProgressIndicator(),
+                      ),
+              errorBuilder: (context, error, stackTrace) => Center(
+                child: Image.asset('assets/defaultMedia.png'),
               ),
             ),
             _emptySpace,
             Container(
-              height: 31,
               color: context.colors.backgroundDark,
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: CustomPaddingHtmlWidget(
-                  style: context.textStyles.textMedium.copyWith(
-                    color: context.colors.backgroundLight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: CustomPaddingHtmlWidget(
+                    style: context.textStyles.textMedium.copyWith(
+                      color: context.colors.backgroundLight,
+                    ),
+                    htmlContent: article.title,
                   ),
-                  htmlContent: article.title,
                 ),
               ),
             ),
             _emptySpace,
             CustomPaddingHtmlWidget(
-              style: context.textStyles.textSmall.copyWith(
+              style: context.textStyles.textSmallGreen.copyWith(
                 color: context.colors.backgroundDark,
               ),
               htmlContent: article.content,
             ),
-            const SizedBox(height: 1.5 * RaPageConstraints.radioPlayerHeight),
+            const SizedBox(height: RaPageConstraints.radioPlayerPadding),
           ],
         ),
       ),

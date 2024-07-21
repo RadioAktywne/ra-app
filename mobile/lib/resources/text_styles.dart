@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:radioaktywne/extensions/build_context.dart';
+import 'package:flutter/material.dart';
+import 'package:radioaktywne/extensions/themes.dart';
 
 class RATextStyles {
   const RATextStyles(this.context);
@@ -27,14 +28,18 @@ class RATextStyles {
         color: context.colors.highlightGreen,
       );
 
-  TextStyle get textSmall => TextStyle(
+  TextStyle get textSmallGreen => TextStyle(
         fontSize: 12,
         fontFamily: 'Arial',
         fontWeight: FontWeight.bold,
         color: context.colors.highlightGreen,
       );
 
-  TextStyle get textNormal => textSmall.copyWith(fontWeight: FontWeight.normal);
+  TextStyle get textSmallWhite =>
+      textSmallGreen.copyWith(color: context.colors.backgroundLight);
+
+  TextStyle get textSmallGreenNormal =>
+      textSmallGreen.copyWith(fontWeight: FontWeight.normal);
 
   TextStyle get textBurgerMenuItem =>
       textMedium.copyWith(color: context.colors.backgroundLight);

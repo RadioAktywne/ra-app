@@ -4,5 +4,12 @@
     "dataLoadError": "Wystąpił błąd podczas pobierania danych",
     "imageLoadError": "Wystąpił błąd podczas pobierania obrazu",
     "noStreamTitle": "Radio Aktywne",
-    "ramowka": "Ramówka"
+    "ramowka": "Ramówka",
+    "monday": "Poniedziałek",
+    "tuesday": "Wtorek",
+    "wednesday": "Środa",
+    "thursday": "Czwartek",
+    "friday": "Piątek",
+    "saturday": "Sobota",
+    "sunday": "Niedziela"
 }

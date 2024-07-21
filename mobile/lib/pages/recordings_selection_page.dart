@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:go_router/go_router.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card_2.dart';
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
@@ -10,7 +9,6 @@ import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/recordings_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
-import 'package:radioaktywne/router/ra_routes.dart';
 
 class RecordingsSelectionPage extends StatelessWidget {
   const RecordingsSelectionPage({
@@ -26,20 +24,20 @@ class RecordingsSelectionPage extends StatelessWidget {
     'https://radioaktywne.pl/wp-json/wp/v2/recording?_embed=true&page=1&per_page=22',
   );
 
-Future<Iterable<RecordingsInfo>> _fetchRecordings() async {
-  try {
-    print('Fetching data from: $_infoUrl');
-    var data = await fetchData(_infoUrl, RecordingsInfo.fromJson);
-    print('Fetch successful. Data: $data');
-    return data;
-  } on TimeoutException catch (e) {
-    print('Fetch timed out: $e');
-    return [];
-  } catch (e) {
-    print('Fetch failed with exception: $e');
-    return [];
+  Future<Iterable<RecordingsInfo>> _fetchRecordings() async {
+    try {
+      print('Fetching data from: $_infoUrl');
+      var data = await fetchData(_infoUrl, RecordingsInfo.fromJson);
+      print('Fetch successful. Data: $data');
+      return data;
+    } on TimeoutException catch (e) {
+      print('Fetch timed out: $e');
+      return [];
+    } catch (e) {
+      print('Fetch failed with exception: $e');
+      return [];
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -74,28 +72,26 @@ Future<Iterable<RecordingsInfo>> _fetchRecordings() async {
               //     RaRoutes.articleId(article.id),
               //     extra: article,
               //   ),
-                child: ColorShadowedCard2(
-                  shadowColor: shadowColors[index % shadowColors.length],
-                  footer: DefaultTextStyle(
-                    style: context.textStyles.textSmall.copyWith(
-                      color: context.colors.highlightGreen,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: HtmlWidget(article.title),
-                    ),
+              child: ColorShadowedCard2(
+                shadowColor: shadowColors[index % shadowColors.length],
+                footer: DefaultTextStyle(
+                  style: context.textStyles.textSmallGreen,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: HtmlWidget(article.title),
                   ),
-                  child: Image.network(
-                    article.thumbnail,
-                    errorBuilder: (context, error, stackTrace) => AspectRatio(
-                      aspectRatio: 1,
-                      child: Center(
-                        child: Image.asset('assets/defaultMedia.png'),
-                      ),
+                ),
+                child: Image.network(
+                  article.thumbnail,
+                  errorBuilder: (context, error, stackTrace) => AspectRatio(
+                    aspectRatio: 1,
+                    child: Center(
+                      child: Image.asset('assets/defaultMedia.png'),
                     ),
                   ),
                 ),
-            //  ),
+              ),
+              //  ),
             );
           },
         );

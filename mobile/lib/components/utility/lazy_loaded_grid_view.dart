@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:html_unescape/html_unescape.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/utility/image_with_overlay.dart';
@@ -11,7 +10,6 @@ import 'package:radioaktywne/pages/ra_error_page.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/resources/resources.dart';
-import 'package:radioaktywne/resources/shadow_color.dart';
 
 class LazyLoadedGridView<T> extends HookWidget {
   const LazyLoadedGridView({
@@ -75,7 +73,7 @@ class LazyLoadedGridView<T> extends HookWidget {
         return GestureDetector(
           onTap: () => onItemTap(item, index),
           child: ColorShadowedCard(
-            shadowColor: shadowColor(context, index),
+            shadowColor: context.shadowColor(index),
             child: ImageWithOverlay(
               thumbnailPath: thumbnailPath(item),
               titleOverlay: Text(

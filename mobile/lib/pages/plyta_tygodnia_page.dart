@@ -5,6 +5,7 @@ import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/plyta_tygodnia_info.dart';
+import 'package:radioaktywne/pages/ra_error_page.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
@@ -71,8 +72,8 @@ class PlytaTygodniaPage extends StatelessWidget {
       onFetch: _fetchPlytaTygodnia,
       defaultData: PlytaTygodniaInfo.empty(),
       hasData: (plytaTygodnia) => plytaTygodnia.isNotEmpty,
-      loadingBuilder: (context, snapshot) => const _PlytaTygodniaWaiting(),
-      errorBuilder: (context) => const _PlytaTygodniaNoData(),
+      loadingBuilder: (context, snapshot) => const RaProgressIndicator(),
+      errorBuilder: (context) => const RaErrorPage(),
       builder: (context, plytaTygodnia) => Padding(
         padding: RaPageConstraints.outerTextPagePadding,
         child: ListView(
@@ -130,60 +131,15 @@ class PlytaTygodniaPage extends StatelessWidget {
               padding: _textPadding,
               child: SelectableText(
                 plytaTygodnia.description + plytaTygodnia.description,
-                style: context.textStyles.textSmall.copyWith(
+                style: context.textStyles.textSmallGreen.copyWith(
                   color: context.colors.backgroundDark,
                 ),
               ),
             ),
-            const SizedBox(height: 1.5 * RaPageConstraints.radioPlayerHeight),
+            const SizedBox(height: RaPageConstraints.radioPlayerPadding),
           ],
         ),
       ),
     );
-  }
-}
-
-/// Empty variant of the [PlytaTygodniaPage], to be
-/// displayed when data cannot be fetched.
-class _PlytaTygodniaNoData extends StatelessWidget {
-  const _PlytaTygodniaNoData();
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) => SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: constraints.maxHeight,
-            maxHeight: constraints.maxHeight,
-          ),
-          child: Center(
-            child: Padding(
-              padding: RaPageConstraints.outerTextPagePadding,
-              child: Text(
-                context.l10n.dataLoadError,
-                style: context.textStyles.textMedium.copyWith(
-                  color: context.colors.highlightGreen,
-                ),
-                textAlign: TextAlign.center,
-                softWrap: true,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Loading variant of [PlytaTygodniaPage], displaying
-/// loading animation.
-class _PlytaTygodniaWaiting extends StatelessWidget {
-  const _PlytaTygodniaWaiting();
-
-  @override
-  Widget build(BuildContext context) {
-    return const RaProgressIndicator();
   }
 }

@@ -6,15 +6,17 @@ import 'package:radioaktywne/components/radio_player/stream_title_workaround.dar
 /// An [AudioHandler] for playing a single item.
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   /// Initialise the audio handler.
-  AudioPlayerHandler()
-      : _player = AudioPlayer(),
+  AudioPlayerHandler({
+    required this.mediaSource,
+  })  : _player = AudioPlayer(),
+        _playerPosition = Duration.zero,
         streamTitleWorkaround = StreamTitleWorkaround() {
     // So that our clients (the Flutter UI and the system notification) know
     // what state to display, here we set up our audio handler to broadcast all
     // playback state changes as they happen via playbackState...
     _player.playbackEventStream.map(_transformEvent).pipe(playbackState);
     // ... and also the current media item via mediaItem.
-    mediaItem.add(mediaItemTemplate);
+    mediaItem.add(mediaSource);
 
     // Change stream title and subtitle based on IcyMetadata
     _player.icyMetadataStream.listen((event) {
@@ -25,7 +27,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
         print('stream title: $streamTitle');
       }
 
-      var mediaItemValue = mediaItem.value ?? mediaItemTemplate;
+      var mediaItemValue = mediaItem.value ?? mediaSource;
       if (streamName.isNotEmpty) {
         mediaItemValue = mediaItemValue.copyWith(
           album: streamName,
@@ -46,19 +48,13 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
         return;
       }
 
-      final mediaItemValue = mediaItem.value ?? mediaItemTemplate;
+      final mediaItemValue = mediaItem.value ?? mediaSource;
       mediaItem.add(mediaItemValue.copyWith(title: streamTitle));
     });
   }
 
-  static final mediaItemTemplate = MediaItem(
-    id: 'https://listen.radioaktywne.pl:8443/raogg',
-    title: 'Stream title not provided', // TODO: zmienić na 'Radio Aktywne'
-    album: 'Stream name not provided', // TODO: zmienić na 'Radio Aktywne'
-    artUri: Uri.parse(
-      'https://cdn-profiles.tunein.com/s10187/images/logod.png',
-    ),
-  );
+  MediaItem mediaSource;
+  Duration _playerPosition;
 
   final AudioPlayer _player;
 
@@ -79,14 +75,23 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     // when user would press 'play' for the first time, he would hear the
     // stream starting from the moment he launched the app, not when he pressed
     // 'play'.
-    await _player
-        .setAudioSource(AudioSource.uri(Uri.parse(mediaItemTemplate.id)));
+
+    if (kDebugMode) {
+      print('');
+    }
+
+    await _player.setAudioSource(AudioSource.uri(Uri.parse(mediaSource.id)));
+    await _player.seek(_playerPosition);
     return _player.play();
   }
 
   @override
   Future<void> pause() {
     streamTitleWorkaround.playerStopped();
+    _playerPosition = _player.position;
+    if (kDebugMode) {
+      print('Player paused, recorded position: $_playerPosition');
+    }
     return _player.pause();
   }
 
@@ -96,7 +101,20 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   @override
   Future<void> stop() {
     streamTitleWorkaround.playerStopped();
+    _playerPosition = _player.position;
     return _player.stop();
+  }
+
+  @override
+  Future<void> playMediaItem(MediaItem mediaItem) async {
+    this.mediaItem.add(mediaItem);
+
+    if (mediaItem.id != mediaSource.id) {
+      _playerPosition = Duration.zero;
+    }
+
+    await _player.setUrl(mediaItem.id);
+    await _player.seek(_playerPosition);
   }
 
   /// Transform a just_audio event into an audio_service state.

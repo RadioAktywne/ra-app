@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
+import 'package:radioaktywne/components/newest_article/newest_article_widget.dart';
+import 'package:radioaktywne/components/newest_recording/newest_recording_widget.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_widget.dart';
-import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
+import 'package:radioaktywne/components/teraz_gramy/teraz_gramy_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
+import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/router/ra_router_config.dart';
 
 void main() {
@@ -46,9 +49,10 @@ class MainPage extends StatelessWidget {
     super.key,
   });
 
-  static const _widgetPadding = EdgeInsets.symmetric(
-    vertical: 8,
-    horizontal: 16,
+  static const _widgetPadding = EdgeInsets.only(
+    top: RaPageConstraints.pagePaddingValue,
+    left: RaPageConstraints.pagePaddingValue,
+    right: RaPageConstraints.pagePaddingValue,
   );
 
   @override
@@ -57,139 +61,60 @@ class MainPage extends StatelessWidget {
       color: context.colors.backgroundLight,
       width: double.infinity,
       height: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: const SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(
+            bottom: RaPageConstraints.radioPlayerPadding,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              /// Ramówka widget
-              const Padding(
-                padding: _widgetPadding,
-                child: RamowkaWidget(),
-              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  /// Ramówka widget
+                  Padding(
+                    padding: _widgetPadding,
+                    child: RamowkaWidget(),
+                  ),
 
-              /// Old Ramowka
-              Padding(
-                padding: _widgetPadding,
-                child: ColorShadowedCard(
-                  shadowColor: context.colors.highlightYellow,
-                  header: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Text(
-                      'Ramówka na dziś',
-                      style: context.textStyles.textMedium,
+                  /// Teraz Gramy widget
+                  Padding(
+                    padding: _widgetPadding,
+                    child: AspectRatio(
+                      aspectRatio: 1.7,
+                      child: TerazGramyWidget(),
                     ),
                   ),
-                  footer: Padding(
-                    padding: const EdgeInsets.only(top: 4),
+
+                  /// Najnowsze Nagrania widget & Najnowsze Artykuły Widget
+                  Padding(
+                    padding: _widgetPadding,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 2,
-                          ),
-                          child: Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              color: Colors.grey,
-                              shape: BoxShape.circle,
-                            ),
+                        Expanded(
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: NewestRecordingWidget(),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 2,
-                          ),
-                          child: Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
+                        SizedBox(
+                          width: RaPageConstraints.pagePaddingValue,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 2,
-                          ),
-                          child: Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              color: Colors.grey,
-                              shape: BoxShape.circle,
-                            ),
+                        Expanded(
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: NewestArticleWidget(),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  child: Container(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(
-                      'Lorem ipsum',
-                      style: context.textStyles.textSmall,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: _widgetPadding,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ColorShadowedCard(
-                        shadowColor: context.colors.highlightPurple,
-                        header: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 2,
-                          ),
-                          child: Text(
-                            'Nagłówek',
-                            style: context.textStyles.textMedium,
-                          ),
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          child: Text(
-                            'Lorem ipsum',
-                            style: context.textStyles.textSmall,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: ColorShadowedCard(
-                        shadowColor: context.colors.highlightBlue,
-                        footer: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 2,
-                          ),
-                          child: Text(
-                            'Stopka',
-                            style: context.textStyles.textSmall,
-                          ),
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          child: Text(
-                            'Lorem ipsum',
-                            style: context.textStyles.textSmall,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
