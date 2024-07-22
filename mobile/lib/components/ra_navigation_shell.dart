@@ -7,6 +7,7 @@ import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
 import 'package:radioaktywne/components/ra_bottom_navigation_bar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
+import 'package:radioaktywne/components/radio_player/audio_player_handler.dart';
 import 'package:radioaktywne/components/radio_player/radio_player_widget.dart';
 import 'package:radioaktywne/extensions/themes.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
@@ -49,6 +50,9 @@ class RaNavigationShell extends HookWidget {
     artUri: Uri.parse(
       'https://cdn-profiles.tunein.com/s10187/images/logod.png',
     ),
+    extras: {
+      AudioPlayerConstants.mediaKind: MediaKind.radio,
+    },
   );
 
   @override

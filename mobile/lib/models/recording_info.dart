@@ -1,17 +1,33 @@
+import 'package:audio_service/audio_service.dart';
+import 'package:radioaktywne/components/radio_player/audio_player_handler.dart';
+
 class RecordingInfo {
   RecordingInfo.fromJson(Map<String, dynamic> jsonData)
-      : title =
-            (jsonData['title'] as Map<String, dynamic>)['rendered'] as String,
+      : title = (jsonData['acf'] as Map<String, dynamic>)['title'] as String,
         thumbnailPath =
             ((jsonData['acf'] as Map<String, dynamic>)['image'] as int)
                 .toString(),
         recordingPath =
             ((jsonData['acf'] as Map<String, dynamic>)['file'] as int)
-                .toString();
+                .toString(),
+        duration = Duration.zero,
+        seek = Duration.zero;
 
   final String title;
   String thumbnailPath;
   String recordingPath;
+  Duration duration;
+  Duration seek;
+
+  MediaItem get mediaItem => MediaItem(
+        id: recordingPath,
+        title: title,
+        duration: duration,
+        extras: {
+          AudioPlayerConstants.mediaKind: MediaKind.recording,
+          AudioPlayerConstants.seek: seek,
+        },
+      );
 
   @override
   String toString() {
@@ -20,6 +36,8 @@ RecordingInfo {
   title=$title,
   thumbnailPath=$thumbnailPath,
   recordingPath=$recordingPath,
+  duration=$duration,
+  seek=$seek,
 }''';
   }
 }

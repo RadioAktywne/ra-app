@@ -9,7 +9,6 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   AudioPlayerHandler({
     required this.mediaSource,
   })  : _player = AudioPlayer(),
-        _playerPosition = Duration.zero,
         streamTitleWorkaround = StreamTitleWorkaround() {
     // So that our clients (the Flutter UI and the system notification) know
     // what state to display, here we set up our audio handler to broadcast all
@@ -54,7 +53,6 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   }
 
   MediaItem mediaSource;
-  Duration _playerPosition;
 
   final AudioPlayer _player;
 
@@ -68,6 +66,14 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   // Flutter UI, notification, lock screen or headset will be routed through to
   // these 4 methods so that we can handle audio playback logic in one place.
 
+  void _updateRecordingPosition() {
+    if (mediaSource.extras?[AudioPlayerConstants.mediaKind] ==
+        MediaKind.recording) {
+      mediaSource.extras
+          ?.update(AudioPlayerConstants.seek, (_) => _player.position);
+    }
+  }
+
   @override
   Future<void> play() async {
     streamTitleWorkaround.playerStarted();
@@ -75,46 +81,35 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     // when user would press 'play' for the first time, he would hear the
     // stream starting from the moment he launched the app, not when he pressed
     // 'play'.
-
-    if (kDebugMode) {
-      print('');
-    }
-
     await _player.setAudioSource(AudioSource.uri(Uri.parse(mediaSource.id)));
-    await _player.seek(_playerPosition);
+    await _player
+        .seek(mediaSource.extras?[AudioPlayerConstants.seek] as Duration);
     return _player.play();
   }
 
   @override
   Future<void> pause() {
     streamTitleWorkaround.playerStopped();
-    _playerPosition = _player.position;
-    if (kDebugMode) {
-      print('Player paused, recorded position: $_playerPosition');
-    }
+    _updateRecordingPosition();
     return _player.pause();
+  }
+
+  @override
+  Future<void> stop() {
+    streamTitleWorkaround.playerStopped();
+    _updateRecordingPosition();
+    return _player.stop();
   }
 
   @override
   Future<void> seek(Duration position) => _player.seek(position);
 
   @override
-  Future<void> stop() {
-    streamTitleWorkaround.playerStopped();
-    _playerPosition = _player.position;
-    return _player.stop();
-  }
-
-  @override
   Future<void> playMediaItem(MediaItem mediaItem) async {
     this.mediaItem.add(mediaItem);
-
-    if (mediaItem.id != mediaSource.id) {
-      _playerPosition = Duration.zero;
-    }
-
     await _player.setUrl(mediaItem.id);
-    await _player.seek(_playerPosition);
+    await _player
+        .seek(mediaItem.extras?[AudioPlayerConstants.seek] as Duration);
   }
 
   /// Transform a just_audio event into an audio_service state.
@@ -152,4 +147,14 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
       queueIndex: event.currentIndex,
     );
   }
+}
+
+abstract class AudioPlayerConstants {
+  static const String mediaKind = 'mediaItemExtras';
+  static const String seek = 'seek';
+}
+
+enum MediaKind {
+  radio,
+  recording;
 }

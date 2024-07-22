@@ -3,10 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_playbutton.dart';
+import 'package:radioaktywne/components/radio_player/audio_player_handler.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 import 'package:text_scroll/text_scroll.dart';
+
+class RadioPlayerWidget extends StatelessWidget {
+  const RadioPlayerWidget({super.key});
+
+  /// Measurements from Figma
+  static const double buttonSize = 37;
+  static const EdgeInsets horizontalPadding =
+      EdgeInsets.symmetric(horizontal: 14);
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AudioHandlerCubit, AudioHandler?>(
+      builder: (context, audioHandler) {
+        return _PlayerWidget(audioHandler: audioHandler);
+      },
+    );
+  }
+}
 
 /// The radio player with scrolling stream title
 /// and a [RaPlayButton].
@@ -14,96 +32,163 @@ import 'package:text_scroll/text_scroll.dart';
 /// Should be positioned at the bottom of the screen,
 /// "attached" to the navigation bar
 /// (in accordance to Figma).
-class RadioPlayerWidget extends HookWidget {
-  const RadioPlayerWidget({super.key});
+class _PlayerWidget extends HookWidget {
+  const _PlayerWidget({required this.audioHandler});
 
-  /// Measurements from Figma
-  static const double buttonSize = 37;
-  static const EdgeInsets horizontalPadding =
-      EdgeInsets.symmetric(horizontal: 14);
+  final AudioHandler? audioHandler;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AudioHandlerCubit, AudioHandler?>(
-      builder: (context, audioHandler) {
-        return Container(
-          height: RaPageConstraints.radioPlayerHeight,
-          color: context.colors.backgroundDarkSecondary,
-          child: Row(
-            children: switch (audioHandler) {
-              null => [
-                  Padding(
-                    padding: horizontalPadding,
-                    child: RaPlayButton(
-                      onPressed: () {},
-                      size: buttonSize,
-                      audioProcessingState: AudioProcessingState.loading,
-                    ),
-                  ),
-                  Text(
-                    context.l10n.noStreamTitle,
-                    style: context.textStyles.textPlayer,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              _ => [
-                  _StreamPlayButton(
-                    audioHandler: audioHandler,
-                  ),
-                  _StreamTitle(
-                    audioHandler: audioHandler,
-                  ),
+    final widgets =
+        useState(<Widget>[_RadioPlayer(audioHandler: audioHandler)]);
+    return StreamBuilder<MediaItem?>(
+      stream: audioHandler?.mediaItem,
+      builder: (context, snapshot) {
+        final mediaKind =
+            snapshot.data?.extras?[AudioPlayerConstants.mediaKind] as MediaKind;
+        widgets.value = switch (mediaKind) {
+          MediaKind.recording => [
+              _BackButton(audioHandler: audioHandler),
+              _RadioPlayer(audioHandler: audioHandler),
+              _SeekBar(audioHandler: audioHandler),
+            ],
+          MediaKind.radio => [_RadioPlayer(audioHandler: audioHandler)],
+        };
 
-                  /// A seek bar. It could be helpful when playing recordings.
-                  // StreamBuilder<MediaState>(
-                  //   stream: _mediaStateStream,
-                  //   builder: (context, snapshot) {
-                  //     final mediaState = snapshot.data;
-                  //     return SeekBar(
-                  //       duration:
-                  //           mediaState?.mediaItem?.duration ?? Duration.zero,
-                  //       position: mediaState?.position ?? Duration.zero,
-                  //       onChangeEnd: (newPosition) {
-                  //         audioHandler.seek(newPosition);
-                  //       },
-                  //       bufferedPosition: Duration.zero,
-                  //     );
-                  //   },
-                  // ),
-                ],
-            },
+        return SizedBox(
+          height: switch (mediaKind) {
+            MediaKind.radio => RaPageConstraints.radioPlayerHeight,
+            MediaKind.recording => 2.5 * RaPageConstraints.radioPlayerHeight,
+          },
+          child: AnimatedList(
+            // initialItemCount: widgets.value.length,
+            itemBuilder: (context, index, controller) => widgets.value[index],
           ),
         );
       },
     );
   }
-
-  /// Logic for the seek bar. It could be helpful when playing recordings.
-  /// A stream reporting the combined state of the current media item and its
-  /// current position.
-// Stream<MediaState> get _mediaStateStream =>
-//     Rx.combineLatest2<MediaItem?, Duration, MediaState>(
-//       audioHandler.mediaItem,
-//       AudioService.position,
-//       MediaState.new,
-//     );
-
-  /// Very basic button used in development, provided in library example of use.
-  /// Leaving it for potential use in future development.
-  // IconButton _button(IconData iconData, VoidCallback onPressed) => IconButton(
-  //       icon: Icon(iconData),
-  //       iconSize: 64,
-  //       onPressed: onPressed,
-  //     );
 }
 
-/// Logic for the seek bar - continued
-// class MediaState {
-//   MediaState(this.mediaItem, this.position);
+class _RadioPlayer extends StatelessWidget {
+  const _RadioPlayer({required this.audioHandler});
 
-//   final MediaItem? mediaItem;
-//   final Duration position;
-// }
+  final AudioHandler? audioHandler;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: RaPageConstraints.radioPlayerHeight,
+      color: context.colors.backgroundDarkSecondary,
+      child: Row(
+        children: switch (audioHandler) {
+          null => [
+              Padding(
+                padding: RadioPlayerWidget.horizontalPadding,
+                child: RaPlayButton(
+                  onPressed:
+                      () {}, // maybe display a message like: "Radio player couldn't be loaded"?
+                  size: RadioPlayerWidget.buttonSize,
+                  audioProcessingState: AudioProcessingState.loading,
+                ),
+              ),
+              Text(
+                context.l10n.noStreamTitle,
+                style: context.textStyles.textPlayer,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          _ => [
+              _StreamPlayButton(
+                audioHandler: audioHandler!,
+              ),
+              _StreamTitle(
+                audioHandler: audioHandler!,
+              ),
+
+              /// A seek bar. It could be helpful when playing recordings.
+              // StreamBuilder<MediaState>(
+              //   stream: _mediaStateStream,
+              //   builder: (context, snapshot) {
+              //     final mediaState = snapshot.data;
+              //     return SeekBar(
+              //       duration:
+              //           mediaState?.mediaItem?.duration ?? Duration.zero,
+              //       position: mediaState?.position ?? Duration.zero,
+              //       onChangeEnd: (newPosition) {
+              //         audioHandler.seek(newPosition);
+              //       },
+              //       bufferedPosition: Duration.zero,
+              //     );
+              //   },
+              // ),
+            ],
+        },
+      ),
+    );
+  }
+}
+
+class _BackButton extends StatelessWidget {
+  const _BackButton({required this.audioHandler});
+
+  final AudioHandler? audioHandler;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: context.colors.backgroundDark,
+      height: RaPageConstraints.radioPlayerHeight / 2,
+    ); // TODO: implement
+  }
+}
+
+class _SeekBar extends StatelessWidget {
+  const _SeekBar({required this.audioHandler});
+
+  final AudioHandler? audioHandler;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<MediaItem?>(
+      stream: audioHandler?.mediaItem,
+      builder: (context, snapshot) {
+        final mediaItem = snapshot.data;
+        return Container(
+          height: RaPageConstraints.radioPlayerHeight,
+          padding: RadioPlayerWidget.horizontalPadding,
+          color: context.colors.backgroundDark,
+          child: Center(
+            child: Slider(
+              activeColor: context.colors.highlightGreen,
+              // secondaryActiveColor: context.colors.highlightRed,
+              inactiveColor: context.colors.backgroundLight,
+              thumbColor: context.colors.highlightRed,
+              max: (mediaItem?.duration ?? Duration.zero).inSeconds as double,
+              value: (mediaItem?.extras?[AudioPlayerConstants.seek] as Duration)
+                  .inSeconds as double,
+              onChanged: (position) {
+                audioHandler?.seek(Duration(seconds: position as int));
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class MediaState {
+  const MediaState({required this.mediaItem, required this.position});
+
+  final MediaItem? mediaItem;
+  final Duration position;
+}
+
+enum RaPlayerKind {
+  radioPlayer,
+  recordingPlayer;
+}
 
 /// The [RaPlayButton] controlling the radio stream.
 class _StreamPlayButton extends StatelessWidget {

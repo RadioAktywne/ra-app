@@ -27,39 +27,14 @@ final raRouter = GoRouter(
           path: RaRoutes.albumOfTheWeek,
           builder: (context, state) => const PlytaTygodniaPage(),
         ),
-        // TODO: This is just a mock. Replace with proper page.
         GoRoute(
           path: RaRoutes.recordings,
-          builder: (context, state) => const RecordingsPage(),
-          // Container(
-          //   color: context.colors.backgroundLight,
-          //   child: Center(
-          //     child: BlocBuilder<AudioHandlerCubit, AudioHandler?>(
-          //       builder: (context, audioHandler) {
-          //         return TextButton(
-          //           onPressed: () {
-          //             audioHandler?.playMediaItem(
-          //               MediaItem(
-          //                 id: 'https://radioaktywne.pl/wp-content/uploads/2024/06/ola-olczyk.mp3',
-          //                 title:
-          //                     'Stream title not provided', // TODO: zmienić na 'Radio Aktywne'
-          //                 album:
-          //                     'Stream name not provided', // TODO: zmienić na 'Radio Aktywne'
-          //                 artUri: Uri.parse(
-          //                   'https://cdn-profiles.tunein.com/s10187/images/logod.png',
-          //                 ),
-          //               ),
-          //             );
-          //           },
-          //           child: Text(
-          //             'Przełącz na `ola-olczyk.mp3`',
-          //             style: context.textStyles.textSmallGreen,
-          //           ),
-          //         );
-          //       },
-          //     ),
-          //   ),
-          // ),
+          builder: (context, state) =>
+              BlocBuilder<AudioHandlerCubit, AudioHandler?>(
+            builder: (context, audioHandler) => RecordingsPage(
+              audioHandler: audioHandler,
+            ),
+          ),
         ),
         GoRoute(
           path: RaRoutes.articles,
