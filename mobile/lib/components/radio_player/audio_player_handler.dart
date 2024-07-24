@@ -74,16 +74,25 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     }
   }
 
+  Future<void> _startAction() async {
+    switch (mediaSource.extras?[AudioPlayerConstants.mediaKind] as MediaKind?) {
+      case null || MediaKind.radio:
+        streamTitleWorkaround.playerStarted();
+      case MediaKind.recording:
+        await _player
+            .seek(mediaSource.extras?[AudioPlayerConstants.seek] as Duration?);
+        streamTitleWorkaround.playerStopped();
+    }
+  }
+
   @override
   Future<void> play() async {
-    streamTitleWorkaround.playerStarted();
     // Forces player to start playing live when 'play' is pressed. Otherwise,
     // when user would press 'play' for the first time, he would hear the
     // stream starting from the moment he launched the app, not when he pressed
     // 'play'.
     await _player.setAudioSource(AudioSource.uri(Uri.parse(mediaSource.id)));
-    await _player
-        .seek(mediaSource.extras?[AudioPlayerConstants.seek] as Duration);
+    await _startAction();
     return _player.play();
   }
 
@@ -102,14 +111,27 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   }
 
   @override
-  Future<void> seek(Duration position) => _player.seek(position);
+  Future<void> seek(Duration position) {
+    return _player.seek(position);
+  }
 
   @override
   Future<void> playMediaItem(MediaItem mediaItem) async {
     this.mediaItem.add(mediaItem);
+    mediaSource = mediaItem;
     await _player.setUrl(mediaItem.id);
-    await _player
-        .seek(mediaItem.extras?[AudioPlayerConstants.seek] as Duration);
+    await _startAction();
+    await _player.setAudioSource(AudioSource.uri(Uri.parse(mediaSource.id)));
+  }
+
+  @override
+  Future<void> updateMediaItem(MediaItem mediaItem) async {
+    mediaSource = mediaItem;
+  }
+
+  @override
+  Future<dynamic> customAction(String name, [Map<String, dynamic>? extras]) {
+    return Future.value(_player.position);
   }
 
   /// Transform a just_audio event into an audio_service state.
@@ -152,6 +174,18 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 abstract class AudioPlayerConstants {
   static const String mediaKind = 'mediaItemExtras';
   static const String seek = 'seek';
+
+  static final radioMediaItem = MediaItem(
+    id: 'https://listen.radioaktywne.pl:8443/raogg',
+    title: 'Stream title not provided', // TODO: zmienić na 'Radio Aktywne'
+    album: 'Stream name not provided', // TODO: zmienić na 'Radio Aktywne'
+    artUri: Uri.parse(
+      'https://cdn-profiles.tunein.com/s10187/images/logod.png',
+    ),
+    extras: {
+      AudioPlayerConstants.mediaKind: MediaKind.radio,
+    },
+  );
 }
 
 enum MediaKind {

@@ -1,4 +1,3 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,18 +42,6 @@ class RaNavigationShell extends HookWidget {
 
   final _scaffoldKey = GlobalKey<ScaffoldState>(debugLabel: 'Inner scaffold');
 
-  static final _radioMediaSource = MediaItem(
-    id: 'https://listen.radioaktywne.pl:8443/raogg',
-    title: 'Stream title not provided', // TODO: zmienić na 'Radio Aktywne'
-    album: 'Stream name not provided', // TODO: zmienić na 'Radio Aktywne'
-    artUri: Uri.parse(
-      'https://cdn-profiles.tunein.com/s10187/images/logod.png',
-    ),
-    extras: {
-      AudioPlayerConstants.mediaKind: MediaKind.radio,
-    },
-  );
-
   @override
   Widget build(BuildContext context) {
     final burgerMenuIconController = useAnimationController(
@@ -64,7 +51,7 @@ class RaNavigationShell extends HookWidget {
 
     return BlocProvider(
       create: (context) => AudioHandlerCubit(
-        initialMedia: _radioMediaSource,
+        initialMedia: AudioPlayerConstants.radioMediaItem,
       ),
       child: AnnotatedRegion(
         value: SystemUiOverlayStyle(
