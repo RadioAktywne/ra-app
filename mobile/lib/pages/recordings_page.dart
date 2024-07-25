@@ -56,8 +56,10 @@ class RecordingsPage extends HookWidget {
         title: recording.title,
         thumbnailPath: recording.thumbnailPath,
       ),
-      onItemTap: (recording, index) =>
-          audioHandler?.playMediaItem(recording.mediaItem),
+      onItemTap: (recording, index) async {
+        await audioHandler?.updateMediaItem(recording.mediaItem);
+        await audioHandler?.play();
+      },
     );
   }
 }

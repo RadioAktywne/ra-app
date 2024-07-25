@@ -19,4 +19,6 @@ abstract class RaPageConstraints {
   );
   static const double radioPlayerHeight = 50;
   static const double radioPlayerPadding = 1.5 * radioPlayerHeight;
+  static const double recordingPlayerHeight = radioPlayerHeight * 2.5;
+  static const double recordingPlayerPadding = 1.25 * recordingPlayerHeight;
 }

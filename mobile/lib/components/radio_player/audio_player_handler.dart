@@ -40,6 +40,35 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
       mediaItem.add(mediaItemValue);
     });
 
+    _player.positionStream.listen((position) {
+      final oldState = progressNotifier.value;
+      progressNotifier.value = ProgressBarState(
+        current: position == Duration.zero && oldState.current > position
+            ? oldState.current
+            : position,
+        buffered: oldState.buffered,
+        total: oldState.total,
+      );
+    });
+
+    _player.bufferedPositionStream.listen((bufferedPosition) {
+      final oldState = progressNotifier.value;
+      progressNotifier.value = ProgressBarState(
+        current: oldState.current,
+        buffered: bufferedPosition,
+        total: oldState.total,
+      );
+    });
+
+    _player.durationStream.listen((totalDuration) {
+      final oldState = progressNotifier.value;
+      progressNotifier.value = ProgressBarState(
+        current: oldState.current,
+        buffered: oldState.buffered,
+        total: totalDuration ?? oldState.total,
+      );
+    });
+
     /// Listening for stream title changes
     streamTitleWorkaround.stream.listen((streamTitle) {
       final previousTitle = mediaItem.value?.title;
@@ -58,6 +87,14 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   /// Workaround for stream title fetching
   final StreamTitleWorkaround streamTitleWorkaround;
+
+  final progressNotifier = ValueNotifier<ProgressBarState>(
+    ProgressBarState(
+      current: Duration.zero,
+      buffered: Duration.zero,
+      total: Duration.zero,
+    ),
+  );
 
   /// export icyMetadata (may become handy at some point)
   // Stream<IcyMetadata?> get icyMetadata => _player.icyMetadataStream;
@@ -79,8 +116,14 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
       case null || MediaKind.radio:
         streamTitleWorkaround.playerStarted();
       case MediaKind.recording:
-        await _player
-            .seek(mediaSource.extras?[AudioPlayerConstants.seek] as Duration?);
+        final currentPosition =
+            mediaSource.extras?[AudioPlayerConstants.seek] as Duration? ??
+                Duration.zero;
+        await _player.seek(
+          currentPosition >= (mediaSource.duration ?? Duration.zero)
+              ? Duration.zero
+              : currentPosition,
+        );
         streamTitleWorkaround.playerStopped();
     }
   }
@@ -126,12 +169,8 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   @override
   Future<void> updateMediaItem(MediaItem mediaItem) async {
+    this.mediaItem.add(mediaItem);
     mediaSource = mediaItem;
-  }
-
-  @override
-  Future<dynamic> customAction(String name, [Map<String, dynamic>? extras]) {
-    return Future.value(_player.position);
   }
 
   /// Transform a just_audio event into an audio_service state.
@@ -191,4 +230,15 @@ abstract class AudioPlayerConstants {
 enum MediaKind {
   radio,
   recording;
+}
+
+class ProgressBarState {
+  ProgressBarState({
+    required this.current,
+    required this.buffered,
+    required this.total,
+  });
+  final Duration current;
+  final Duration buffered;
+  final Duration total;
 }

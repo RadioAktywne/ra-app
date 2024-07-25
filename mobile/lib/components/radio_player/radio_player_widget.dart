@@ -1,7 +1,7 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_playbutton.dart';
 import 'package:radioaktywne/components/radio_player/audio_player_handler.dart';
@@ -31,10 +31,10 @@ class RadioPlayerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AudioHandlerCubit, AudioHandler?>(
+    return BlocBuilder<AudioHandlerCubit, AudioPlayerHandler>(
       builder: (context, audioHandler) {
         return StreamBuilder<MediaItem?>(
-          stream: audioHandler?.mediaItem,
+          stream: audioHandler.mediaItem,
           builder: (context, snapshot) {
             final mediaKind = snapshot
                 .data?.extras?[AudioPlayerConstants.mediaKind] as MediaKind?;
@@ -43,8 +43,7 @@ class RadioPlayerWidget extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               height: switch (mediaKind) {
                 null || MediaKind.radio => RaPageConstraints.radioPlayerHeight,
-                MediaKind.recording =>
-                  2.5 * RaPageConstraints.radioPlayerHeight,
+                MediaKind.recording => RaPageConstraints.recordingPlayerHeight,
               },
               child: Stack(
                 children: [
@@ -61,6 +60,7 @@ class RadioPlayerWidget extends StatelessWidget {
                       MediaKind.recording =>
                         RaPageConstraints.radioPlayerHeight * 2,
                     },
+                    left: 12,
                     child: _BackButton(
                       audioHandler: audioHandler,
                     ),
@@ -87,7 +87,7 @@ class RadioPlayerWidget extends StatelessWidget {
 class _RadioPlayer extends StatelessWidget {
   const _RadioPlayer({required this.audioHandler});
 
-  final AudioHandler? audioHandler;
+  final AudioPlayerHandler audioHandler;
 
   @override
   Widget build(BuildContext context) {
@@ -96,49 +96,14 @@ class _RadioPlayer extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       color: context.colors.backgroundDarkSecondary,
       child: Row(
-        children: switch (audioHandler) {
-          null => [
-              Padding(
-                padding: RadioPlayerWidget.horizontalPadding,
-                child: RaPlayButton(
-                  onPressed:
-                      () {}, // maybe display a message like: "Radio player couldn't be loaded"?
-                  size: RadioPlayerWidget.buttonSize,
-                  audioProcessingState: AudioProcessingState.loading,
-                ),
-              ),
-              Text(
-                context.l10n.noStreamTitle,
-                style: context.textStyles.textPlayer,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          _ => [
-              _StreamPlayButton(
-                audioHandler: audioHandler!,
-              ),
-              _StreamTitle(
-                audioHandler: audioHandler!,
-              ),
-
-              /// A seek bar. It could be helpful when playing recordings.
-              // StreamBuilder<MediaState>(
-              //   stream: _mediaStateStream,
-              //   builder: (context, snapshot) {
-              //     final mediaState = snapshot.data;
-              //     return SeekBar(
-              //       duration:
-              //           mediaState?.mediaItem?.duration ?? Duration.zero,
-              //       position: mediaState?.position ?? Duration.zero,
-              //       onChangeEnd: (newPosition) {
-              //         audioHandler.seek(newPosition);
-              //       },
-              //       bufferedPosition: Duration.zero,
-              //     );
-              //   },
-              // ),
-            ],
-        },
+        children: [
+          _PlayButton(
+            audioHandler: audioHandler,
+          ),
+          _StreamTitle(
+            audioHandler: audioHandler,
+          ),
+        ],
       ),
     );
   }
@@ -152,73 +117,82 @@ class _BackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // width: MediaQuery.of(context).size.width,
-      color: context.colors.backgroundDark,
+      width: (MediaQuery.of(context).size.width -
+              2 * RaPageConstraints.pagePaddingValue) /
+          3,
       height: RaPageConstraints.radioPlayerHeight / 2,
+      color: context.colors.backgroundDark,
       child: GestureDetector(
         onTap: () =>
             audioHandler?.playMediaItem(AudioPlayerConstants.radioMediaItem),
-        child: Text('Wróć do radia', style: context.textStyles.textSmallGreen),
+        child: Center(
+          child:
+              Text('Wróć do radia', style: context.textStyles.textSmallGreen),
+        ),
       ),
     );
   }
 }
 
+class SeekBarData {
+  const SeekBarData({
+    required this.position,
+    required this.mediaItem,
+  });
+
+  final Duration position;
+  final MediaItem mediaItem;
+}
+
 class _SeekBar extends HookWidget {
   const _SeekBar({required this.audioHandler});
 
-  final AudioHandler? audioHandler;
+  final AudioPlayerHandler audioHandler;
 
   @override
   Widget build(BuildContext context) {
-    final slider = useState<double>(0);
-    return StreamBuilder<MediaItem?>(
-      stream: audioHandler?.mediaItem,
-      builder: (context, snapshot) {
-        final mediaItem = snapshot.data;
-        return Container(
-          width: MediaQuery.of(context).size.width,
-          height: RaPageConstraints.radioPlayerHeight,
-          color: context.colors.backgroundDark,
-          child: Center(
-            child: Slider(
-              allowedInteraction: SliderInteraction.slideThumb,
-              activeColor: context.colors.highlightGreen,
-              // secondaryActiveColor: context.colors.highlightRed,
-              inactiveColor: context.colors.backgroundLight,
-              thumbColor: context.colors.highlightRed,
-              max: (mediaItem?.duration ?? Duration.zero).inSeconds.toDouble(),
-              value: slider.value,
-              onChanged: (position) => slider.value = position,
-              onChangeEnd: (position) =>
-                  audioHandler?.seek(Duration(seconds: position.round())),
-            ),
-          ),
-        );
-      },
+    return Container(
+      width: MediaQuery.of(context).size.width -
+          2 * RaPageConstraints.pagePaddingValue,
+      height: RaPageConstraints.radioPlayerHeight,
+      color: context.colors.backgroundDark,
+      child: Center(
+        child: ValueListenableBuilder<ProgressBarState>(
+          valueListenable: audioHandler.progressNotifier,
+          builder: (_, value, __) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: RaPageConstraints.pagePaddingValue,
+              ),
+              child: ProgressBar(
+                progress: value.current,
+                total: value.total,
+                buffered: value.buffered,
+                thumbColor: context.colors.highlightRed,
+                thumbRadius: 5,
+                thumbGlowRadius: 15,
+                bufferedBarColor: context.colors.backgroundLightSecondary,
+                baseBarColor: context.colors.backgroundLight,
+                progressBarColor: context.colors.highlightGreen,
+                thumbCanPaintOutsideBar: false,
+                timeLabelLocation: TimeLabelLocation.none,
+                onSeek: audioHandler.seek,
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }
 
-class MediaState {
-  const MediaState({required this.mediaItem, required this.position});
-
-  final MediaItem? mediaItem;
-  final Duration position;
-}
-
-enum RaPlayerKind {
-  radioPlayer,
-  recordingPlayer;
-}
-
 /// The [RaPlayButton] controlling the radio stream.
-class _StreamPlayButton extends StatelessWidget {
-  const _StreamPlayButton({
+class _PlayButton extends StatelessWidget {
+  const _PlayButton({
     required this.audioHandler,
   });
 
-  final AudioHandler audioHandler;
+  final AudioPlayerHandler audioHandler;
 
   @override
   Widget build(BuildContext context) {
@@ -269,7 +243,7 @@ class _StreamTitle extends StatelessWidget {
           child: TextScroll(
             (mediaItem?.title != null && mediaItem!.title.isNotEmpty == true)
                 ? mediaItem.title
-                : 'No stream title',
+                : 'No stream title', // TODO: change for RadioAktywne
             velocity: const Velocity(
               pixelsPerSecond: Offset(17, 0),
             ),
