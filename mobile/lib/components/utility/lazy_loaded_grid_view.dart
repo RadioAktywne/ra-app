@@ -58,8 +58,7 @@ class LazyLoadedGridView<T> extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lazyLoadingController = useLazyLoadingController(fetchPage);
-    print("lazy loading controller's new state: $lazyLoadingController");
+    final lazyLoadingController = _useLazyLoadingController(fetchPage);
 
     if (lazyLoadingController.isLoading &&
         lazyLoadingController.items.isEmpty) {
@@ -82,6 +81,11 @@ class LazyLoadedGridView<T> extends HookWidget {
       controller: lazyLoadingController.scrollController,
       padding: padding.copyWith(bottom: context.playerPaddingValue),
       gridDelegate: gridDelegate,
+      physics: lazyLoadingController.isLoading
+          ? const BouncingScrollPhysics(
+              decelerationRate: ScrollDecelerationRate.fast,
+            )
+          : null,
       itemCount: lazyLoadingController.items.length,
       itemBuilder: (context, index) {
         final item = lazyLoadingController.items.elementAt(index);
@@ -94,7 +98,7 @@ class LazyLoadedGridView<T> extends HookWidget {
               thumbnailPath: gridItem.thumbnailPath,
               titleOverlay: Text(
                 htmlUnescape.convert(gridItem.title),
-                // possibly context.textStyles.textSmallGreen, up to RA to decide
+                // TODO: possibly context.textStyles.textSmallGreen, up to RA to decide
                 style: context.textStyles.textMedium,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 4,
@@ -108,7 +112,7 @@ class LazyLoadedGridView<T> extends HookWidget {
 }
 
 // TODO: (maybe) return a list of [LazyLoadedGridViewItem]s
-_LazyLoadingController<T> useLazyLoadingController<T>(
+_LazyLoadingController<T> _useLazyLoadingController<T>(
   Future<Iterable<T>> Function(int) fetchPage,
 ) {
   final scrollController = useScrollController();
@@ -200,17 +204,6 @@ class _LazyLoadingController<T> {
   bool get hasError => _hasError.value;
 
   set hasMore(bool value) => _hasMore.value = value;
-
-  @override
-  String toString() => '''
-_LazyLoadingController {
-  scrollController=$scrollController,
-  currentPage=$currentPage,
-  isLoading=$isLoading,
-  hasMore=$hasMore,
-  hasError=$hasError,
-  fetchItems=$fetchItems,
-}''';
 }
 
 class LazyLoadedGridViewItem {
