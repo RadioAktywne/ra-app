@@ -7,15 +7,16 @@ import 'package:radioaktywne/components/radio_player/stream_title_workaround.dar
 class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   /// Initialise the audio handler.
   AudioPlayerHandler({
-    required this.mediaSource,
-  })  : _player = AudioPlayer(),
+    required MediaItem mediaItem,
+  })  : _mediaItem = mediaItem,
+        _player = AudioPlayer(),
         streamTitleWorkaround = StreamTitleWorkaround() {
     // So that our clients (the Flutter UI and the system notification) know
     // what state to display, here we set up our audio handler to broadcast all
     // playback state changes as they happen via playbackState...
     _player.playbackEventStream.map(_transformEvent).pipe(playbackState);
     // ... and also the current media item via mediaItem.
-    mediaItem.add(mediaSource);
+    this.mediaItem.add(_mediaItem);
 
     // Change stream title and subtitle based on IcyMetadata
     _player.icyMetadataStream.listen((event) {
@@ -26,7 +27,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
         print('stream title: $streamTitle');
       }
 
-      var mediaItemValue = mediaItem.value ?? mediaSource;
+      var mediaItemValue = this.mediaItem.value ?? _mediaItem;
       if (streamName.isNotEmpty) {
         mediaItemValue = mediaItemValue.copyWith(
           album: streamName,
@@ -37,7 +38,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
           title: streamTitle,
         );
       }
-      mediaItem.add(mediaItemValue);
+      this.mediaItem.add(mediaItemValue);
     });
 
     _player.positionStream.listen((position) {
@@ -71,17 +72,17 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
     /// Listening for stream title changes
     streamTitleWorkaround.stream.listen((streamTitle) {
-      final previousTitle = mediaItem.value?.title;
+      final previousTitle = this.mediaItem.value?.title;
       if (streamTitle == previousTitle) {
         return;
       }
 
-      final mediaItemValue = mediaItem.value ?? mediaSource;
-      mediaItem.add(mediaItemValue.copyWith(title: streamTitle));
+      final mediaItemValue = this.mediaItem.value ?? _mediaItem;
+      this.mediaItem.add(mediaItemValue.copyWith(title: streamTitle));
     });
   }
 
-  MediaItem mediaSource;
+  MediaItem _mediaItem;
 
   final AudioPlayer _player;
 
@@ -104,23 +105,23 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
   // these 4 methods so that we can handle audio playback logic in one place.
 
   void _updateRecordingPosition() {
-    if (mediaSource.extras?[AudioPlayerConstants.mediaKind] ==
+    if (_mediaItem.extras?[AudioPlayerConstants.mediaKind] ==
         MediaKind.recording) {
-      mediaSource.extras
+      _mediaItem.extras
           ?.update(AudioPlayerConstants.seek, (_) => _player.position);
     }
   }
 
   Future<void> _startAction() async {
-    switch (mediaSource.extras?[AudioPlayerConstants.mediaKind] as MediaKind?) {
+    switch (_mediaItem.extras?[AudioPlayerConstants.mediaKind] as MediaKind?) {
       case null || MediaKind.radio:
         streamTitleWorkaround.playerStarted();
       case MediaKind.recording:
         final currentPosition =
-            mediaSource.extras?[AudioPlayerConstants.seek] as Duration? ??
+            _mediaItem.extras?[AudioPlayerConstants.seek] as Duration? ??
                 Duration.zero;
         await _player.seek(
-          currentPosition >= (mediaSource.duration ?? Duration.zero)
+          currentPosition >= (_mediaItem.duration ?? Duration.zero)
               ? Duration.zero
               : currentPosition,
         );
@@ -134,43 +135,40 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     // when user would press 'play' for the first time, he would hear the
     // stream starting from the moment he launched the app, not when he pressed
     // 'play'.
-    await _player.setAudioSource(AudioSource.uri(Uri.parse(mediaSource.id)));
+    await _player.setAudioSource(AudioSource.uri(Uri.parse(_mediaItem.id)));
     await _startAction();
     return _player.play();
   }
 
   @override
-  Future<void> pause() {
+  Future<void> pause() async {
     streamTitleWorkaround.playerStopped();
     _updateRecordingPosition();
     return _player.pause();
   }
 
   @override
-  Future<void> stop() {
+  Future<void> stop() async {
     streamTitleWorkaround.playerStopped();
     _updateRecordingPosition();
     return _player.stop();
   }
 
   @override
-  Future<void> seek(Duration position) {
+  Future<void> seek(Duration position) async {
     return _player.seek(position);
-  }
-
-  @override
-  Future<void> playMediaItem(MediaItem mediaItem) async {
-    this.mediaItem.add(mediaItem);
-    mediaSource = mediaItem;
-    await _player.setUrl(mediaItem.id);
-    await _startAction();
-    await _player.setAudioSource(AudioSource.uri(Uri.parse(mediaSource.id)));
   }
 
   @override
   Future<void> updateMediaItem(MediaItem mediaItem) async {
     this.mediaItem.add(mediaItem);
-    mediaSource = mediaItem;
+    _mediaItem = mediaItem;
+  }
+
+  @override
+  Future<void> playMediaItem(MediaItem mediaItem) async {
+    await updateMediaItem(mediaItem);
+    await play();
   }
 
   /// Transform a just_audio event into an audio_service state.
@@ -182,18 +180,19 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
     return PlaybackState(
       controls: [
         // MediaControl.rewind,
-        // if (_player.playing) MediaControl.pause else MediaControl.play,
+        if (_mediaItem.extras?[AudioPlayerConstants.mediaKind] ==
+            MediaKind.recording)
+          if (_player.playing) MediaControl.pause else MediaControl.play,
         // MediaControl.stop,
         // MediaControl.fastForward,
         if (_player.playing) MediaControl.stop else MediaControl.play,
       ],
-      // systemActions: const {
-      //   MediaAction.seek,
-      //   MediaAction.seekForward,
-      //   MediaAction.seekBackward,
-      // },
+      systemActions: {
+        if (_mediaItem.extras?[AudioPlayerConstants.mediaKind] ==
+            MediaKind.recording)
+          MediaAction.seek,
+      },
       androidCompactActionIndices: const [0],
-
       processingState: switch (_player.processingState) {
         ProcessingState.idle => AudioProcessingState.idle,
         ProcessingState.loading => AudioProcessingState.loading,
@@ -238,6 +237,7 @@ class ProgressBarState {
     required this.buffered,
     required this.total,
   });
+
   final Duration current;
   final Duration buffered;
   final Duration total;

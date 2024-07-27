@@ -22,9 +22,9 @@ class ArticleSelectionPage extends StatelessWidget {
     return LazyLoadedGridView(
       fetchPage: (page) async {
         final pageUri = Uri.parse('$_articlesUri&page=$page&per_page=16');
-        return fetchData(pageUri, ArticleInfo.fromJson);
+        return fetchData(pageUri, ArticleInfo.fromJson, timeout: timeout);
       },
-      transformItem: (article) => LazyLoadedGridViewItem(
+      itemBuilder: (article) => LazyLoadedGridViewItem(
         title: article.title,
         thumbnailPath: article.thumbnail,
       ),
@@ -32,7 +32,6 @@ class ArticleSelectionPage extends StatelessWidget {
         RaRoutes.articleId(article.id),
         extra: article,
       ),
-      timeout: timeout,
     );
   }
 }

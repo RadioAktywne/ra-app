@@ -10,14 +10,14 @@ class AudioHandlerCubit extends Cubit<AudioPlayerHandler> {
    */
   AudioHandlerCubit({required MediaItem initialMedia})
       : super(
-          AudioPlayerHandler(mediaSource: AudioPlayerConstants.radioMediaItem),
+          AudioPlayerHandler(mediaItem: AudioPlayerConstants.radioMediaItem),
         ) {
     initAudioHandler(initialMedia);
   }
 
   Future<void> initAudioHandler(MediaItem initialMedia) async {
     final audioService = await AudioService.init(
-      builder: () => AudioPlayerHandler(mediaSource: initialMedia),
+      builder: () => AudioPlayerHandler(mediaItem: initialMedia),
       config: const AudioServiceConfig(
         androidNotificationChannelName: 'Live radio stream',
         androidNotificationOngoing: true,

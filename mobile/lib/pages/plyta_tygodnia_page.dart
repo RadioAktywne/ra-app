@@ -136,7 +136,7 @@ class PlytaTygodniaPage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: RaPageConstraints.radioPlayerPadding),
+            SizedBox(height: context.playerPaddingValue),
           ],
         ),
       ),

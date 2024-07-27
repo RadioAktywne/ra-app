@@ -10,13 +10,14 @@ import 'package:radioaktywne/pages/ra_error_page.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/resources/resources.dart';
 
+/// A [GridView] that fetches its items in chunks and
+/// displays them in a grid of [ColorShadowedCard]s.
 class LazyLoadedGridView<T> extends HookWidget {
   const LazyLoadedGridView({
     super.key,
     required this.fetchPage,
-    required this.transformItem,
+    required this.itemBuilder,
     required this.onItemTap,
-    this.timeout = const Duration(seconds: 15),
     this.padding = RaPageConstraints.pagePadding,
     this.gridDelegate = const SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 2,
@@ -25,19 +26,40 @@ class LazyLoadedGridView<T> extends HookWidget {
     ),
   });
 
+  /// Function for fetching the page data lazily
+  ///
+  /// Example function that can be used as [fetchPage]:
+  /// ```dart
+  /// Future<Iterable<int>> fetchPage(int index) {
+  ///   final data = http.get('https://example.com/$index');
+  ///   return decode(data.body);
+  /// }
+  /// ```
   final Future<Iterable<T>> Function(int) fetchPage;
-  final LazyLoadedGridViewItem Function(T) transformItem;
+
+  /// Function that transforms fetched elements of type [T]
+  /// into [LazyLoadedGridViewItem]s to be displayed in a
+  /// [ColorShadowedCard].
+  final LazyLoadedGridViewItem Function(T) itemBuilder;
+
+  /// Function called every time an item in the
+  /// grid is tapped.
   final void Function(T data, int index) onItemTap;
 
-  final Duration timeout;
-
+  /// This widget's outer padding.
+  ///
+  /// Equivalent to [GridView]'s `padding` property
   final EdgeInsets padding;
 
-  final SliverGridDelegateWithFixedCrossAxisCount gridDelegate;
+  /// Optional gridDelegate.
+  ///
+  /// On default, grid has 2 axis.
+  final SliverGridDelegate gridDelegate;
 
   @override
   Widget build(BuildContext context) {
     final lazyLoadingController = useLazyLoadingController(fetchPage);
+    print("lazy loading controller's new state: $lazyLoadingController");
 
     if (lazyLoadingController.isLoading &&
         lazyLoadingController.items.isEmpty) {
@@ -58,12 +80,12 @@ class LazyLoadedGridView<T> extends HookWidget {
 
     return GridView.builder(
       controller: lazyLoadingController.scrollController,
-      padding: padding,
+      padding: padding.copyWith(bottom: context.playerPaddingValue),
       gridDelegate: gridDelegate,
       itemCount: lazyLoadingController.items.length,
       itemBuilder: (context, index) {
         final item = lazyLoadingController.items.elementAt(index);
-        final gridItem = transformItem(item);
+        final gridItem = itemBuilder(item);
         return GestureDetector(
           onTap: () => onItemTap(item, index),
           child: ColorShadowedCard(
@@ -85,7 +107,7 @@ class LazyLoadedGridView<T> extends HookWidget {
   }
 }
 
-// TODO: return a list of [LazyLoadedGridViewItem]s
+// TODO: (maybe) return a list of [LazyLoadedGridViewItem]s
 _LazyLoadingController<T> useLazyLoadingController<T>(
   Future<Iterable<T>> Function(int) fetchPage,
 ) {
@@ -178,6 +200,17 @@ class _LazyLoadingController<T> {
   bool get hasError => _hasError.value;
 
   set hasMore(bool value) => _hasMore.value = value;
+
+  @override
+  String toString() => '''
+_LazyLoadingController {
+  scrollController=$scrollController,
+  currentPage=$currentPage,
+  isLoading=$isLoading,
+  hasMore=$hasMore,
+  hasError=$hasError,
+  fetchItems=$fetchItems,
+}''';
 }
 
 class LazyLoadedGridViewItem {

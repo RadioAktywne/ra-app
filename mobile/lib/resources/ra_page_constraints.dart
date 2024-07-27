@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:radioaktywne/components/radio_player/audio_player_handler.dart';
+import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
 /// Constants representing page constraints
 /// that have to be accessible all over the app.
@@ -13,12 +16,25 @@ abstract class RaPageConstraints {
       EdgeInsets.symmetric(horizontal: 26);
   static const EdgeInsets pagePadding = EdgeInsets.only(
     top: pagePaddingValue,
-    bottom: radioPlayerPadding,
+    bottom: _radioPlayerPaddingValue,
     left: pagePaddingValue,
     right: pagePaddingValue,
   );
   static const double radioPlayerHeight = 50;
-  static const double radioPlayerPadding = 1.5 * radioPlayerHeight;
+  static const double _radioPlayerPaddingValue = 1.5 * radioPlayerHeight;
   static const double recordingPlayerHeight = radioPlayerHeight * 2.5;
-  static const double recordingPlayerPadding = 1.25 * recordingPlayerHeight;
+  static const double _recordingPlayerPaddingValue =
+      1.1 * recordingPlayerHeight;
+}
+
+extension PlayerPaddingValue on BuildContext {
+  double get playerPaddingValue =>
+      switch (BlocProvider.of<AudioHandlerCubit>(this)
+          .state
+          .mediaItem
+          .value
+          ?.extras?[AudioPlayerConstants.mediaKind] as MediaKind?) {
+        null || MediaKind.radio => RaPageConstraints._radioPlayerPaddingValue,
+        MediaKind.recording => RaPageConstraints._recordingPlayerPaddingValue,
+      };
 }

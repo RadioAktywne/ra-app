@@ -31,9 +31,9 @@ class ArticlePage extends StatelessWidget {
                   loadingProgress == null
                       ? child
                       : Container(
-                        color: context.colors.backgroundDarkSecondary,
-                        child: const RaProgressIndicator(),
-                      ),
+                          color: context.colors.backgroundDarkSecondary,
+                          child: const RaProgressIndicator(),
+                        ),
               errorBuilder: (context, error, stackTrace) => Center(
                 child: Image.asset('assets/defaultMedia.png'),
               ),
@@ -61,7 +61,7 @@ class ArticlePage extends StatelessWidget {
               ),
               htmlContent: article.content,
             ),
-            const SizedBox(height: RaPageConstraints.radioPlayerPadding),
+            SizedBox(height: context.playerPaddingValue),
           ],
         ),
       ),

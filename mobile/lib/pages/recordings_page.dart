@@ -52,7 +52,7 @@ class RecordingsPage extends HookWidget {
   Widget build(BuildContext context) {
     return LazyLoadedGridView(
       fetchPage: fetchPage,
-      transformItem: (recording) => LazyLoadedGridViewItem(
+      itemBuilder: (recording) => LazyLoadedGridViewItem(
         title: recording.title,
         thumbnailPath: recording.thumbnailPath,
       ),

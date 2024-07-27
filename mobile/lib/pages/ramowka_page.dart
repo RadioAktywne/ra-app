@@ -56,7 +56,7 @@ class RamowkaPage extends StatelessWidget {
         builder: (context, ramowka) => ListView.separated(
           padding: RaPageConstraints.outerWidgetPagePadding.copyWith(
             top: RaPageConstraints.pagePaddingValue,
-            bottom: RaPageConstraints.radioPlayerPadding,
+            bottom: context.playerPaddingValue,
           ),
           itemBuilder: (context, index) {
             final ramowkaForDay =

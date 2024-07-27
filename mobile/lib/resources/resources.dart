@@ -5,4 +5,4 @@ export 'colors.dart';
 export 'day.dart';
 export 'theme.dart';
 
-final HtmlUnescape htmlUnescape = HtmlUnescape();
+final htmlUnescape = HtmlUnescape();

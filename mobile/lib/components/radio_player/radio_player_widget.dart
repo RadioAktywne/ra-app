@@ -24,11 +24,6 @@ class RadioPlayerWidget extends StatelessWidget {
 
   final Duration animationDuration;
 
-  /// Measurements from Figma
-  static const double buttonSize = 37;
-  static const EdgeInsets horizontalPadding =
-      EdgeInsets.symmetric(horizontal: 14);
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AudioHandlerCubit, AudioPlayerHandler>(
@@ -112,7 +107,7 @@ class _RadioPlayer extends StatelessWidget {
 class _BackButton extends StatelessWidget {
   const _BackButton({required this.audioHandler});
 
-  final AudioHandler? audioHandler;
+  final AudioPlayerHandler? audioHandler;
 
   @override
   Widget build(BuildContext context) {
@@ -123,8 +118,11 @@ class _BackButton extends StatelessWidget {
       height: RaPageConstraints.radioPlayerHeight / 2,
       color: context.colors.backgroundDark,
       child: GestureDetector(
-        onTap: () =>
-            audioHandler?.playMediaItem(AudioPlayerConstants.radioMediaItem),
+        onTap: () async {
+          await audioHandler
+              ?.updateMediaItem(AudioPlayerConstants.radioMediaItem);
+          await audioHandler?.play();
+        },
         child: Center(
           child:
               Text('Wróć do radia', style: context.textStyles.textSmallGreen),
@@ -134,8 +132,8 @@ class _BackButton extends StatelessWidget {
   }
 }
 
-class SeekBarData {
-  const SeekBarData({
+class _SeekBarData {
+  const _SeekBarData({
     required this.position,
     required this.mediaItem,
   });
@@ -197,7 +195,7 @@ class _PlayButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: RadioPlayerWidget.horizontalPadding,
+      padding: const EdgeInsets.symmetric(horizontal: 14),
       child: StreamBuilder<AudioProcessingState>(
         stream: audioHandler.playbackState
             .map((state) => state.processingState)
@@ -205,6 +203,11 @@ class _PlayButton extends StatelessWidget {
         builder: (context, snapshot) {
           final audioProcessingState =
               snapshot.data ?? AudioProcessingState.idle;
+          if (audioProcessingState == AudioProcessingState.completed) {
+            audioHandler
+              ..seek(Duration.zero)
+              ..stop();
+          }
           return StreamBuilder<bool>(
             stream: audioHandler.playbackState
                 .map((state) => state.playing)
@@ -212,7 +215,7 @@ class _PlayButton extends StatelessWidget {
             builder: (context, snapshot) {
               final playing = snapshot.data ?? false;
               return RaPlayButton(
-                size: RadioPlayerWidget.buttonSize,
+                size: 37,
                 onPressed: playing ? audioHandler.stop : audioHandler.play,
                 audioProcessingState: audioProcessingState,
               );
