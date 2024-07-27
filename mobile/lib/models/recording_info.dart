@@ -1,5 +1,5 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:radioaktywne/components/radio_player/audio_player_handler.dart';
+import 'package:radioaktywne/components/ra_player/ra_player_recources.dart';
 
 class RecordingInfo {
   RecordingInfo.fromJson(Map<String, dynamic> jsonData)
@@ -24,8 +24,8 @@ class RecordingInfo {
         title: title,
         duration: duration,
         extras: {
-          AudioPlayerConstants.mediaKind: MediaKind.recording,
-          AudioPlayerConstants.seek: seek,
+          RaPlayerConstants.mediaKind: MediaKind.recording,
+          RaPlayerConstants.seek: seek,
         },
       );
 

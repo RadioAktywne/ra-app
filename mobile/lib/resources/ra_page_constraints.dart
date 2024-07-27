@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:radioaktywne/components/radio_player/audio_player_handler.dart';
+import 'package:radioaktywne/components/ra_player/ra_player_recources.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
 /// Constants representing page constraints
@@ -29,12 +29,8 @@ abstract class RaPageConstraints {
 
 extension PlayerPaddingValue on BuildContext {
   double get playerPaddingValue =>
-      switch (BlocProvider.of<AudioHandlerCubit>(this)
-          .state
-          .mediaItem
-          .value
-          ?.extras?[AudioPlayerConstants.mediaKind] as MediaKind?) {
-        null || MediaKind.radio => RaPageConstraints._radioPlayerPaddingValue,
+      switch (BlocProvider.of<AudioHandlerCubit>(this).state.mediaKind) {
+        MediaKind.radio => RaPageConstraints._radioPlayerPaddingValue,
         MediaKind.recording => RaPageConstraints._recordingPlayerPaddingValue,
       };
 }
