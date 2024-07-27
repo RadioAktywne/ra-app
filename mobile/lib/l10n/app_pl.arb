@@ -11,5 +11,6 @@
     "thursday": "Czwartek",
     "friday": "Piątek",
     "saturday": "Sobota",
-    "sunday": "Niedziela"
+    "sunday": "Niedziela",
+    "nowPlaying": "Teraz gramy"
 }

@@ -39,4 +39,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get sunday => 'Niedziela';
+
+  @override
+  String get nowPlaying => 'Teraz gramy';
 }

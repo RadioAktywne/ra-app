@@ -2,12 +2,11 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radioaktywne/components/ra_playbutton.dart';
+import 'package:radioaktywne/components/radio_player/radio_player_widget.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/utility/image_with_overlay.dart';
-import 'package:radioaktywne/extensions/themes.dart';
-
-import '../../state/audio_handler_cubit.dart';
-import '../radio_player/radio_player_widget.dart';
+import 'package:radioaktywne/extensions/extensions.dart';
+import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
 /// Widget representing what's currently played on the radio
 ///
@@ -21,91 +20,63 @@ class TerazGramyWidget extends StatelessWidget {
   /// Shadow color for the card.
   final Color? shadowColor;
 
+  static const double _buttonSize = 100;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AudioHandlerCubit, AudioHandler?>(
-        builder: (context, audioHandler) {
-    final defaultShadowColor = context.colors.highlightRed;
-
-    return ColorShadowedCard(
-      shadowColor: shadowColor ?? defaultShadowColor,
-      child: ImageWithOverlay(
-        imageBuilder: Image.asset,
-        thumbnailPath: 'assets/teraz_gramy_background.webp',
-        titleOverlay: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: switch (audioHandler) {
-            null =>
-            [
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Teraz gramy \n',
-                      style: context.textStyles.textPlayer.copyWith(
-                        color: context.colors.highlightGreen,
-                      ),
-                    ),
-                    TextSpan(
-                      text: 'No stream title',
-                      style: context.textStyles.textMedium.copyWith(
-                        height: 1.5,
-                      ),
-                    ),
-                  ],
+      builder: (context, audioHandler) {
+        return ColorShadowedCard(
+          shadowColor: shadowColor ?? context.colors.highlightRed,
+          child: ImageWithOverlay(
+            imageBuilder: Image.asset,
+            thumbnailPath: 'assets/teraz_gramy_background.webp',
+            titleOverlay: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.l10n.nowPlaying,
+                  style: context.textStyles.textPlayer.copyWith(
+                    color: context.colors.highlightGreen,
+                  ),
                 ),
-              ),
-            ],
-
-            _ =>
-            [RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'Teraz gramy',
-                    style: context.textStyles.textPlayer.copyWith(
-                      color: context.colors.highlightGreen,
+                switch (audioHandler) {
+                  null => Text(
+                      'No stream title', // TODO: zamienić na "RadioAktywne"
+                      style:
+                          context.textStyles.textMedium.copyWith(height: 1.5),
+                    ),
+                  _ => StreamTitle(
+                      audioHandler: audioHandler,
+                      width: MediaQuery.of(context).size.width,
+                      style:
+                          context.textStyles.textMedium.copyWith(height: 1.5),
+                    ),
+                },
+              ],
+            ),
+            titleOverlayPadding: const EdgeInsets.all(8),
+            child: Center(
+              child: switch (audioHandler) {
+                null => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    child: RaPlayButton(
+                      onPressed: () {},
+                      size: _buttonSize,
+                      audioProcessingState: AudioProcessingState.loading,
                     ),
                   ),
-                ],
-              ),
+                _ => StreamPlayButton(
+                    audioHandler: audioHandler,
+                    buttonSize: _buttonSize,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: _buttonSize),
+                  ),
+              },
             ),
-              StreamTitle(
-                audioHandler: audioHandler,
-                width: MediaQuery.of(context).size.width,
-                style: context.textStyles.textMedium.copyWith(
-                  height: 1.5,
-                ),
-              ),
-            ],
-          },
-        ),
-        titleOverlayPadding: const EdgeInsets.all(8),
-        // TODO: This is just a dummy mock, needs major work
-        child: Row(
-    children: switch (audioHandler) {
-          null => [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              child: RaPlayButton(
-                onPressed: () {},
-                size: 100,
-                audioProcessingState: AudioProcessingState.loading,
-              ),
-            ),
-        ],
-          _ => [
-            StreamPlayButton(
-              audioHandler: audioHandler,
-              buttonSize: 100,
-              padding: const EdgeInsets.symmetric(horizontal: 100),
-            ),
-          ],
-        },
-      ),
-      ),
-    );
-  },
+          ),
+        );
+      },
     );
   }
 }

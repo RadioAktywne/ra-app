@@ -166,12 +166,12 @@ class _RaPlayButtonImageLoading extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         Container(
-          padding: const EdgeInsets.all(5),
+          padding: EdgeInsets.all(size / 7),
           width: size,
           height: size,
           child: CircularProgressIndicator(
             color: context.colors.highlightRed,
-            strokeWidth: 1.7,
+            strokeWidth: size / 22,
           ),
         ),
       ],
