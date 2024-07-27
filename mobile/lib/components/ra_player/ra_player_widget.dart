@@ -11,7 +11,7 @@ import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 import 'package:text_scroll/text_scroll.dart';
 
-/// The player for radio and recordings.
+/// The player widget for radio and recordings.
 ///
 /// It changes its state based on [MediaKind]
 /// passed as an extra in [RaPlayerHandler]'s [MediaItem].
@@ -82,58 +82,6 @@ class RaPlayerWidget extends StatelessWidget {
   }
 }
 
-class _Player extends StatelessWidget {
-  const _Player({required this.audioHandler});
-
-  final RaPlayerHandler audioHandler;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: RaPageConstraints.radioPlayerHeight,
-      width: MediaQuery.of(context).size.width,
-      color: context.colors.backgroundDarkSecondary,
-      child: Row(
-        children: [
-          _PlayButton(
-            audioHandler: audioHandler,
-          ),
-          _StreamTitle(
-            audioHandler: audioHandler,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _BackButton extends StatelessWidget {
-  const _BackButton({required this.audioHandler});
-
-  final RaPlayerHandler? audioHandler;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: (MediaQuery.of(context).size.width -
-              2 * RaPageConstraints.pagePaddingValue) /
-          3,
-      height: RaPageConstraints.radioPlayerHeight / 2,
-      color: context.colors.backgroundDark,
-      child: GestureDetector(
-        onTap: () async {
-          await audioHandler?.updateMediaItem(RaPlayerConstants.radioMediaItem);
-          await audioHandler?.play();
-        },
-        child: Center(
-          child:
-              Text('Wróć do radia', style: context.textStyles.textSmallGreen),
-        ),
-      ),
-    );
-  }
-}
-
 class _SeekBarData {
   const _SeekBarData({
     required this.position,
@@ -159,7 +107,7 @@ class _SeekBar extends HookWidget {
       child: Center(
         child: ValueListenableBuilder<ProgressBarState>(
           valueListenable: audioHandler.progressNotifier,
-          builder: (_, value, __) {
+          builder: (context, value, child) {
             return Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: RaPageConstraints.pagePaddingValue,
@@ -181,6 +129,58 @@ class _SeekBar extends HookWidget {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+class _BackButton extends StatelessWidget {
+  const _BackButton({required this.audioHandler});
+
+  final RaPlayerHandler audioHandler;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: (MediaQuery.of(context).size.width -
+              2 * RaPageConstraints.pagePaddingValue) /
+          3,
+      height: RaPageConstraints.radioPlayerHeight / 2,
+      color: context.colors.backgroundDark,
+      child: GestureDetector(
+        onTap: () async =>
+            audioHandler.playMediaItem(RaPlayerConstants.radioMediaItem),
+        child: Center(
+          child: Text(
+            context.l10n.backToRadio,
+            style: context.textStyles.textSmallGreen,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Player extends StatelessWidget {
+  const _Player({required this.audioHandler});
+
+  final RaPlayerHandler audioHandler;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: RaPageConstraints.radioPlayerHeight,
+      width: MediaQuery.of(context).size.width,
+      color: context.colors.backgroundDarkSecondary,
+      child: Row(
+        children: [
+          _PlayButton(
+            audioHandler: audioHandler,
+          ),
+          _StreamTitle(
+            audioHandler: audioHandler,
+          ),
+        ],
       ),
     );
   }
@@ -235,7 +235,7 @@ class _StreamTitle extends StatelessWidget {
     required this.audioHandler,
   });
 
-  final AudioHandler audioHandler;
+  final RaPlayerHandler audioHandler;
 
   @override
   Widget build(BuildContext context) {
@@ -249,9 +249,7 @@ class _StreamTitle extends StatelessWidget {
             (mediaItem?.title != null && mediaItem!.title.isNotEmpty == true)
                 ? mediaItem.title
                 : 'No stream title', // TODO: change for RadioAktywne
-            velocity: const Velocity(
-              pixelsPerSecond: Offset(17, 0),
-            ),
+            velocity: const Velocity(pixelsPerSecond: Offset(17, 0)),
             pauseBetween: const Duration(milliseconds: 2500),
             intervalSpaces: 6,
             selectable: true,
