@@ -111,7 +111,6 @@ class LazyLoadedGridView<T> extends HookWidget {
   }
 }
 
-// TODO: (maybe) return a list of [LazyLoadedGridViewItem]s
 _LazyLoadingController<T> _useLazyLoadingController<T>(
   Future<Iterable<T>> Function(int) fetchPage,
 ) {
