@@ -28,13 +28,13 @@ class PlytaTygodniaPage extends StatelessWidget {
 
   /// Plyta tygodnia info fetch details.
   static final Uri _infoUrl = Uri.parse(
-    'https://radioaktywne.pl/wp-json/wp/v2/album?page=1&per_page=16',
+    'https://radioaktywne.pl/wp-json/wp/v2/album?page=1&per_page=1',
   );
   static const _infoHeaders = {'Content-Type': 'application/json'};
 
   /// Plyta tygodnia album cover fetch details.
   static Uri _imgUrl(String id) => Uri.parse(
-        'https://radioaktywne.pl/wp-json/wp/v2/media?include[]=$id',
+        'https://radioaktywne.pl/wp-json/wp/v2/media/$id',
       );
   static const _imgHeaders = {'Content-Type': 'image/jpeg'};
 
@@ -50,15 +50,12 @@ class PlytaTygodniaPage extends StatelessWidget {
 
       final plytaTygodnia = data.first;
 
-      final imageUrls = await fetchData(
+      plytaTygodnia.imageTag = await fetchSingle(
         _imgUrl(plytaTygodnia.imageTag),
         (e) => (e['guid'] as Map<String, dynamic>)['rendered'] as String,
         headers: _imgHeaders,
         timeout: timeout,
       );
-
-      final imageUrl = imageUrls.first;
-      plytaTygodnia.imageTag = imageUrl;
 
       return plytaTygodnia;
     } on TimeoutException catch (_) {
