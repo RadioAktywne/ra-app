@@ -3,13 +3,9 @@ import 'package:radioaktywne/components/ra_player/ra_player_recources.dart';
 
 class RecordingInfo {
   RecordingInfo.fromJson(Map<String, dynamic> jsonData)
-      : title = (jsonData['acf'] as Map<String, dynamic>)['title'] as String,
-        thumbnailPath =
-            ((jsonData['acf'] as Map<String, dynamic>)['image'] as int)
-                .toString(),
-        recordingPath =
-            ((jsonData['acf'] as Map<String, dynamic>)['file'] as int)
-                .toString(),
+      : title = jsonData['acf']['title'] as String,
+        thumbnailPath = (jsonData['acf']['image'] as int).toString(),
+        recordingPath = (jsonData['acf']['file'] as int).toString(),
         duration = Duration.zero,
         seek = Duration.zero;
 

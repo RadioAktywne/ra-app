@@ -21,6 +21,8 @@ class AudioHandlerCubit extends Cubit<RaPlayerHandler> {
       builder: () => RaPlayerHandler(mediaItem: initialMedia),
       config: const AudioServiceConfig(
         androidNotificationChannelName: 'Live radio stream',
+        // androidNotificationChannelId: 'pl.radioaktywne.channel.audio',
+        // androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
         androidNotificationOngoing: true,
       ),
     );

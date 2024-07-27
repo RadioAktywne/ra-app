@@ -1,6 +1,4 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:radioaktywne/components/ra_navigation_shell.dart';
 import 'package:radioaktywne/extensions/themes.dart';
@@ -12,7 +10,6 @@ import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
 import 'package:radioaktywne/pages/ramowka_page.dart';
 import 'package:radioaktywne/pages/recordings_page.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
-import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
 final raRouter = GoRouter(
   initialLocation: RaRoutes.home,
@@ -29,12 +26,7 @@ final raRouter = GoRouter(
         ),
         GoRoute(
           path: RaRoutes.recordings,
-          builder: (context, state) =>
-              BlocBuilder<AudioHandlerCubit, AudioHandler?>(
-            builder: (context, audioHandler) => RecordingsPage(
-              audioHandler: audioHandler,
-            ),
-          ),
+          builder: (context, state) => const RecordingsPage(),
         ),
         GoRoute(
           path: RaRoutes.articles,

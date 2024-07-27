@@ -32,6 +32,7 @@ dependencies:
   intl: ^0.19.0
   json_annotation: ^4.9.0
   just_audio: ^0.9.38
+  just_audio_background: ^0.0.1-beta.13
   leancode_hooks: ^0.0.6
   logging: ^1.1.1
   oktoast: ^3.4.0

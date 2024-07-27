@@ -1,23 +1,25 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
+import 'package:radioaktywne/components/ra_player/ra_player_handler.dart';
 import 'package:radioaktywne/components/utility/lazy_loaded_grid_view.dart';
 import 'package:radioaktywne/models/recording_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
+import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
 class RecordingsPage extends HookWidget {
   const RecordingsPage({
     super.key,
-    required this.audioHandler,
+    this.perPage = 8,
   });
 
-  final AudioHandler? audioHandler;
+  final int perPage;
 
-  static Uri _recordingsUrl(int page) => Uri.parse(
-        'https://radioaktywne.pl/wp-json/wp/v2/recording?_embed=true&page=$page&per_page=8',
+  Uri _recordingsUrl(int page) => Uri.parse(
+        'https://radioaktywne.pl/wp-json/wp/v2/recording?_embed=true&page=$page&per_page=$perPage',
       );
 
-  static Uri _recordingUrl(String id) =>
+  Uri _recordingUrl(String id) =>
       Uri.parse('https://radioaktywne.pl/wp-json/wp/v2/media/$id');
 
   Future<List<RecordingInfo>> fetchPage(int page) async {
@@ -50,15 +52,17 @@ class RecordingsPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LazyLoadedGridView(
-      fetchPage: fetchPage,
-      itemBuilder: (recording) => LazyLoadedGridViewItem(
-        title: recording.title,
-        thumbnailPath: recording.thumbnailPath,
-      ),
-      onItemTap: (recording, index) async {
-        await audioHandler?.updateMediaItem(recording.mediaItem);
-        await audioHandler?.play();
+    return BlocBuilder<AudioHandlerCubit, RaPlayerHandler>(
+      builder: (context, audioHandler) {
+        return LazyLoadedGridView(
+          fetchPage: fetchPage,
+          itemBuilder: (recording) => LazyLoadedGridViewItem(
+            title: recording.title,
+            thumbnailPath: recording.thumbnailPath,
+          ),
+          onItemTap: (recording, index) async =>
+              audioHandler.playMediaItem(recording.mediaItem),
+        );
       },
     );
   }

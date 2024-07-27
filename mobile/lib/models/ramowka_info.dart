@@ -12,18 +12,10 @@ class RamowkaInfo implements Comparable<RamowkaInfo> {
 
   /// Creates a [RamowkaInfo] object from a given Json map.
   RamowkaInfo.fromJson(Map<String, dynamic> jsonData)
-      : title = parseTitle(
-          (jsonData['title'] as Map<String, dynamic>)['rendered'].toString(),
-        ),
-        startTime = parseTime(
-          (jsonData['acf'] as Map<String, dynamic>)['start_time'].toString(),
-        ),
-        endTime = parseTime(
-          (jsonData['acf'] as Map<String, dynamic>)['end_time'].toString(),
-        ),
-        day = Day.fromString(
-          (jsonData['acf'] as Map<String, dynamic>)['day'].toString(),
-        );
+      : title = parseTitle(jsonData['title']['rendered'] as String),
+        startTime = parseTime(jsonData['acf']['start_time'] as String),
+        endTime = parseTime(jsonData['acf']['end_time'] as String),
+        day = Day.fromString(jsonData['acf']['day'] as String);
 
   final String title;
   final String startTime;
