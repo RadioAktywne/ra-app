@@ -162,6 +162,12 @@ abstract class AppLocalizations {
   /// In pl, this message translates to:
   /// **'Niedziela'**
   String get sunday;
+
+  /// No description provided for @nowPlaying.
+  ///
+  /// In pl, this message translates to:
+  /// **'Teraz gramy'**
+  String get nowPlaying;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
