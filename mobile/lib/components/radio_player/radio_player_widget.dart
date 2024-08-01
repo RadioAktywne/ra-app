@@ -110,18 +110,18 @@ class StreamPlayButton extends StatelessWidget {
   const StreamPlayButton({
     super.key,
     required this.audioHandler,
-    this.buttonSize,
-    this.padding,
+    this.buttonSize = RadioPlayerWidget.buttonSize,
+    this.padding = RadioPlayerWidget.horizontalPadding,
   });
 
   final AudioHandler audioHandler;
-  final double? buttonSize;
-  final EdgeInsetsGeometry? padding;
+  final double buttonSize;
+  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: padding ?? RadioPlayerWidget.horizontalPadding,
+      padding: padding,
       child: StreamBuilder<AudioProcessingState>(
         stream: audioHandler.playbackState
             .map((state) => state.processingState)
@@ -136,7 +136,7 @@ class StreamPlayButton extends StatelessWidget {
             builder: (context, snapshot) {
               final playing = snapshot.data ?? false;
               return RaPlayButton(
-                size: buttonSize ?? RadioPlayerWidget.buttonSize,
+                size: buttonSize,
                 onPressed: playing ? audioHandler.stop : audioHandler.play,
                 audioProcessingState: audioProcessingState,
               );

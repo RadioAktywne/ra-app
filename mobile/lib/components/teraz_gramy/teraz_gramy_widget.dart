@@ -42,7 +42,7 @@ class TerazGramyWidget extends StatelessWidget {
                 ),
                 switch (audioHandler) {
                   null => Text(
-                      'No stream title', // TODO: zamienić na "RadioAktywne"
+                      context.l10n.noStreamTitle,
                       style:
                           context.textStyles.textMedium.copyWith(height: 1.5),
                     ),
