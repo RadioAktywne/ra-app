@@ -1,5 +1,5 @@
 {
-    "@locale": "pl",
+    "@@locale": "pl",
     "hello": "cześć",
     "dataLoadError": "Wystąpił błąd podczas pobierania danych",
     "imageLoadError": "Wystąpił błąd podczas pobierania obrazu",
@@ -12,5 +12,6 @@
     "friday": "Piątek",
     "saturday": "Sobota",
     "sunday": "Niedziela",
-    "nowPlaying": "Teraz gramy"
+    "nowPlaying": "Teraz gramy",
+    "backToRadio": "Wróć do radia"
 }

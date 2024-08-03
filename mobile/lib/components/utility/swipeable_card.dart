@@ -25,7 +25,6 @@ class SwipeableCard extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pageController = usePageController();
     final currentPage = useState(0);
 
     return ColorShadowedCard(
@@ -62,7 +61,6 @@ class SwipeableCard extends HookWidget {
         children: <Widget>[
           Positioned.fill(
             child: PageView.builder(
-              controller: pageController,
               itemCount: items.length,
               onPageChanged: (index) => currentPage.value = index,
               itemBuilder: (context, index) {

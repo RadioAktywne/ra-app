@@ -8,6 +8,7 @@ import 'package:radioaktywne/pages/article_page.dart';
 import 'package:radioaktywne/pages/article_selection_page.dart';
 import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
 import 'package:radioaktywne/pages/ramowka_page.dart';
+import 'package:radioaktywne/pages/recordings_page.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
 final raRouter = GoRouter(
@@ -23,10 +24,9 @@ final raRouter = GoRouter(
           path: RaRoutes.albumOfTheWeek,
           builder: (context, state) => const PlytaTygodniaPage(),
         ),
-        // TODO: Implement page for this route
         GoRoute(
           path: RaRoutes.recordings,
-          builder: (context, state) => DummyRoute(state: state),
+          builder: (context, state) => const RecordingsPage(),
         ),
         GoRoute(
           path: RaRoutes.articles,
@@ -40,7 +40,7 @@ final raRouter = GoRouter(
         // TODO: Implement following pages:
         GoRoute(
           path: RaRoutes.radioPeople,
-          builder: (context, state) => DummyRoute(state: state),
+          builder: (context, state) => _DummyRoute(state: state),
         ),
         GoRoute(
           path: RaRoutes.ramowka,
@@ -48,11 +48,28 @@ final raRouter = GoRouter(
         ),
         GoRoute(
           path: RaRoutes.broadcasts,
-          builder: (context, state) => DummyRoute(state: state),
+          builder: (context, state) => _DummyRoute(state: state),
         ),
         GoRoute(
           path: RaRoutes.about,
-          builder: (context, state) => DummyRoute(state: state),
+          builder: (context, state) => _DummyRoute(state: state),
+        ),
+        // TODO: Implement following pages:
+        GoRoute(
+          path: RaRoutes.radioPeople,
+          builder: (context, state) => _DummyRoute(state: state),
+        ),
+        GoRoute(
+          path: RaRoutes.ramowka,
+          builder: (context, state) => const RamowkaPage(),
+        ),
+        GoRoute(
+          path: RaRoutes.broadcasts,
+          builder: (context, state) => _DummyRoute(state: state),
+        ),
+        GoRoute(
+          path: RaRoutes.about,
+          builder: (context, state) => _DummyRoute(state: state),
         ),
       ],
       builder: (context, state, child) =>
@@ -61,9 +78,8 @@ final raRouter = GoRouter(
   ],
 );
 
-class DummyRoute extends StatelessWidget {
-  const DummyRoute({
-    super.key,
+class _DummyRoute extends StatelessWidget {
+  const _DummyRoute({
     required this.state,
   });
 

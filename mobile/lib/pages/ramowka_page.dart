@@ -55,8 +55,8 @@ class RamowkaPage extends StatelessWidget {
         hasData: (ramowka) => ramowka.isNotEmpty,
         builder: (context, ramowka) => ListView.separated(
           padding: RaPageConstraints.outerWidgetPagePadding.copyWith(
-            top: RaPageConstraints.pagePadding,
-            bottom: RaPageConstraints.radioPlayerPadding,
+            top: RaPageConstraints.pagePaddingValue,
+            bottom: context.playerPaddingValue,
           ),
           itemBuilder: (context, index) {
             final ramowkaForDay =
@@ -82,7 +82,7 @@ class RamowkaPage extends StatelessWidget {
             );
           },
           separatorBuilder: (context, index) =>
-              const SizedBox(height: RaPageConstraints.pagePadding),
+              const SizedBox(height: RaPageConstraints.pagePaddingValue),
           itemCount: Day.values.length,
         ),
       ),

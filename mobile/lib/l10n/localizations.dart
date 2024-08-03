@@ -168,6 +168,12 @@ abstract class AppLocalizations {
   /// In pl, this message translates to:
   /// **'Teraz gramy'**
   String get nowPlaying;
+
+  /// No description provided for @backToRadio.
+  ///
+  /// In pl, this message translates to:
+  /// **'Wróć do radia'**
+  String get backToRadio;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

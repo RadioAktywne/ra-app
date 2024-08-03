@@ -42,4 +42,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get nowPlaying => 'Teraz gramy';
+
+  @override
+  String get backToRadio => 'Wróć do radia';
 }

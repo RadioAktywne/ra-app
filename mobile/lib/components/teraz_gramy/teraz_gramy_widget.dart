@@ -1,8 +1,7 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:radioaktywne/components/ra_playbutton.dart';
-import 'package:radioaktywne/components/radio_player/radio_player_widget.dart';
+import 'package:radioaktywne/components/ra_player/ra_player_handler.dart';
+import 'package:radioaktywne/components/ra_player/ra_player_widget.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/utility/image_with_overlay.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
@@ -24,7 +23,7 @@ class TerazGramyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AudioHandlerCubit, AudioHandler?>(
+    return BlocBuilder<AudioHandlerCubit, RaPlayerHandler>(
       builder: (context, audioHandler) {
         return ColorShadowedCard(
           shadowColor: shadowColor ?? context.colors.highlightRed,
@@ -40,39 +39,21 @@ class TerazGramyWidget extends StatelessWidget {
                     color: context.colors.highlightGreen,
                   ),
                 ),
-                switch (audioHandler) {
-                  null => Text(
-                      context.l10n.noStreamTitle,
-                      style:
-                          context.textStyles.textMedium.copyWith(height: 1.5),
-                    ),
-                  _ => StreamTitle(
-                      audioHandler: audioHandler,
-                      width: MediaQuery.of(context).size.width,
-                      style:
-                          context.textStyles.textMedium.copyWith(height: 1.5),
-                    ),
-                },
+                PlayerTitle(
+                  audioHandler: audioHandler,
+                  width: MediaQuery.of(context).size.width,
+                  textStyle:
+                      context.textStyles.textMedium.copyWith(height: 1.5),
+                ),
               ],
             ),
             titleOverlayPadding: const EdgeInsets.all(8),
             child: Center(
-              child: switch (audioHandler) {
-                null => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
-                    child: RaPlayButton(
-                      onPressed: () {},
-                      size: _buttonSize,
-                      audioProcessingState: AudioProcessingState.loading,
-                    ),
-                  ),
-                _ => StreamPlayButton(
-                    audioHandler: audioHandler,
-                    buttonSize: _buttonSize,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: _buttonSize),
-                  ),
-              },
+              child: PlayerPlayButton(
+                audioHandler: audioHandler,
+                size: _buttonSize,
+                padding: const EdgeInsets.symmetric(horizontal: _buttonSize),
+              ),
             ),
           ),
         );

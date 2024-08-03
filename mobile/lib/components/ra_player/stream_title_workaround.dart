@@ -28,7 +28,6 @@ class StreamTitleWorkaround {
       (response) {
         final dynamic jsonData = jsonDecode(response.body);
         final dynamic maybeStreamName =
-            // ignore: avoid_dynamic_calls
             jsonData['icestats']['source'][0]['title'];
 
         if (maybeStreamName is String) {
