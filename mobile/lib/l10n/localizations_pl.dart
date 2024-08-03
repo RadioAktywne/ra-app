@@ -41,5 +41,8 @@ class AppLocalizationsPl extends AppLocalizations {
   String get sunday => 'Niedziela';
 
   @override
+  String get nowPlaying => 'Teraz gramy';
+
+  @override
   String get backToRadio => 'Wróć do radia';
 }

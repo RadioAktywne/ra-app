@@ -163,6 +163,12 @@ abstract class AppLocalizations {
   /// **'Niedziela'**
   String get sunday;
 
+  /// No description provided for @nowPlaying.
+  ///
+  /// In pl, this message translates to:
+  /// **'Teraz gramy'**
+  String get nowPlaying;
+
   /// No description provided for @backToRadio.
   ///
   /// In pl, this message translates to:

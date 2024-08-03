@@ -174,11 +174,13 @@ class _Player extends StatelessWidget {
       color: context.colors.backgroundDarkSecondary,
       child: Row(
         children: [
-          _PlayButton(
+          PlayerPlayButton(
             audioHandler: audioHandler,
+            size: 37,
           ),
-          _StreamTitle(
+          PlayerTitle(
             audioHandler: audioHandler,
+            width: MediaQuery.of(context).size.width / 1.4,
           ),
         ],
       ),
@@ -187,17 +189,22 @@ class _Player extends StatelessWidget {
 }
 
 /// The [RaPlayButton] controlling the radio stream.
-class _PlayButton extends StatelessWidget {
-  const _PlayButton({
+class PlayerPlayButton extends StatelessWidget {
+  const PlayerPlayButton({
+    super.key,
     required this.audioHandler,
+    required this.size,
+    this.padding = const EdgeInsets.symmetric(horizontal: 14),
   });
 
   final RaPlayerHandler audioHandler;
+  final double size;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14),
+      padding: padding,
       child: StreamBuilder<AudioProcessingState>(
         stream: audioHandler.playbackState
             .map((state) => state.processingState)
@@ -217,7 +224,7 @@ class _PlayButton extends StatelessWidget {
             builder: (context, snapshot) {
               final playing = snapshot.data ?? false;
               return RaPlayButton(
-                size: 37,
+                size: size,
                 onPressed: playing ? audioHandler.stop : audioHandler.play,
                 audioProcessingState: audioProcessingState,
               );
@@ -230,12 +237,17 @@ class _PlayButton extends StatelessWidget {
 }
 
 /// The display of the radio stream title.
-class _StreamTitle extends StatelessWidget {
-  const _StreamTitle({
+class PlayerTitle extends StatelessWidget {
+  const PlayerTitle({
+    super.key,
     required this.audioHandler,
+    required this.width,
+    this.textStyle,
   });
 
   final RaPlayerHandler audioHandler;
+  final double width;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -244,16 +256,16 @@ class _StreamTitle extends StatelessWidget {
       builder: (context, snapshot) {
         final mediaItem = snapshot.data;
         return SizedBox(
-          width: MediaQuery.of(context).size.width / 1.4,
+          width: width,
           child: TextScroll(
             (mediaItem?.title != null && mediaItem!.title.isNotEmpty == true)
                 ? mediaItem.title
-                : 'No stream title', // TODO: change for RadioAktywne
+                : context.l10n.noStreamTitle,
             velocity: const Velocity(pixelsPerSecond: Offset(17, 0)),
             pauseBetween: const Duration(milliseconds: 2500),
             intervalSpaces: 6,
             selectable: true,
-            style: context.textStyles.textPlayer,
+            style: textStyle ?? context.textStyles.textPlayer,
           ),
         );
       },
