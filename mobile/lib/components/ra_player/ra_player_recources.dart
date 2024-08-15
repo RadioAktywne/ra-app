@@ -8,7 +8,8 @@ abstract class RaPlayerConstants {
   static const String seek = 'seek';
 
   static final radioMediaItem = MediaItem(
-    id: RaLinks.radioPlayer.radioStream,
+    id: Uri.https(RaLinks.radioPlayerBase, RaLinks.radioPlayer.radioStream)
+        .toString(),
     title: 'Radio Aktywne',
     album: 'Radio Aktywne',
     artUri: Uri.parse(RaLinks.logo),

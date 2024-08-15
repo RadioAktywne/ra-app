@@ -10,7 +10,7 @@ class AudioHandlerCubit extends Cubit<RaPlayerHandler> {
    */
   AudioHandlerCubit({required MediaItem initialMedia})
       : super(
-          RaPlayerHandler(mediaItem: const MediaItem(id: '', title: '')),
+          RaPlayerHandler(mediaItem: initialMedia),
         ) {
     initAudioHandler(initialMedia);
   }
