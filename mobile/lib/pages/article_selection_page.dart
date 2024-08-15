@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:radioaktywne/components/utility/lazy_loaded_grid_view.dart';
 import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
+import 'package:radioaktywne/resources/ra_links.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
 class ArticleSelectionPage extends StatelessWidget {
@@ -13,15 +14,19 @@ class ArticleSelectionPage extends StatelessWidget {
 
   final Duration timeout;
 
-  static final Uri _articlesUri = Uri.parse(
-    'https://radioaktywne.pl/wp-json/wp/v2/posts?_embed=true',
-  );
-
   @override
   Widget build(BuildContext context) {
     return LazyLoadedGridView(
       fetchPage: (page) async {
-        final pageUri = Uri.parse('$_articlesUri&page=$page&per_page=16');
+        final pageUri = Uri.https(
+          RaLinks.radioAktywne,
+          RaLinks.api.posts,
+          {
+            '_embed': true.toString(),
+            'page': page.toString(),
+            'per_page': 16.toString(),
+          },
+        );
         return fetchData(pageUri, ArticleInfo.fromJson, timeout: timeout);
       },
       itemBuilder: (article) => LazyLoadedGridViewItem(

@@ -28,19 +28,14 @@ Future<Iterable<T>> fetchData<T>(
   Duration timeout = _fetchTimeout,
   Map<String, String> headers = _jsonHeaders,
 }) async {
-  final response = await http
-      .get(
-        url,
-        headers: headers,
-      )
-      .timeout(timeout);
+  final response = await http.get(url, headers: headers).timeout(timeout);
 
   try {
     final jsonData = jsonDecode(response.body) as List<dynamic>;
     return jsonData.map(
       (data) => fromJson(data as Map<String, dynamic>),
     );
-  } catch (e) {
+  } catch (_) {
     final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
     return [fromJson(jsonData)];
   }
@@ -63,12 +58,7 @@ Future<T> fetchSingle<T>(
   Duration timeout = _fetchTimeout,
   Map<String, String> headers = _jsonHeaders,
 }) async {
-  final response = await http
-      .get(
-        url,
-        headers: headers,
-      )
-      .timeout(timeout);
+  final response = await http.get(url, headers: headers).timeout(timeout);
 
   final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
   return fromJson(jsonData);

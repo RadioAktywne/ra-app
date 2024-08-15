@@ -7,6 +7,7 @@ import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/plyta_tygodnia_info.dart';
 import 'package:radioaktywne/pages/ra_error_page.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
+import 'package:radioaktywne/resources/ra_links.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
 class PlytaTygodniaPage extends StatelessWidget {
@@ -27,14 +28,20 @@ class PlytaTygodniaPage extends StatelessWidget {
   static const SizedBox _verticalPadding = SizedBox(height: 26);
 
   /// Plyta tygodnia info fetch details.
-  static final Uri _infoUrl = Uri.parse(
-    'https://radioaktywne.pl/wp-json/wp/v2/album?page=1&per_page=1',
+  static final Uri _infoUrl = Uri.https(
+    RaLinks.radioAktywne,
+    RaLinks.api.album,
+    {
+      'page': 1.toString(),
+      'per_page': 1.toString(),
+    },
   );
   static const _infoHeaders = {'Content-Type': 'application/json'};
 
   /// Plyta tygodnia album cover fetch details.
-  static Uri _imgUrl(String id) => Uri.parse(
-        'https://radioaktywne.pl/wp-json/wp/v2/media/$id',
+  static Uri _imgUrl(String id) => Uri.https(
+        RaLinks.radioAktywne,
+        '${RaLinks.api.media}/$id',
       );
   static const _imgHeaders = {'Content-Type': 'image/jpeg'};
 

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:radioaktywne/resources/ra_links.dart';
 
 class StreamTitleWorkaround {
   StreamTitleWorkaround() {
@@ -14,7 +15,7 @@ class StreamTitleWorkaround {
   late Stream<String> stream;
 
   final httpPackageUrl =
-      Uri.parse('https://listen.radioaktywne.pl:8443/status-json.xsl');
+      Uri.https(RaLinks.radioPlayerBase, RaLinks.radioPlayer.status);
   bool _isPlaying = false;
   var _timer = Timer.periodic(
     const Duration(seconds: 5),

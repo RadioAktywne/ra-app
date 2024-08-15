@@ -1,18 +1,19 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:radioaktywne/resources/ra_links.dart';
 
 abstract class RaPlayerConstants {
+  const RaPlayerConstants._();
+
   static const String mediaKind = 'mediaKind';
   static const String seek = 'seek';
 
   static final radioMediaItem = MediaItem(
-    id: 'https://listen.radioaktywne.pl:8443/raogg',
-    title: 'Stream title not provided', // TODO: zmienić na 'Radio Aktywne'
-    album: 'Stream name not provided', // TODO: zmienić na 'Radio Aktywne'
-    artUri: Uri.parse(
-      'https://cdn-profiles.tunein.com/s10187/images/logod.png',
-    ),
+    id: RaLinks.radioPlayer.radioStream,
+    title: 'Radio Aktywne',
+    album: 'Radio Aktywne',
+    artUri: Uri.parse(RaLinks.logo),
     extras: {
-      mediaKind: MediaKind.radio,
+      RaPlayerConstants.mediaKind: MediaKind.radio,
     },
   );
 }

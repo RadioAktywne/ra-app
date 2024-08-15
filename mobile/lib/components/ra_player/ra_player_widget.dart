@@ -27,6 +27,10 @@ class RaPlayerWidget extends StatelessWidget {
 
   final Duration animationDuration;
 
+  static const double _playerSize = 37;
+  static const double _thumbRadius = 5;
+  static const double _thumbGlowRadius = 15;
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AudioHandlerCubit, RaPlayerHandler>(
@@ -117,8 +121,8 @@ class _SeekBar extends HookWidget {
                 total: value.total,
                 buffered: value.buffered,
                 thumbColor: context.colors.highlightRed,
-                thumbRadius: 5,
-                thumbGlowRadius: 15,
+                thumbRadius: RaPlayerWidget._thumbRadius,
+                thumbGlowRadius: RaPlayerWidget._thumbGlowRadius,
                 bufferedBarColor: context.colors.backgroundLightSecondary,
                 baseBarColor: context.colors.backgroundLight,
                 progressBarColor: context.colors.highlightGreen,
@@ -139,12 +143,16 @@ class _BackButton extends StatelessWidget {
 
   final RaPlayerHandler audioHandler;
 
+  double _calculateButtonWidth(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    const padding = RaPageConstraints.pagePaddingValue * 2;
+    return (screenWidth - padding) / 3;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: (MediaQuery.of(context).size.width -
-              2 * RaPageConstraints.pagePaddingValue) /
-          3,
+      width: _calculateButtonWidth(context),
       height: RaPageConstraints.radioPlayerHeight / 2,
       color: context.colors.backgroundDark,
       child: GestureDetector(
@@ -176,7 +184,7 @@ class _Player extends StatelessWidget {
         children: [
           PlayerPlayButton(
             audioHandler: audioHandler,
-            size: 37,
+            size: RaPlayerWidget._playerSize,
           ),
           PlayerTitle(
             audioHandler: audioHandler,
