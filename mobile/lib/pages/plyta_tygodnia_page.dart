@@ -29,8 +29,8 @@ class PlytaTygodniaPage extends StatelessWidget {
 
   /// Plyta tygodnia info fetch details.
   static final Uri _infoUrl = Uri.https(
-    RaLinks.radioAktywne,
-    RaLinks.api.album,
+    RaApi.baseUrl,
+    RaApi.endpoints.album,
     {
       'page': 1.toString(),
       'per_page': 1.toString(),
@@ -40,8 +40,8 @@ class PlytaTygodniaPage extends StatelessWidget {
 
   /// Plyta tygodnia album cover fetch details.
   static Uri _imgUrl(String id) => Uri.https(
-        RaLinks.radioAktywne,
-        '${RaLinks.api.media}/$id',
+        RaApi.baseUrl,
+        '${RaApi.endpoints.media}/$id',
       );
   static const _imgHeaders = {'Content-Type': 'image/jpeg'};
 

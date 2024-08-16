@@ -19,8 +19,8 @@ class ArticleSelectionPage extends StatelessWidget {
     return LazyLoadedGridView(
       fetchPage: (page) async {
         final pageUri = Uri.https(
-          RaLinks.radioAktywne,
-          RaLinks.api.posts,
+          RaApi.baseUrl,
+          RaApi.endpoints.posts,
           {
             '_embed': true.toString(),
             'page': page.toString(),

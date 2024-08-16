@@ -4,23 +4,23 @@ import 'package:radioaktywne/resources/ra_links.dart';
 void main() {
   test("Correct path to RA API's posts", () {
     expect(
-      Uri.https(RaLinks.radioAktywne, RaLinks.api.posts),
+      Uri.https(RaApi.baseUrl, RaApi.endpoints.posts),
       Uri.parse('https://radioaktywne.pl/wp-json/wp/v2/posts'),
     );
   });
 
   test("Correct path to RA's radio player", () {
     expect(
-      Uri.https(RaLinks.radioPlayerBase, RaLinks.radioPlayer.radioStream),
-      Uri.parse('https://listen.radioaktywne.pl:${RaLinks.playerPort}/raogg'),
+      Uri.https(RaListen.baseUrl, RaListen.radioStream),
+      Uri.parse('https://listen.radioaktywne.pl:${RaListen.playerPort}/raogg'),
     );
   });
 
   test("Correct path to RA API's album; hard query params", () {
     expect(
       Uri.https(
-        RaLinks.radioAktywne,
-        RaLinks.api.album,
+        RaApi.baseUrl,
+        RaApi.endpoints.album,
         {
           '_embed': true.toString(),
           'page': 5.toString(),

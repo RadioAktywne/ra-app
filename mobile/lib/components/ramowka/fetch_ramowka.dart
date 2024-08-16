@@ -11,8 +11,8 @@ Future<Iterable<RamowkaInfo>> fetchRamowka({
 }) async =>
     fetchData(
       Uri.https(
-        RaLinks.radioAktywne,
-        RaLinks.api.event,
+        RaApi.baseUrl,
+        RaApi.endpoints.event,
         {
           '_embed': true.toString(),
           'page': 1.toString(),

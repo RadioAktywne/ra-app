@@ -19,8 +19,8 @@ class NewestArticleFetch {
     _isLoading = true;
 
     final pageUri = Uri.https(
-      RaLinks.radioAktywne,
-      RaLinks.api.posts,
+      RaApi.baseUrl,
+      RaApi.endpoints.posts,
       {
         '_embed': true.toString(),
         'page': 1.toString(),

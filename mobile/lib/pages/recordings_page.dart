@@ -17,8 +17,8 @@ class RecordingsPage extends HookWidget {
   final int perPage;
 
   Uri _recordingsUrl(int page) => Uri.https(
-        RaLinks.radioAktywne,
-        RaLinks.api.recording,
+        RaApi.baseUrl,
+        RaApi.endpoints.recording,
         {
           'embed': true.toString(),
           'page': page.toString(),
@@ -27,7 +27,7 @@ class RecordingsPage extends HookWidget {
       );
 
   Uri _recordingUrl(String id) =>
-      Uri.https(RaLinks.radioAktywne, '${RaLinks.api.media}/$id');
+      Uri.https(RaApi.baseUrl, '${RaApi.endpoints.media}/$id');
 
   Future<List<RecordingInfo>> fetchPage(int page) async {
     final pageUrl = _recordingsUrl(page);

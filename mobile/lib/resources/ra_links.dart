@@ -1,12 +1,16 @@
-abstract class RaLinks {
+abstract class RaListen {
   static const int playerPort = 8443;
-  static const String radioAktywne = 'radioaktywne.pl';
-  static const _RadioAktywneApi api = _RadioAktywneApi._();
-  static const String radioPlayerBase =
-      'listen.radioaktywne.pl:${RaLinks.playerPort}';
-  static const _RadioPlayerBase radioPlayer = _RadioPlayerBase._();
-  static const String logo =
+
+  static const String baseUrl = 'listen.radioaktywne.pl:$playerPort';
+  static const String status = 'status-json.xsl';
+  static const String radioStream = 'raogg';
+}
+
+abstract class RaApi {
+  static const String baseUrl = 'radioaktywne.pl';
+  static const String logoUrl =
       'https://cdn-profiles.tunein.com/s10187/images/logod.png';
+  static const _RadioAktywneApi endpoints = _RadioAktywneApi._();
 }
 
 class _RadioAktywneApi {
@@ -19,11 +23,4 @@ class _RadioAktywneApi {
   String get album => '$_api/album';
   String get media => '$_api/media';
   String get recording => '$_api/recording';
-}
-
-class _RadioPlayerBase {
-  const _RadioPlayerBase._();
-
-  String get status => 'status-json.xsl';
-  String get radioStream => 'raogg';
 }
