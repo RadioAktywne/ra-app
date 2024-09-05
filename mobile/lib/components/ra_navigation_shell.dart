@@ -24,13 +24,7 @@ class RaNavigationShell extends HookWidget {
 
   /// The other widgets in the application,
   /// usually - the pages.
-  /// The other widgets in the application,
-  /// usually - the pages.
   final Widget child;
-
-  /// Internal state of the [GoRouter] for
-  /// determining e.g. the currently selected
-  /// page.
 
   /// Internal state of the [GoRouter] for
   /// determining e.g. the currently selected
