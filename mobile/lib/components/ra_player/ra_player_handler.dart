@@ -197,7 +197,7 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
       systemActions: {
         if (mediaKind == MediaKind.recording) MediaAction.seek,
       },
-      androidCompactActionIndices: const [0],
+      androidCompactActionIndices: const [0, 1],
       processingState: switch (_player.processingState) {
         ProcessingState.idle => AudioProcessingState.idle,
         ProcessingState.loading => AudioProcessingState.loading,

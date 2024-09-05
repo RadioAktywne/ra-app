@@ -64,17 +64,25 @@ class TerazGramyWidget extends StatelessWidget {
                 child: Center(
                   child: StreamBuilder<PlaybackState>(
                     stream: audioHandler.playbackState,
-                    builder: (context, state) {
+                    builder: (context, snapshot) {
+                      final state = snapshot.data;
+                      final isRadio =
+                          mediaItem?.extras?[RaPlayerConstants.mediaKind] ==
+                              MediaKind.radio;
                       return RaPlayButton(
                         size: _buttonSize,
-                        onPressed: () => audioHandler
-                            .playMediaItem(RaPlayerConstants.radioMediaItem),
-                        audioProcessingState:
-                            mediaItem?.extras?[RaPlayerConstants.mediaKind] ==
-                                    MediaKind.radio
-                                ? state.data?.processingState ??
-                                    AudioProcessingState.idle
-                                : AudioProcessingState.idle,
+                        onPressed: () => isRadio
+                            ? state?.processingState ==
+                                    AudioProcessingState.ready
+                                ? audioHandler.stop()
+                                : audioHandler.play()
+                            : audioHandler.playMediaItem(
+                                RaPlayerConstants.radioMediaItem,
+                              ),
+                        audioProcessingState: isRadio
+                            ? state?.processingState ??
+                                AudioProcessingState.idle
+                            : AudioProcessingState.idle,
                       );
                     },
                   ),
