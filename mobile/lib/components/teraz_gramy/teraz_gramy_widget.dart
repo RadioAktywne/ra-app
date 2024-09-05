@@ -1,6 +1,9 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:radioaktywne/components/ra_playbutton.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_handler.dart';
+import 'package:radioaktywne/components/ra_player/ra_player_recources.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_widget.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/utility/image_with_overlay.dart';
@@ -25,37 +28,60 @@ class TerazGramyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AudioHandlerCubit, RaPlayerHandler>(
       builder: (context, audioHandler) {
-        return ColorShadowedCard(
-          shadowColor: shadowColor ?? context.colors.highlightRed,
-          child: ImageWithOverlay(
-            imageBuilder: Image.asset,
-            thumbnailPath: 'assets/teraz_gramy_background.webp',
-            titleOverlay: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  context.l10n.nowPlaying,
-                  style: context.textStyles.textPlayer.copyWith(
-                    color: context.colors.highlightGreen,
+        return StreamBuilder<MediaItem?>(
+          stream: audioHandler.mediaItem,
+          builder: (context, snapshot) {
+            final mediaItem = snapshot.data;
+            return ColorShadowedCard(
+              shadowColor: shadowColor ?? context.colors.highlightRed,
+              child: ImageWithOverlay(
+                imageBuilder: Image.asset,
+                thumbnailPath: 'assets/teraz_gramy_background.webp',
+                titleOverlay: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.l10n.nowPlaying,
+                      style: context.textStyles.textPlayer.copyWith(
+                        color: context.colors.highlightGreen,
+                      ),
+                    ),
+                    ValueListenableBuilder<String?>(
+                      valueListenable: audioHandler.streamTitleNotifier,
+                      builder: (context, value, _) {
+                        final title = value ?? context.l10n.noStreamTitle;
+                        return RaPlayerTitle(
+                          width: MediaQuery.of(context).size.width,
+                          title: title,
+                          textStyle: context.textStyles.textMedium
+                              .copyWith(height: 1.5),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                titleOverlayPadding: const EdgeInsets.all(8),
+                child: Center(
+                  child: StreamBuilder<PlaybackState>(
+                    stream: audioHandler.playbackState,
+                    builder: (context, state) {
+                      return RaPlayButton(
+                        size: _buttonSize,
+                        onPressed: () => audioHandler
+                            .playMediaItem(RaPlayerConstants.radioMediaItem),
+                        audioProcessingState:
+                            mediaItem?.extras?[RaPlayerConstants.mediaKind] ==
+                                    MediaKind.radio
+                                ? state.data?.processingState ??
+                                    AudioProcessingState.idle
+                                : AudioProcessingState.idle,
+                      );
+                    },
                   ),
                 ),
-                PlayerTitle(
-                  audioHandler: audioHandler,
-                  width: MediaQuery.of(context).size.width,
-                  textStyle:
-                      context.textStyles.textMedium.copyWith(height: 1.5),
-                ),
-              ],
-            ),
-            titleOverlayPadding: const EdgeInsets.all(8),
-            child: Center(
-              child: PlayerPlayButton(
-                audioHandler: audioHandler,
-                size: _buttonSize,
-                padding: const EdgeInsets.symmetric(horizontal: _buttonSize),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );

@@ -14,8 +14,7 @@ class StreamTitleWorkaround {
   late StreamController<String> _streamController;
   late Stream<String> stream;
 
-  final httpPackageUrl =
-      Uri.https(RaListen.baseUrl, RaListen.status);
+  final httpPackageUrl = Uri.https(RaRadio.baseUrl, RaRadio.status);
   bool _isPlaying = false;
   var _timer = Timer.periodic(
     const Duration(seconds: 5),

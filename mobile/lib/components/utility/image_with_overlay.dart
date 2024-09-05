@@ -8,9 +8,9 @@ class ImageWithOverlay extends StatelessWidget {
     super.key,
     required this.thumbnailPath,
     this.child,
-    this.imageBuilder = Image.network,
     this.titleOverlay,
     this.titleOverlayPadding = const EdgeInsets.all(4),
+    this.imageBuilder = Image.network,
   });
 
   /// Child widget to display centered above the image, BUT ABOVE TITLE OVERLAY.

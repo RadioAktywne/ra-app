@@ -11,8 +11,8 @@ void main() {
 
   test("Correct path to RA's radio player", () {
     expect(
-      Uri.https(RaListen.baseUrl, RaListen.radioStream),
-      Uri.parse('https://listen.radioaktywne.pl:${RaListen.playerPort}/raogg'),
+      Uri.https(RaRadio.baseUrl, RaRadio.radioStream),
+      Uri.parse('https://listen.radioaktywne.pl:${RaRadio.playerPort}/raogg'),
     );
   });
 

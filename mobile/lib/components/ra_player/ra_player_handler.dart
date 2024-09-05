@@ -80,6 +80,7 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
 
       final mediaItemValue = this.mediaItem.value ?? _mediaItem;
       this.mediaItem.add(mediaItemValue.copyWith(title: streamTitle));
+      streamTitleNotifier.value = streamTitle;
     });
   }
 
@@ -96,6 +97,8 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   /// Workaround for stream title fetching
   final StreamTitleWorkaround streamTitleWorkaround;
+
+  final streamTitleNotifier = ValueNotifier<String?>(null);
 
   final progressNotifier = ValueNotifier<ProgressBarState>(
     ProgressBarState(

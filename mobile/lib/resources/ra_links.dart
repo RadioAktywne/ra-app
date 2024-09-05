@@ -1,4 +1,4 @@
-abstract class RaListen {
+abstract class RaRadio {
   static const int playerPort = 8443;
 
   static const String baseUrl = 'listen.radioaktywne.pl:$playerPort';

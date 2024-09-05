@@ -111,7 +111,7 @@ class _SeekBar extends HookWidget {
       child: Center(
         child: ValueListenableBuilder<ProgressBarState>(
           valueListenable: audioHandler.progressNotifier,
-          builder: (context, value, child) {
+          builder: (context, value, _) {
             return Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: RaPageConstraints.pagePaddingValue,
@@ -186,7 +186,7 @@ class _Player extends StatelessWidget {
             audioHandler: audioHandler,
             size: RaPlayerWidget._playerSize,
           ),
-          PlayerTitle(
+          _PlayerTitle(
             audioHandler: audioHandler,
             width: MediaQuery.of(context).size.width / 1.4,
           ),
@@ -245,8 +245,8 @@ class PlayerPlayButton extends StatelessWidget {
 }
 
 /// The display of the radio stream title.
-class PlayerTitle extends StatelessWidget {
-  const PlayerTitle({
+class _PlayerTitle extends StatelessWidget {
+  const _PlayerTitle({
     super.key,
     required this.audioHandler,
     required this.width,
@@ -263,20 +263,41 @@ class PlayerTitle extends StatelessWidget {
       stream: audioHandler.mediaItem,
       builder: (context, snapshot) {
         final mediaItem = snapshot.data;
-        return SizedBox(
+        final title = mediaItem?.title ?? context.l10n.noStreamTitle;
+        return RaPlayerTitle(
+          title: title.isNotEmpty ? title : context.l10n.noStreamTitle,
+          textStyle: textStyle,
           width: width,
-          child: TextScroll(
-            (mediaItem?.title != null && mediaItem!.title.isNotEmpty == true)
-                ? mediaItem.title
-                : context.l10n.noStreamTitle,
-            velocity: const Velocity(pixelsPerSecond: Offset(17, 0)),
-            pauseBetween: const Duration(milliseconds: 2500),
-            intervalSpaces: 6,
-            selectable: true,
-            style: textStyle ?? context.textStyles.textPlayer,
-          ),
         );
       },
+    );
+  }
+}
+
+class RaPlayerTitle extends StatelessWidget {
+  const RaPlayerTitle({
+    super.key,
+    required this.title,
+    required this.width,
+    this.textStyle,
+  });
+
+  final String title;
+  final double width;
+  final TextStyle? textStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      child: TextScroll(
+        title,
+        velocity: const Velocity(pixelsPerSecond: Offset(17, 0)),
+        pauseBetween: const Duration(milliseconds: 2500),
+        intervalSpaces: 6,
+        selectable: true,
+        style: textStyle ?? context.textStyles.textPlayer,
+      ),
     );
   }
 }
