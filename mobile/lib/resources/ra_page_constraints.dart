@@ -29,7 +29,7 @@ abstract class RaPageConstraints {
 
 extension PlayerPaddingValue on BuildContext {
   double get playerPaddingValue =>
-      switch (BlocProvider.of<AudioHandlerCubit>(this).state.mediaKind) {
+      switch (BlocProvider.of<AudioHandlerCubit>(this).state.mediaKind.value) {
         MediaKind.radio => RaPageConstraints._radioPlayerPaddingValue,
         MediaKind.recording => RaPageConstraints._recordingPlayerPaddingValue,
       };

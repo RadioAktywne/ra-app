@@ -43,8 +43,8 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
     });
 
     _player.positionStream.listen((position) {
-      final oldState = progressNotifier.value;
-      progressNotifier.value = ProgressBarState(
+      final oldState = progress.value;
+      progress.value = ProgressBarState(
         current: position == Duration.zero && oldState.current > position
             ? oldState.current
             : position,
@@ -54,8 +54,8 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
     });
 
     _player.bufferedPositionStream.listen((bufferedPosition) {
-      final oldState = progressNotifier.value;
-      progressNotifier.value = ProgressBarState(
+      final oldState = progress.value;
+      progress.value = ProgressBarState(
         current: oldState.current,
         buffered: bufferedPosition,
         total: oldState.total,
@@ -63,8 +63,8 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
     });
 
     _player.durationStream.listen((totalDuration) {
-      final oldState = progressNotifier.value;
-      progressNotifier.value = ProgressBarState(
+      final oldState = progress.value;
+      progress.value = ProgressBarState(
         current: oldState.current,
         buffered: oldState.buffered,
         total: totalDuration ?? oldState.total,
@@ -72,41 +72,39 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
     });
 
     /// Listening for stream title changes
-    streamTitleWorkaround.stream.listen((streamTitle) {
+    streamTitleWorkaround.stream.listen((title) {
       final previousTitle = this.mediaItem.value?.title;
-      if (streamTitle == previousTitle) {
+      if (title == previousTitle) {
         return;
       }
 
       final mediaItemValue = this.mediaItem.value ?? _mediaItem;
-      this.mediaItem.add(mediaItemValue.copyWith(title: streamTitle));
-      streamTitleNotifier.value = streamTitle;
+      this.mediaItem.add(mediaItemValue.copyWith(title: title));
+      streamTitle.value = title;
     });
   }
 
   MediaItem _mediaItem;
-
-  MediaKind get mediaKind =>
-      _mediaItem.extras?[RaPlayerConstants.mediaKind] as MediaKind? ??
-      MediaKind.radio;
-
-  Duration get duration =>
-      _mediaItem.extras?[RaPlayerConstants.seek] as Duration? ?? Duration.zero;
 
   final AudioPlayer _player;
 
   /// Workaround for stream title fetching
   final StreamTitleWorkaround streamTitleWorkaround;
 
-  final streamTitleNotifier = ValueNotifier<String?>(null);
+  /// Current stream title that can be listened by components to multiple times
+  final streamTitle = ValueNotifier<String?>(null);
 
-  final progressNotifier = ValueNotifier<ProgressBarState>(
+  /// Current recording's progress
+  final progress = ValueNotifier<ProgressBarState>(
     ProgressBarState(
       current: Duration.zero,
       buffered: Duration.zero,
       total: Duration.zero,
     ),
   );
+
+  /// The kind of media playing currently (radio or recording)
+  final mediaKind = ValueNotifier<MediaKind>(MediaKind.radio);
 
   /// export icyMetadata (may become handy at some point)
   // Stream<IcyMetadata?> get icyMetadata => _player.icyMetadataStream;
@@ -115,19 +113,12 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
   // Flutter UI, notification, lock screen or headset will be routed through to
   // these 4 methods so that we can handle audio playback logic in one place.
 
-  void _updateRecordingPosition() {
-    if (mediaKind == MediaKind.recording) {
-      _mediaItem.extras
-          ?.update(RaPlayerConstants.seek, (_) => _player.position);
-    }
-  }
-
   Future<void> _startAction() async {
-    switch (mediaKind) {
+    switch (mediaKind.value) {
       case MediaKind.radio:
         streamTitleWorkaround.playerStarted();
       case MediaKind.recording:
-        final currentPosition = duration;
+        final currentPosition = progress.value.current;
         await _player.seek(
           currentPosition >= (_mediaItem.duration ?? Duration.zero)
               ? Duration.zero
@@ -151,14 +142,12 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
   @override
   Future<void> pause() async {
     streamTitleWorkaround.playerStopped();
-    _updateRecordingPosition();
     return _player.pause();
   }
 
   @override
   Future<void> stop() async {
     streamTitleWorkaround.playerStopped();
-    _updateRecordingPosition();
     return _player.stop();
   }
 
@@ -174,7 +163,11 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
   }
 
   @override
-  Future<void> playMediaItem(MediaItem mediaItem) async {
+  Future<void> playMediaItem(
+    MediaItem mediaItem, {
+    MediaKind mediaKind = MediaKind.radio,
+  }) async {
+    this.mediaKind.value = mediaKind;
     await updateMediaItem(mediaItem);
     await play();
   }
@@ -188,16 +181,16 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
     return PlaybackState(
       controls: [
         // MediaControl.rewind,
-        if (mediaKind == MediaKind.recording)
+        if (mediaKind.value == MediaKind.recording)
           if (_player.playing) MediaControl.pause else MediaControl.play,
         // MediaControl.stop,
         // MediaControl.fastForward,
         if (_player.playing) MediaControl.stop else MediaControl.play,
       ],
       systemActions: {
-        if (mediaKind == MediaKind.recording) MediaAction.seek,
+        if (mediaKind.value == MediaKind.recording) MediaAction.seek,
       },
-      androidCompactActionIndices: const [0, 1],
+      androidCompactActionIndices: const [0],
       processingState: switch (_player.processingState) {
         ProcessingState.idle => AudioProcessingState.idle,
         ProcessingState.loading => AudioProcessingState.loading,

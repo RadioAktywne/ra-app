@@ -35,16 +35,14 @@ class RaPlayerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AudioHandlerCubit, RaPlayerHandler>(
       builder: (context, audioHandler) {
-        return StreamBuilder<MediaItem?>(
-          stream: audioHandler.mediaItem,
-          builder: (context, snapshot) {
-            final mediaKind = snapshot
-                .data?.extras?[RaPlayerConstants.mediaKind] as MediaKind?;
+        return ValueListenableBuilder<MediaKind>(
+          valueListenable: audioHandler.mediaKind,
+          builder: (context, mediaKind, _) {
             return AnimatedContainer(
               duration: animationDuration,
               width: MediaQuery.of(context).size.width,
               height: switch (mediaKind) {
-                null || MediaKind.radio => RaPageConstraints.radioPlayerHeight,
+                MediaKind.radio => RaPageConstraints.radioPlayerHeight,
                 MediaKind.recording => RaPageConstraints.recordingPlayerHeight,
               },
               child: Stack(
@@ -58,7 +56,7 @@ class RaPlayerWidget extends StatelessWidget {
                   AnimatedPositioned(
                     duration: animationDuration,
                     bottom: switch (mediaKind) {
-                      null || MediaKind.radio => 0,
+                      MediaKind.radio => 0,
                       MediaKind.recording =>
                         RaPageConstraints.radioPlayerHeight * 2,
                     },
@@ -70,7 +68,7 @@ class RaPlayerWidget extends StatelessWidget {
                   AnimatedPositioned(
                     duration: animationDuration,
                     bottom: switch (mediaKind) {
-                      null || MediaKind.radio => 0,
+                      MediaKind.radio => 0,
                       MediaKind.recording =>
                         RaPageConstraints.radioPlayerHeight,
                     },
@@ -110,7 +108,7 @@ class _SeekBar extends HookWidget {
       color: context.colors.backgroundDark,
       child: Center(
         child: ValueListenableBuilder<ProgressBarState>(
-          valueListenable: audioHandler.progressNotifier,
+          valueListenable: audioHandler.progress,
           builder: (context, value, _) {
             return Padding(
               padding: const EdgeInsets.symmetric(
@@ -231,10 +229,20 @@ class PlayerPlayButton extends StatelessWidget {
                 .distinct(),
             builder: (context, snapshot) {
               final playing = snapshot.data ?? false;
-              return RaPlayButton(
-                size: size,
-                onPressed: playing ? audioHandler.stop : audioHandler.play,
-                audioProcessingState: audioProcessingState,
+              return ValueListenableBuilder<MediaKind>(
+                valueListenable: audioHandler.mediaKind,
+                builder: (context, mediaKind, _) {
+                  return RaPlayButton(
+                    size: size,
+                    onPressed: switch (mediaKind) {
+                      MediaKind.radio =>
+                        playing ? audioHandler.stop : audioHandler.play,
+                      MediaKind.recording =>
+                        playing ? audioHandler.pause : audioHandler.play,
+                    },
+                    audioProcessingState: audioProcessingState,
+                  );
+                },
               );
             },
           );

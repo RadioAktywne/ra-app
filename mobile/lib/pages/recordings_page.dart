@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_handler.dart';
+import 'package:radioaktywne/components/ra_player/ra_player_recources.dart';
 import 'package:radioaktywne/components/utility/lazy_loaded_grid_view.dart';
 import 'package:radioaktywne/models/recording_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
@@ -67,8 +68,10 @@ class RecordingsPage extends HookWidget {
             title: recording.title,
             thumbnailPath: recording.thumbnailPath,
           ),
-          onItemTap: (recording, index) async =>
-              audioHandler.playMediaItem(recording.mediaItem),
+          onItemTap: (recording, index) async => audioHandler.playMediaItem(
+            recording.mediaItem,
+            mediaKind: MediaKind.recording,
+          ),
         );
       },
     );

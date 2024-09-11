@@ -31,7 +31,13 @@ class StreamTitleWorkaround {
             jsonData['icestats']['source'][0]['title'];
 
         if (maybeStreamName is String) {
-          _streamController.add(maybeStreamName);
+          if (maybeStreamName == 'Unknown') {
+            _streamController.add(
+              'Radio Aktywne', // TODO: is there any way to get this from l10n?
+            );
+          } else {
+            _streamController.add(maybeStreamName);
+          }
         }
       },
     );

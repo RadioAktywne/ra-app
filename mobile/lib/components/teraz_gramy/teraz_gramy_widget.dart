@@ -28,10 +28,9 @@ class TerazGramyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AudioHandlerCubit, RaPlayerHandler>(
       builder: (context, audioHandler) {
-        return StreamBuilder<MediaItem?>(
-          stream: audioHandler.mediaItem,
-          builder: (context, snapshot) {
-            final mediaItem = snapshot.data;
+        return ValueListenableBuilder<MediaKind>(
+          valueListenable: audioHandler.mediaKind,
+          builder: (context, mediaKind, _) {
             return ColorShadowedCard(
               shadowColor: shadowColor ?? context.colors.highlightRed,
               child: ImageWithOverlay(
@@ -47,7 +46,7 @@ class TerazGramyWidget extends StatelessWidget {
                       ),
                     ),
                     ValueListenableBuilder<String?>(
-                      valueListenable: audioHandler.streamTitleNotifier,
+                      valueListenable: audioHandler.streamTitle,
                       builder: (context, value, _) {
                         final title = value ?? context.l10n.noStreamTitle;
                         return RaPlayerTitle(
@@ -66,9 +65,7 @@ class TerazGramyWidget extends StatelessWidget {
                     stream: audioHandler.playbackState,
                     builder: (context, snapshot) {
                       final state = snapshot.data;
-                      final isRadio =
-                          mediaItem?.extras?[RaPlayerConstants.mediaKind] ==
-                              MediaKind.radio;
+                      final isRadio = mediaKind == MediaKind.radio;
                       return RaPlayButton(
                         size: _buttonSize,
                         onPressed: () => isRadio
