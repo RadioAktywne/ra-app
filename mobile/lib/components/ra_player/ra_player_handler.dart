@@ -147,6 +147,10 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   @override
   Future<void> stop() async {
+    if (mediaKind.value == MediaKind.recording) {
+      await updateMediaItem(RaPlayerConstants.radioMediaItem);
+      mediaKind.value = MediaKind.radio;
+    }
     streamTitleWorkaround.playerStopped();
     return _player.stop();
   }
