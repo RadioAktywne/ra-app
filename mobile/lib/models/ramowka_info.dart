@@ -1,5 +1,5 @@
 import 'package:radioaktywne/extensions/extensions.dart';
-import 'package:radioaktywne/resources/day.dart';
+import 'package:radioaktywne/resources/resources.dart';
 
 /// Information about a single Ramowka entry.
 class RamowkaInfo implements Comparable<RamowkaInfo> {
@@ -27,10 +27,11 @@ class RamowkaInfo implements Comparable<RamowkaInfo> {
       time.removeTrailing('0').removeTrailing(':');
 
   /// Parses title string to the required format
-  static String parseTitle(String title) => title
-      .replaceAll('&#8217;', "'")
-      .replaceFirst('(Replay)', ' - powtórka')
-      .replaceFirst('(Live)', '');
+  static String parseTitle(String title) => htmlUnescape.convert(
+        title
+            .replaceFirst('(Replay)', ' - powtórka')
+            .replaceFirst('(Live)', ''),
+      );
 
   @override
   String toString() {

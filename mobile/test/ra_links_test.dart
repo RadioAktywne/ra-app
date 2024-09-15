@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
 
 void main() {
@@ -22,10 +23,10 @@ void main() {
         RaApi.baseUrl,
         RaApi.endpoints.album,
         {
-          '_embed': true.toString(),
-          'page': 5.toString(),
-          'per_page': 15.toString(),
-        },
+          '_embed': true,
+          'page': 5,
+          'per_page': 15,
+        }.valuesToString(),
       ),
       Uri.parse(
         'https://radioaktywne.pl/wp-json/wp/v2/album?_embed=true&page=5&per_page=15',

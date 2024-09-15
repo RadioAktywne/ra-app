@@ -11,14 +11,14 @@ import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/router/ra_router_config.dart';
 
 Future<void> main() async {
-  /// Setup for the orientationt to stay in portrait mode
+  /// Setup for the orientationt to stay in portrait mode.
   ///
-  /// Also, in the AndroidManifest.xml file,
+  /// Also, in the `AndroidManifest.xml` file,
   /// added a line: `android:screenOrientation="portrait"`
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
+    // DeviceOrientation.portraitDown, // TODO: decide about this one...
   ]);
   runApp(const MainApp());
 }

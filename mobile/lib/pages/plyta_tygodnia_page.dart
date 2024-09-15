@@ -10,6 +10,7 @@ import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
+/// Page displaying the album of the week.
 class PlytaTygodniaPage extends StatelessWidget {
   const PlytaTygodniaPage({
     super.key,
@@ -32,9 +33,9 @@ class PlytaTygodniaPage extends StatelessWidget {
     RaApi.baseUrl,
     RaApi.endpoints.album,
     {
-      'page': 1.toString(),
-      'per_page': 1.toString(),
-    },
+      'page': 1,
+      'per_page': 1,
+    }.valuesToString(),
   );
   static const _infoHeaders = {'Content-Type': 'application/json'};
 

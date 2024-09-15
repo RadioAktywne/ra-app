@@ -13,12 +13,11 @@ import 'package:text_scroll/text_scroll.dart';
 
 /// The player widget for radio and recordings.
 ///
-/// It changes its state based on [MediaKind]
-/// passed as an extra in [RaPlayerHandler]'s [MediaItem].
+/// It changes its state based on [RaPlayerHandler]'s
+/// [MediaKind].
 ///
 /// Should be positioned at the bottom of the screen,
-/// "attached" to the navigation bar
-/// (in accordance to Figma).
+/// "attached" to the navigation bar.
 class RaPlayerWidget extends StatelessWidget {
   const RaPlayerWidget({
     super.key,
@@ -99,25 +98,30 @@ class _SeekBar extends HookWidget {
 
   final RaPlayerHandler audioHandler;
 
+  double _calculateSeekBarWidth(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    const pagePadding = RaPageConstraints.pagePaddingValue;
+    return screenWidth - 2 * pagePadding;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width -
-          2 * RaPageConstraints.pagePaddingValue,
+      width: _calculateSeekBarWidth(context),
       height: RaPageConstraints.radioPlayerHeight,
       color: context.colors.backgroundDark,
       child: Center(
         child: ValueListenableBuilder<ProgressBarState>(
           valueListenable: audioHandler.progress,
-          builder: (context, value, _) {
+          builder: (context, progress, _) {
             return Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: RaPageConstraints.pagePaddingValue,
               ),
               child: ProgressBar(
-                progress: value.current,
-                total: value.total,
-                buffered: value.buffered,
+                progress: progress.current,
+                total: progress.total,
+                buffered: progress.buffered,
                 thumbColor: context.colors.highlightRed,
                 thumbRadius: RaPlayerWidget._thumbRadius,
                 thumbGlowRadius: RaPlayerWidget._thumbGlowRadius,
@@ -154,8 +158,7 @@ class _BackButton extends StatelessWidget {
       height: RaPageConstraints.radioPlayerHeight / 2,
       color: context.colors.backgroundDark,
       child: GestureDetector(
-        onTap: () async =>
-            audioHandler.playMediaItem(RaPlayerConstants.radioMediaItem),
+        onTap: () async => audioHandler.playMediaItem(radioMediaItem),
         child: Center(
           child: Text(
             context.l10n.backToRadio,
@@ -234,12 +237,12 @@ class PlayerPlayButton extends StatelessWidget {
                 builder: (context, mediaKind, _) {
                   return RaPlayButton(
                     size: size,
-                    onPressed: switch (mediaKind) {
-                      MediaKind.radio =>
-                        playing ? audioHandler.stop : audioHandler.play,
-                      MediaKind.recording =>
-                        playing ? audioHandler.pause : audioHandler.play,
-                    },
+                    onPressed: playing
+                        ? switch (mediaKind) {
+                            MediaKind.radio => audioHandler.stop,
+                            MediaKind.recording => audioHandler.pause,
+                          }
+                        : audioHandler.play,
                     audioProcessingState: audioProcessingState,
                   );
                 },

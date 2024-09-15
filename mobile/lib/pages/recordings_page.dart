@@ -9,6 +9,7 @@ import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
+/// Allow browsing the RA recordings.
 class RecordingsPage extends HookWidget {
   const RecordingsPage({
     super.key,
@@ -17,7 +18,7 @@ class RecordingsPage extends HookWidget {
 
   final int perPage;
 
-  Uri _recordingsUrl(int page) => Uri.https(
+  Uri _allRecordingsUrl(int page) => Uri.https(
         RaApi.baseUrl,
         RaApi.endpoints.recording,
         {
@@ -27,32 +28,33 @@ class RecordingsPage extends HookWidget {
         },
       );
 
-  Uri _recordingUrl(String id) =>
+  Uri _singleRecordingUrl(String id) =>
       Uri.https(RaApi.baseUrl, '${RaApi.endpoints.media}/$id');
 
   Future<List<RecordingInfo>> fetchPage(int page) async {
-    final pageUrl = _recordingsUrl(page);
-    final data = await fetchData(pageUrl, RecordingInfo.fromJson);
+    final pageUrl = _allRecordingsUrl(page);
+    final recordings = await fetchData(pageUrl, RecordingInfo.fromJson);
 
     final pageData = <RecordingInfo>[];
-    for (final element in data) {
+    for (final element in recordings) {
       final (recordingPath, duration) = await fetchSingle(
-        _recordingUrl(element.recordingPath),
+        _singleRecordingUrl(element.recordingPath),
         (jsonData) => (
           jsonData['source_url'] as String,
           Duration(seconds: jsonData['media_details']['length'] as int)
         ),
       );
 
-      element
-        ..recordingPath = recordingPath
-        ..duration = duration
-        ..thumbnailPath = await fetchSingle(
-          _recordingUrl(element.thumbnailPath),
-          (jsonData) => jsonData['media_details']['sizes']['thumbnail']
-              ['source_url'] as String,
-        );
-      pageData.add(element);
+      pageData.add(
+        element
+          ..recordingPath = recordingPath
+          ..duration = duration
+          ..thumbnailPath = await fetchSingle(
+            _singleRecordingUrl(element.thumbnailPath),
+            (jsonData) => jsonData['media_details']['sizes']['thumbnail']
+                ['source_url'] as String,
+          ),
+      );
     }
 
     return pageData;
@@ -68,6 +70,7 @@ class RecordingsPage extends HookWidget {
             title: recording.title,
             thumbnailPath: recording.thumbnailPath,
           ),
+          // TODO: navigate to the tapped recording's page
           onItemTap: (recording, index) async => audioHandler.playMediaItem(
             recording.mediaItem,
             mediaKind: MediaKind.recording,

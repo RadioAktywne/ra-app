@@ -5,6 +5,7 @@ import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
+/// Page displaying a single article.
 class ArticlePage extends StatelessWidget {
   const ArticlePage({
     super.key,
@@ -14,6 +15,8 @@ class ArticlePage extends StatelessWidget {
 
   /// Space between things on the page.
   static const SizedBox _emptySpace = SizedBox(height: 9);
+
+  /// Space from the top of the page.
   static const SizedBox _spaceFromTop = SizedBox(height: 26);
 
   @override
@@ -34,7 +37,7 @@ class ArticlePage extends StatelessWidget {
                           color: context.colors.backgroundDarkSecondary,
                           child: const RaProgressIndicator(),
                         ),
-              errorBuilder: (context, error, stackTrace) => Center(
+              errorBuilder: (_, __, ___) => Center(
                 child: Image.asset('assets/defaultMedia.png'),
               ),
             ),

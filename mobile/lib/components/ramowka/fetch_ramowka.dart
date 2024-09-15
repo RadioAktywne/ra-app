@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/ramowka_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
@@ -14,10 +15,10 @@ Future<Iterable<RamowkaInfo>> fetchRamowka({
         RaApi.baseUrl,
         RaApi.endpoints.event,
         {
-          '_embed': true.toString(),
-          'page': 1.toString(),
-          'per_page': 100.toString(),
-        },
+          '_embed': true,
+          'page': 1,
+          'per_page': 100,
+        }.valuesToString(),
       ),
       RamowkaInfo.fromJson,
       timeout: timeout,

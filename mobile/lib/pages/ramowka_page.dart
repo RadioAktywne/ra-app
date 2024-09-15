@@ -50,8 +50,8 @@ class RamowkaPage extends StatelessWidget {
       child: RefreshableFetchWidget(
         onFetch: _fetchRamowka,
         defaultData: const <Day, List<RamowkaInfo>>{},
-        loadingBuilder: (context, snapshot) => const RaProgressIndicator(),
-        errorBuilder: (context) => const RaErrorPage(),
+        loadingBuilder: (_, __) => const RaProgressIndicator(),
+        errorBuilder: (_) => const RaErrorPage(),
         hasData: (ramowka) => ramowka.isNotEmpty,
         builder: (context, ramowka) => ListView.separated(
           padding: RaPageConstraints.outerWidgetPagePadding.copyWith(

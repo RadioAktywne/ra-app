@@ -14,7 +14,7 @@ class AudioHandlerCubit extends Cubit<RaPlayerHandler> {
   }
 
   static final RaPlayerHandler handler =
-      RaPlayerHandler(mediaItem: RaPlayerConstants.radioMediaItem);
+      RaPlayerHandler(mediaItem: radioMediaItem);
 
   Future<void> initAudioHandler(MediaItem initialMedia) async {
     final audioService = await AudioService.init(
@@ -22,6 +22,7 @@ class AudioHandlerCubit extends Cubit<RaPlayerHandler> {
       config: const AudioServiceConfig(
         androidNotificationChannelName: 'Live radio stream',
         androidNotificationOngoing: true,
+        // androidNotificationIcon: ..., // TODO: add custom icon
       ),
     );
     // setting proper AudioService object as state, notifying listeners

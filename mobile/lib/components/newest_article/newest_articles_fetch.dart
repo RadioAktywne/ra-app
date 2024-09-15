@@ -1,3 +1,4 @@
+import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
@@ -22,10 +23,10 @@ class NewestArticleFetch {
       RaApi.baseUrl,
       RaApi.endpoints.posts,
       {
-        '_embed': true.toString(),
-        'page': 1.toString(),
-        'per_page': 3.toString(),
-      },
+        '_embed': true,
+        'page': 1,
+        'per_page': 3,
+      }.valuesToString(),
     );
 
     try {

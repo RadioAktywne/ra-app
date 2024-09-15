@@ -26,7 +26,7 @@ class LazyLoadedGridView<T> extends HookWidget {
     ),
   });
 
-  /// Function for fetching the page data lazily
+  /// Function for fetching the page data lazily.
   ///
   /// Example function that can be used as [fetchPage]:
   /// ```dart
@@ -35,7 +35,7 @@ class LazyLoadedGridView<T> extends HookWidget {
   ///   return decode(data.body);
   /// }
   /// ```
-  final Future<Iterable<T>> Function(int) fetchPage;
+  final Future<Iterable<T>> Function(int index) fetchPage;
 
   /// Function that transforms fetched elements of type [T]
   /// into [LazyLoadedGridViewItem]s to be displayed in a
@@ -48,10 +48,10 @@ class LazyLoadedGridView<T> extends HookWidget {
 
   /// This widget's outer padding.
   ///
-  /// Equivalent to [GridView]'s `padding` property
+  /// Equivalent to [GridView]'s `padding` property.
   final EdgeInsets padding;
 
-  /// Optional gridDelegate.
+  /// Optional gridDelegate to customise grid's appearance.
   ///
   /// On default, grid has 2 axis.
   final SliverGridDelegate gridDelegate;

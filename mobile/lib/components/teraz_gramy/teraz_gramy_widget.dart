@@ -10,9 +10,9 @@ import 'package:radioaktywne/components/utility/image_with_overlay.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
-/// Widget representing what's currently played on the radio
+/// Widget representing what's currently played on the radio.
 ///
-/// Consists of a [ColorShadowedCard] with an image, icon ant text overlay.
+/// Consists of a [ColorShadowedCard] with an image, icon and text overlay.
 class TerazGramyWidget extends StatelessWidget {
   const TerazGramyWidget({
     super.key,
@@ -28,40 +28,40 @@ class TerazGramyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AudioHandlerCubit, RaPlayerHandler>(
       builder: (context, audioHandler) {
-        return ValueListenableBuilder<MediaKind>(
-          valueListenable: audioHandler.mediaKind,
-          builder: (context, mediaKind, _) {
-            return ColorShadowedCard(
-              shadowColor: shadowColor ?? context.colors.highlightRed,
-              child: ImageWithOverlay(
-                imageBuilder: Image.asset,
-                thumbnailPath: 'assets/teraz_gramy_background.webp',
-                titleOverlay: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      context.l10n.nowPlaying,
-                      style: context.textStyles.textPlayer.copyWith(
-                        color: context.colors.highlightGreen,
-                      ),
-                    ),
-                    ValueListenableBuilder<String?>(
-                      valueListenable: audioHandler.streamTitle,
-                      builder: (context, value, _) {
-                        final title = value ?? context.l10n.noStreamTitle;
-                        return RaPlayerTitle(
-                          width: MediaQuery.of(context).size.width,
-                          title: title,
-                          textStyle: context.textStyles.textMedium
-                              .copyWith(height: 1.5),
-                        );
-                      },
-                    ),
-                  ],
+        return ColorShadowedCard(
+          shadowColor: shadowColor ?? context.colors.highlightRed,
+          child: ImageWithOverlay(
+            imageBuilder: Image.asset,
+            thumbnailPath: 'assets/teraz_gramy_background.webp',
+            titleOverlay: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.l10n.nowPlaying,
+                  style: context.textStyles.textPlayer.copyWith(
+                    color: context.colors.highlightGreen,
+                  ),
                 ),
-                titleOverlayPadding: const EdgeInsets.all(8),
-                child: Center(
-                  child: StreamBuilder<PlaybackState>(
+                ValueListenableBuilder<String?>(
+                  valueListenable: audioHandler.streamTitle,
+                  builder: (context, streamTitle, _) {
+                    final title = streamTitle ?? context.l10n.noStreamTitle;
+                    return RaPlayerTitle(
+                      width: MediaQuery.of(context).size.width,
+                      title: title,
+                      textStyle:
+                          context.textStyles.textMedium.copyWith(height: 1.5),
+                    );
+                  },
+                ),
+              ],
+            ),
+            titleOverlayPadding: const EdgeInsets.all(8),
+            child: Center(
+              child: ValueListenableBuilder<MediaKind>(
+                valueListenable: audioHandler.mediaKind,
+                builder: (context, mediaKind, _) {
+                  return StreamBuilder<PlaybackState>(
                     stream: audioHandler.playbackState,
                     builder: (context, snapshot) {
                       final state = snapshot.data;
@@ -73,20 +73,18 @@ class TerazGramyWidget extends StatelessWidget {
                                     AudioProcessingState.ready
                                 ? audioHandler.stop()
                                 : audioHandler.play()
-                            : audioHandler.playMediaItem(
-                                RaPlayerConstants.radioMediaItem,
-                              ),
+                            : audioHandler.playMediaItem(radioMediaItem),
                         audioProcessingState: isRadio
                             ? state?.processingState ??
                                 AudioProcessingState.idle
                             : AudioProcessingState.idle,
                       );
                     },
-                  ),
-                ),
+                  );
+                },
               ),
-            );
-          },
+            ),
+          ),
         );
       },
     );

@@ -37,39 +37,43 @@ final raRouter = GoRouter(
           builder: (context, state) =>
               ArticlePage(article: state.extra! as ArticleInfo),
         ),
-        // TODO: Implement following pages:
+        // TODO: Implement
         GoRoute(
           path: RaRoutes.radioPeople,
-          builder: (context, state) => _DummyRoute(state: state),
+          builder: (context, state) => _DummyPage(name: state.fullPath ?? ''),
         ),
         GoRoute(
           path: RaRoutes.ramowka,
           builder: (context, state) => const RamowkaPage(),
         ),
+        // TODO: Implement
         GoRoute(
           path: RaRoutes.broadcasts,
-          builder: (context, state) => _DummyRoute(state: state),
+          builder: (context, state) => _DummyPage(name: state.fullPath ?? ''),
         ),
+        // TODO: Implement
         GoRoute(
           path: RaRoutes.about,
-          builder: (context, state) => _DummyRoute(state: state),
+          builder: (context, state) => _DummyPage(name: state.fullPath ?? ''),
         ),
-        // TODO: Implement following pages:
+        // TODO: Implement
         GoRoute(
           path: RaRoutes.radioPeople,
-          builder: (context, state) => _DummyRoute(state: state),
+          builder: (context, state) => _DummyPage(name: state.fullPath ?? ''),
         ),
         GoRoute(
           path: RaRoutes.ramowka,
           builder: (context, state) => const RamowkaPage(),
         ),
+        // TODO: Implement
         GoRoute(
           path: RaRoutes.broadcasts,
-          builder: (context, state) => _DummyRoute(state: state),
+          builder: (context, state) => _DummyPage(name: state.fullPath ?? ''),
         ),
+        // TODO: Implement
         GoRoute(
           path: RaRoutes.about,
-          builder: (context, state) => _DummyRoute(state: state),
+          builder: (context, state) => _DummyPage(name: state.fullPath ?? ''),
         ),
       ],
       builder: (context, state, child) =>
@@ -78,12 +82,13 @@ final raRouter = GoRouter(
   ],
 );
 
-class _DummyRoute extends StatelessWidget {
-  const _DummyRoute({
-    required this.state,
+/// Mock page for testing
+class _DummyPage extends StatelessWidget {
+  const _DummyPage({
+    required this.name,
   });
 
-  final GoRouterState state;
+  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +97,7 @@ class _DummyRoute extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Page `${state.fullPath}` doesn't (yet) exist...",
+            "Page `$name` doesn't (yet) exist...",
             style: context.textStyles.textMedium,
           ),
           TextButton(

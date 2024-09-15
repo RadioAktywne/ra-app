@@ -113,7 +113,13 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
   // Flutter UI, notification, lock screen or headset will be routed through to
   // these 4 methods so that we can handle audio playback logic in one place.
 
-  Future<void> _startAction() async {
+  @override
+  Future<void> play() async {
+    // Forces player to start playing live when 'play' is pressed. Otherwise,
+    // when user would press 'play' for the first time, he would hear the
+    // stream starting from the moment he launched the app, not when he pressed
+    // 'play'.
+    await _player.setAudioSource(AudioSource.uri(Uri.parse(_mediaItem.id)));
     switch (mediaKind.value) {
       case MediaKind.radio:
         streamTitleWorkaround.playerStarted();
@@ -126,17 +132,13 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
         );
         streamTitleWorkaround.playerStopped();
     }
+    return _player.play();
   }
 
   @override
-  Future<void> play() async {
-    // Forces player to start playing live when 'play' is pressed. Otherwise,
-    // when user would press 'play' for the first time, he would hear the
-    // stream starting from the moment he launched the app, not when he pressed
-    // 'play'.
-    await _player.setAudioSource(AudioSource.uri(Uri.parse(_mediaItem.id)));
-    await _startAction();
-    return _player.play();
+  Future<void> updateMediaItem(MediaItem mediaItem) async {
+    this.mediaItem.add(mediaItem);
+    _mediaItem = mediaItem;
   }
 
   @override
@@ -148,7 +150,7 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
   @override
   Future<void> stop() async {
     if (mediaKind.value == MediaKind.recording) {
-      await updateMediaItem(RaPlayerConstants.radioMediaItem);
+      await updateMediaItem(radioMediaItem);
       mediaKind.value = MediaKind.radio;
     }
     streamTitleWorkaround.playerStopped();
@@ -161,19 +163,13 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
   }
 
   @override
-  Future<void> updateMediaItem(MediaItem mediaItem) async {
-    this.mediaItem.add(mediaItem);
-    _mediaItem = mediaItem;
-  }
-
-  @override
   Future<void> playMediaItem(
     MediaItem mediaItem, {
     MediaKind mediaKind = MediaKind.radio,
   }) async {
     this.mediaKind.value = mediaKind;
     await updateMediaItem(mediaItem);
-    await play();
+    return play();
   }
 
   /// Transform a just_audio event into an audio_service state.

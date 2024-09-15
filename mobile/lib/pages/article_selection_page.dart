@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:radioaktywne/components/utility/lazy_loaded_grid_view.dart';
+import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
+/// Allow for browsing articles.
 class ArticleSelectionPage extends StatelessWidget {
   const ArticleSelectionPage({
     super.key,
+    this.perPage = 16,
     this.timeout = const Duration(seconds: 15),
   });
+
+  final int perPage;
 
   final Duration timeout;
 
@@ -22,10 +27,10 @@ class ArticleSelectionPage extends StatelessWidget {
           RaApi.baseUrl,
           RaApi.endpoints.posts,
           {
-            '_embed': true.toString(),
-            'page': page.toString(),
-            'per_page': 16.toString(),
-          },
+            '_embed': true,
+            'page': page,
+            'per_page': perPage,
+          }.valuesToString(),
         );
         return fetchData(pageUri, ArticleInfo.fromJson, timeout: timeout);
       },
