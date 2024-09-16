@@ -210,6 +210,11 @@ class PlayerPlayButton extends StatelessWidget {
   final double size;
   final EdgeInsets padding;
 
+  /// Determine if the player is not playing but is ready - it's an
+  /// edge case and should be handled by returning [AudioProcessingState.idle].
+  bool _isPlayerStateEdgeCase(bool playing, AudioProcessingState aps) =>
+      !playing && aps == AudioProcessingState.ready;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -243,7 +248,10 @@ class PlayerPlayButton extends StatelessWidget {
                             MediaKind.recording => audioHandler.pause,
                           }
                         : audioHandler.play,
-                    audioProcessingState: audioProcessingState,
+                    audioProcessingState:
+                        _isPlayerStateEdgeCase(playing, audioProcessingState)
+                            ? AudioProcessingState.idle
+                            : audioProcessingState,
                   );
                 },
               );
