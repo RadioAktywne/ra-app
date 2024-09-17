@@ -106,6 +106,9 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
   /// The kind of media playing currently (radio or recording)
   final mediaKind = ValueNotifier<MediaKind>(MediaKind.radio);
 
+  Stream<bool> get playing =>
+      playbackState.map((state) => state.playing).distinct();
+
   /// export icyMetadata (may become handy at some point)
   // Stream<IcyMetadata?> get icyMetadata => _player.icyMetadataStream;
 

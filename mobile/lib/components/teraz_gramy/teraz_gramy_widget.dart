@@ -64,20 +64,28 @@ class TerazGramyWidget extends StatelessWidget {
                   return StreamBuilder<PlaybackState>(
                     stream: audioHandler.playbackState,
                     builder: (context, snapshot) {
-                      final state = snapshot.data;
-                      final isRadio = mediaKind == MediaKind.radio;
-                      return RaPlayButton(
-                        size: _buttonSize,
-                        onPressed: () => isRadio
-                            ? state?.processingState ==
-                                    AudioProcessingState.ready
-                                ? audioHandler.stop()
-                                : audioHandler.play()
-                            : audioHandler.playMediaItem(radioMediaItem),
-                        audioProcessingState: isRadio
-                            ? state?.processingState ??
-                                AudioProcessingState.idle
-                            : AudioProcessingState.idle,
+                      final state = snapshot.data?.processingState ??
+                          AudioProcessingState.idle;
+                      return StreamBuilder<bool>(
+                        stream: audioHandler.playing,
+                        builder: (context, snapshot) {
+                          final playing = snapshot.data ?? false;
+                          return RaPlayButton(
+                            size: _buttonSize,
+                            onPressed: () => switch (mediaKind) {
+                              MediaKind.radio => playing
+                                  ? audioHandler.stop()
+                                  : audioHandler.play(),
+                              MediaKind.recording =>
+                                audioHandler.playMediaItem(radioMediaItem)
+                            },
+                            audioProcessingState: switch (mediaKind) {
+                              MediaKind.radio => state,
+                              MediaKind.recording => AudioProcessingState.idle,
+                            },
+                            playing: playing,
+                          );
+                        },
                       );
                     },
                   );
