@@ -13,7 +13,8 @@ class ImageWithOverlay extends StatelessWidget {
     this.imageBuilder = Image.network,
   });
 
-  /// Child widget to display centered above the image, BUT ABOVE TITLE OVERLAY.
+  /// Child widget to display centered on top of the image,
+  /// BUT ABOVE TITLE OVERLAY.
   final Widget? child;
 
   /// Network or local path to the image.

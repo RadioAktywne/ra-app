@@ -7,7 +7,7 @@ import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
-/// Allow for browsing articles.
+/// Allows browsing articles.
 class ArticleSelectionPage extends StatelessWidget {
   const ArticleSelectionPage({
     super.key,

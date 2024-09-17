@@ -9,7 +9,7 @@ import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
-/// Allow browsing the RA recordings.
+/// Allows browsing the RA recordings.
 class RecordingsPage extends HookWidget {
   const RecordingsPage({
     super.key,

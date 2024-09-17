@@ -29,7 +29,7 @@ class RamowkaInfo implements Comparable<RamowkaInfo> {
   /// Parses title string to the required format
   static String parseTitle(String title) => htmlUnescape.convert(
         title
-            .replaceFirst('(Replay)', ' - powtórka')
+            .replaceFirst('(Replay)', ' - powtórka') // TODO: use l10n
             .replaceFirst('(Live)', ''),
       );
 

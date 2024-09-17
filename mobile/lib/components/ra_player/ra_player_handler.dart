@@ -182,18 +182,24 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
   /// it can be broadcast to audio_service clients.
   PlaybackState _transformEvent(PlaybackEvent event) {
     return PlaybackState(
-      controls: [
-        // MediaControl.rewind,
-        if (mediaKind.value == MediaKind.recording)
-          if (_player.playing) MediaControl.pause else MediaControl.play,
-        // MediaControl.stop,
-        // MediaControl.fastForward,
-        if (_player.playing) MediaControl.stop else MediaControl.play,
-      ],
-      systemActions: {
-        if (mediaKind.value == MediaKind.recording) MediaAction.seek,
+      controls: switch (mediaKind.value) {
+        MediaKind.radio => [
+            if (_player.playing) MediaControl.stop else MediaControl.play,
+          ],
+        MediaKind.recording => [
+            MediaControl.rewind,
+            if (_player.playing) MediaControl.pause else MediaControl.play,
+            MediaControl.fastForward,
+          ],
       },
-      androidCompactActionIndices: const [0],
+      systemActions: switch (mediaKind.value) {
+        MediaKind.radio => {},
+        MediaKind.recording => {MediaAction.seek},
+      },
+      androidCompactActionIndices: switch (mediaKind.value) {
+        MediaKind.radio => [0],
+        MediaKind.recording => [1],
+      },
       processingState: switch (_player.processingState) {
         ProcessingState.idle => AudioProcessingState.idle,
         ProcessingState.loading => AudioProcessingState.loading,
