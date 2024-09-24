@@ -10,16 +10,17 @@ import 'package:radioaktywne/l10n/localizations.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/router/ra_router_config.dart';
 
-void main() {
-  /// Setup so the orientation stays in portrait mode
+Future<void> main() async {
+  /// Setup for the orientationt to stay in portrait mode.
   ///
-  /// Also, in the AndroidManifest.xml file,
+  /// Also, in the `AndroidManifest.xml` file,
   /// added a line: `android:screenOrientation="portrait"`
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]).then((_) => runApp(const MainApp()));
+    // DeviceOrientation.portraitDown, // TODO: decide about this one...
+  ]);
+  runApp(const MainApp());
 }
 
 class MainApp extends HookWidget {
@@ -43,16 +44,16 @@ class MainApp extends HookWidget {
   }
 }
 
-// TODO: needs major refactor
+// TODO: decide if needs further refactor
 class MainPage extends StatelessWidget {
   const MainPage({
     super.key,
   });
 
   static const _widgetPadding = EdgeInsets.only(
-    top: RaPageConstraints.pagePadding,
-    left: RaPageConstraints.pagePadding,
-    right: RaPageConstraints.pagePadding,
+    top: RaPageConstraints.pagePaddingValue,
+    left: RaPageConstraints.pagePaddingValue,
+    right: RaPageConstraints.pagePaddingValue,
   );
 
   @override
@@ -61,12 +62,12 @@ class MainPage extends StatelessWidget {
       color: context.colors.backgroundLight,
       width: double.infinity,
       height: double.infinity,
-      child: const SingleChildScrollView(
+      child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
-            bottom: RaPageConstraints.radioPlayerPadding,
+            bottom: context.playerPaddingValue,
           ),
-          child: Column(
+          child: const Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
@@ -77,6 +78,7 @@ class MainPage extends StatelessWidget {
                     padding: _widgetPadding,
                     child: RamowkaWidget(),
                   ),
+
                   /// Teraz Gramy widget
                   Padding(
                     padding: _widgetPadding,
@@ -85,6 +87,7 @@ class MainPage extends StatelessWidget {
                       child: TerazGramyWidget(),
                     ),
                   ),
+
                   /// Najnowsze Nagrania widget & Najnowsze Artykuły Widget
                   Padding(
                     padding: _widgetPadding,
@@ -97,7 +100,7 @@ class MainPage extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                          width: RaPageConstraints.pagePadding,
+                          width: RaPageConstraints.pagePaddingValue,
                         ),
                         Expanded(
                           child: AspectRatio(

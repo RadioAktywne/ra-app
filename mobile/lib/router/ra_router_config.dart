@@ -8,6 +8,7 @@ import 'package:radioaktywne/pages/article_page.dart';
 import 'package:radioaktywne/pages/article_selection_page.dart';
 import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
 import 'package:radioaktywne/pages/ramowka_page.dart';
+import 'package:radioaktywne/pages/recordings_page.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
 final raRouter = GoRouter(
@@ -23,10 +24,9 @@ final raRouter = GoRouter(
           path: RaRoutes.albumOfTheWeek,
           builder: (context, state) => const PlytaTygodniaPage(),
         ),
-        // TODO: Implement page for this route
         GoRoute(
           path: RaRoutes.recordings,
-          builder: (context, state) => DummyRoute(state: state),
+          builder: (context, state) => const RecordingsPage(),
         ),
         GoRoute(
           path: RaRoutes.articles,
@@ -37,22 +37,43 @@ final raRouter = GoRouter(
           builder: (context, state) =>
               ArticlePage(article: state.extra! as ArticleInfo),
         ),
-        // TODO: Implement following pages:
+        // TODO: Implement
         GoRoute(
           path: RaRoutes.radioPeople,
-          builder: (context, state) => DummyRoute(state: state),
+          builder: (context, state) => _DummyPage(name: state.fullPath ?? ''),
         ),
         GoRoute(
           path: RaRoutes.ramowka,
           builder: (context, state) => const RamowkaPage(),
         ),
+        // TODO: Implement
         GoRoute(
           path: RaRoutes.broadcasts,
-          builder: (context, state) => DummyRoute(state: state),
+          builder: (context, state) => _DummyPage(name: state.fullPath ?? ''),
         ),
+        // TODO: Implement
         GoRoute(
           path: RaRoutes.about,
-          builder: (context, state) => DummyRoute(state: state),
+          builder: (context, state) => _DummyPage(name: state.fullPath ?? ''),
+        ),
+        // TODO: Implement
+        GoRoute(
+          path: RaRoutes.radioPeople,
+          builder: (context, state) => _DummyPage(name: state.fullPath ?? ''),
+        ),
+        GoRoute(
+          path: RaRoutes.ramowka,
+          builder: (context, state) => const RamowkaPage(),
+        ),
+        // TODO: Implement
+        GoRoute(
+          path: RaRoutes.broadcasts,
+          builder: (context, state) => _DummyPage(name: state.fullPath ?? ''),
+        ),
+        // TODO: Implement
+        GoRoute(
+          path: RaRoutes.about,
+          builder: (context, state) => _DummyPage(name: state.fullPath ?? ''),
         ),
       ],
       builder: (context, state, child) =>
@@ -61,13 +82,13 @@ final raRouter = GoRouter(
   ],
 );
 
-class DummyRoute extends StatelessWidget {
-  const DummyRoute({
-    super.key,
-    required this.state,
+/// Mock page for testing
+class _DummyPage extends StatelessWidget {
+  const _DummyPage({
+    required this.name,
   });
 
-  final GoRouterState state;
+  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +97,7 @@ class DummyRoute extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Page `${state.fullPath}` doesn't (yet) exist...",
+            "Page `$name` doesn't (yet) exist...",
             style: context.textStyles.textMedium,
           ),
           TextButton(

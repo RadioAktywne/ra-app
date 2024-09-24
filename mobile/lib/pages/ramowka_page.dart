@@ -50,13 +50,13 @@ class RamowkaPage extends StatelessWidget {
       child: RefreshableFetchWidget(
         onFetch: _fetchRamowka,
         defaultData: const <Day, List<RamowkaInfo>>{},
-        loadingBuilder: (context, snapshot) => const RaProgressIndicator(),
-        errorBuilder: (context) => const RaErrorPage(),
+        loadingBuilder: (_, __) => const RaProgressIndicator(),
+        errorBuilder: (_) => const RaErrorPage(),
         hasData: (ramowka) => ramowka.isNotEmpty,
         builder: (context, ramowka) => ListView.separated(
           padding: RaPageConstraints.outerWidgetPagePadding.copyWith(
-            top: RaPageConstraints.pagePadding,
-            bottom: RaPageConstraints.radioPlayerPadding,
+            top: RaPageConstraints.pagePaddingValue,
+            bottom: context.playerPaddingValue,
           ),
           itemBuilder: (context, index) {
             final ramowkaForDay =
@@ -82,7 +82,7 @@ class RamowkaPage extends StatelessWidget {
             );
           },
           separatorBuilder: (context, index) =>
-              const SizedBox(height: RaPageConstraints.pagePadding),
+              const SizedBox(height: RaPageConstraints.pagePaddingValue),
           itemCount: Day.values.length,
         ),
       ),

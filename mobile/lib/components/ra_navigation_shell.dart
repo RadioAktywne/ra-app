@@ -6,8 +6,9 @@ import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
 import 'package:radioaktywne/components/ra_bottom_navigation_bar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
-import 'package:radioaktywne/components/radio_player/radio_player_widget.dart';
-import 'package:radioaktywne/extensions/themes.dart';
+import 'package:radioaktywne/components/ra_player/ra_player_recources.dart';
+import 'package:radioaktywne/components/ra_player/ra_player_widget.dart';
+import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
@@ -40,7 +41,9 @@ class RaNavigationShell extends HookWidget {
     );
 
     return BlocProvider(
-      create: (_) => AudioHandlerCubit(),
+      create: (_) => AudioHandlerCubit(
+        initialMedia: radioMediaItem,
+      ),
       child: AnnotatedRegion(
         value: SystemUiOverlayStyle(
           systemNavigationBarColor: context.colors.backgroundDark,
@@ -59,9 +62,10 @@ class RaNavigationShell extends HookWidget {
             mainColor: context.colors.backgroundDark,
             accentColor: context.colors.highlightGreen,
             iconButton: IconButton(
-              onPressed: () => _scaffoldKey.currentState!.isEndDrawerOpen
-                  ? _scaffoldKey.currentState?.closeEndDrawer()
-                  : _scaffoldKey.currentState?.openEndDrawer(),
+              onPressed: () =>
+                  _scaffoldKey.currentState?.isEndDrawerOpen ?? false
+                      ? _scaffoldKey.currentState?.closeEndDrawer()
+                      : _scaffoldKey.currentState?.openEndDrawer(),
               icon: AnimatedIcon(
                 icon: AnimatedIcons.menu_close,
                 progress: burgerMenuIconController,
@@ -97,7 +101,7 @@ class RaNavigationShell extends HookWidget {
           ),
           bottomSheet: const Padding(
             padding: RaPageConstraints.outerWidgetPagePadding,
-            child: RadioPlayerWidget(),
+            child: RaPlayerWidget(),
           ),
           resizeToAvoidBottomInset: false,
         ),

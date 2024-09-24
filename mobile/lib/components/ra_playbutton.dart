@@ -15,7 +15,8 @@ class RaPlayButton extends HookWidget {
     super.key,
     required this.size,
     required this.onPressed,
-    this.audioProcessingState = AudioProcessingState.idle,
+    required this.playing,
+    required this.audioProcessingState,
     this.shrinkAnimationDuration = const Duration(milliseconds: 150),
   });
 
@@ -25,9 +26,10 @@ class RaPlayButton extends HookWidget {
   /// Action called every time the button is pressed
   final void Function() onPressed;
 
+  /// Fallback flag for determining if the player is playing
+  final bool playing;
+
   /// State of the audio player
-  ///
-  /// Default: [AudioProcessingState.idle]
   final AudioProcessingState audioProcessingState;
 
   /// Duration of the shrink animation applied
@@ -37,6 +39,11 @@ class RaPlayButton extends HookWidget {
   final Duration shrinkAnimationDuration;
 
   static const _shadowBlur = 5;
+
+  AudioProcessingState get _playerState =>
+      audioProcessingState == AudioProcessingState.ready && !playing
+          ? AudioProcessingState.idle
+          : audioProcessingState;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +69,7 @@ class RaPlayButton extends HookWidget {
           height: sizeSlider.value,
           child: _RaPlayButtonImage(
             size: size,
-            audioProcessingState: audioProcessingState,
+            audioProcessingState: _playerState,
           ),
         ),
       ),

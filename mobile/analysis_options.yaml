@@ -1,6 +1,9 @@
 include: package:leancode_lint/analysis_options.yaml
 
 analyzer:
+  errors:
+    avoid_dynamic_calls: ignore
+    unused_element: ignore
   exclude:
     - lib/l10n/localizations*.dart
     - lib/firebase_options.dart

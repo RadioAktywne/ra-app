@@ -1,5 +1,7 @@
+import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
+import 'package:radioaktywne/resources/ra_links.dart';
 
 class NewestArticleFetch {
   Iterable<ArticleInfo> _articles = [];
@@ -17,8 +19,14 @@ class NewestArticleFetch {
 
     _isLoading = true;
 
-    final pageUri = Uri.parse(
-      'https://radioaktywne.pl/wp-json/wp/v2/posts?_embed=true&page=1&per_page=3',
+    final pageUri = Uri.https(
+      RaApi.baseUrl,
+      RaApi.endpoints.posts,
+      {
+        '_embed': true,
+        'page': 1,
+        'per_page': 3,
+      }.valuesToString(),
     );
 
     try {

@@ -7,8 +7,10 @@ import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/plyta_tygodnia_info.dart';
 import 'package:radioaktywne/pages/ra_error_page.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
+import 'package:radioaktywne/resources/ra_links.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
+/// Page displaying the album of the week.
 class PlytaTygodniaPage extends StatelessWidget {
   const PlytaTygodniaPage({
     super.key,
@@ -27,14 +29,20 @@ class PlytaTygodniaPage extends StatelessWidget {
   static const SizedBox _verticalPadding = SizedBox(height: 26);
 
   /// Plyta tygodnia info fetch details.
-  static final Uri _infoUrl = Uri.parse(
-    'https://radioaktywne.pl/wp-json/wp/v2/album?page=1&per_page=16',
+  static final Uri _infoUrl = Uri.https(
+    RaApi.baseUrl,
+    RaApi.endpoints.album,
+    {
+      'page': 1,
+      'per_page': 1,
+    }.valuesToString(),
   );
   static const _infoHeaders = {'Content-Type': 'application/json'};
 
   /// Plyta tygodnia album cover fetch details.
-  static Uri _imgUrl(String id) => Uri.parse(
-        'https://radioaktywne.pl/wp-json/wp/v2/media?include[]=$id',
+  static Uri _imgUrl(String id) => Uri.https(
+        RaApi.baseUrl,
+        '${RaApi.endpoints.media}/$id',
       );
   static const _imgHeaders = {'Content-Type': 'image/jpeg'};
 
@@ -50,15 +58,12 @@ class PlytaTygodniaPage extends StatelessWidget {
 
       final plytaTygodnia = data.first;
 
-      final imageUrls = await fetchData(
+      plytaTygodnia.imageTag = await fetchSingle(
         _imgUrl(plytaTygodnia.imageTag),
         (e) => (e['guid'] as Map<String, dynamic>)['rendered'] as String,
         headers: _imgHeaders,
         timeout: timeout,
       );
-
-      final imageUrl = imageUrls.first;
-      plytaTygodnia.imageTag = imageUrl;
 
       return plytaTygodnia;
     } on TimeoutException catch (_) {
@@ -136,7 +141,7 @@ class PlytaTygodniaPage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: RaPageConstraints.radioPlayerPadding),
+            SizedBox(height: context.playerPaddingValue),
           ],
         ),
       ),

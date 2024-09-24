@@ -1,5 +1,5 @@
 import 'package:radioaktywne/extensions/extensions.dart';
-import 'package:radioaktywne/resources/day.dart';
+import 'package:radioaktywne/resources/resources.dart';
 
 /// Information about a single Ramowka entry.
 class RamowkaInfo implements Comparable<RamowkaInfo> {
@@ -12,18 +12,10 @@ class RamowkaInfo implements Comparable<RamowkaInfo> {
 
   /// Creates a [RamowkaInfo] object from a given Json map.
   RamowkaInfo.fromJson(Map<String, dynamic> jsonData)
-      : title = parseTitle(
-          (jsonData['title'] as Map<String, dynamic>)['rendered'].toString(),
-        ),
-        startTime = parseTime(
-          (jsonData['acf'] as Map<String, dynamic>)['start_time'].toString(),
-        ),
-        endTime = parseTime(
-          (jsonData['acf'] as Map<String, dynamic>)['end_time'].toString(),
-        ),
-        day = Day.fromString(
-          (jsonData['acf'] as Map<String, dynamic>)['day'].toString(),
-        );
+      : title = parseTitle(jsonData['title']['rendered'] as String),
+        startTime = parseTime(jsonData['acf']['start_time'] as String),
+        endTime = parseTime(jsonData['acf']['end_time'] as String),
+        day = Day.fromString(jsonData['acf']['day'] as String);
 
   final String title;
   final String startTime;
@@ -35,10 +27,11 @@ class RamowkaInfo implements Comparable<RamowkaInfo> {
       time.removeTrailing('0').removeTrailing(':');
 
   /// Parses title string to the required format
-  static String parseTitle(String title) => title
-      .replaceAll('&#8217;', "'")
-      .replaceFirst('(Replay)', ' - powtórka')
-      .replaceFirst('(Live)', '');
+  static String parseTitle(String title) => htmlUnescape.convert(
+        title
+            .replaceFirst('(Replay)', ' - powtórka') // TODO: use l10n
+            .replaceFirst('(Live)', ''),
+      );
 
   @override
   String toString() {

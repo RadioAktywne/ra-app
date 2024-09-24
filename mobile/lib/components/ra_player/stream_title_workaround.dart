@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:radioaktywne/resources/ra_links.dart';
 
 class StreamTitleWorkaround {
   StreamTitleWorkaround() {
@@ -13,8 +14,7 @@ class StreamTitleWorkaround {
   late StreamController<String> _streamController;
   late Stream<String> stream;
 
-  final httpPackageUrl =
-      Uri.parse('https://listen.radioaktywne.pl:8443/status-json.xsl');
+  final httpPackageUrl = Uri.https(RaRadio.baseUrl, RaRadio.status);
   bool _isPlaying = false;
   var _timer = Timer.periodic(
     const Duration(seconds: 5),
@@ -28,11 +28,16 @@ class StreamTitleWorkaround {
       (response) {
         final dynamic jsonData = jsonDecode(response.body);
         final dynamic maybeStreamName =
-            // ignore: avoid_dynamic_calls
             jsonData['icestats']['source'][0]['title'];
 
         if (maybeStreamName is String) {
-          _streamController.add(maybeStreamName);
+          if (maybeStreamName == 'Unknown') {
+            _streamController.add(
+              'Radio Aktywne', // TODO: is there any way to get this from l10n?
+            );
+          } else {
+            _streamController.add(maybeStreamName);
+          }
         }
       },
     );
