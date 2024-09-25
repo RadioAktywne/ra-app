@@ -44,7 +44,7 @@ class SwipeableCard extends HookWidget {
         color: context.colors.backgroundDark,
         child: header,
       ),
-      footer: Container(
+      footer: !hasError && !isLoading ? Container(
         color: context.colors.backgroundDark,
         child: Padding(
           padding: const EdgeInsets.only(top: 4),
@@ -67,7 +67,7 @@ class SwipeableCard extends HookWidget {
             }),
           ),
         ),
-      ),
+      ) : null,
       child: Builder(
         builder: (context) {
           if (isLoading) {
@@ -76,7 +76,6 @@ class SwipeableCard extends HookWidget {
           if (hasError) {
             return const RaErrorPage();
           }
-
           return Stack(
             children: <Widget>[
               Positioned.fill(
