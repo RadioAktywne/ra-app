@@ -13,7 +13,7 @@ void main() {
   test("Correct path to RA's radio player", () {
     expect(
       Uri.https(RaRadio.baseUrl, RaRadio.radioStream),
-      Uri.parse('https://listen.radioaktywne.pl/raogg'),
+      Uri.parse('https://listen.radioaktywne.pl:443/raogg'),
     );
   });
 
