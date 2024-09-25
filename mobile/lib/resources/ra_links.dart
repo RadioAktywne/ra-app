@@ -3,7 +3,7 @@ abstract class RaRadio {
   static const String baseUrl = 'listen.radioaktywne.pl:$radioPort';
   static const String status = 'status-json.xsl';
   static const String radioStream = 'raogg';
-  // TODO: add low-fi radio stream (ramp4)
+  // TODO: add low-fi radio stream (ramp3)
 }
 
 abstract class RaApi {
