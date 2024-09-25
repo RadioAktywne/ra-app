@@ -1,9 +1,9 @@
 abstract class RaRadio {
-  static const int playerPort = 8443;
-
-  static const String baseUrl = 'listen.radioaktywne.pl:$playerPort';
+  static const int radioPort = 443;
+  static const String baseUrl = 'listen.radioaktywne.pl:$radioPort';
   static const String status = 'status-json.xsl';
   static const String radioStream = 'raogg';
+  // TODO: add low-fi radio stream (ramp3)
 }
 
 abstract class RaApi {
