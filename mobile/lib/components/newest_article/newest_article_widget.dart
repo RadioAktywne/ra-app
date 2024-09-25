@@ -21,11 +21,14 @@ class NewestArticleWidget extends HookWidget {
   Widget build(BuildContext context) {
     final articles = useState<Iterable<ArticleInfo>>([]);
     final hasError = useState(false);
+    final isLoading = useState(false);
 
     useEffect(
       () {
+        isLoading.value = true;
         final newestArticleFetch = NewestArticleFetch();
         newestArticleFetch.loadArticles().then((_) {
+          isLoading.value = false;
           articles.value = newestArticleFetch.articles;
           hasError.value = newestArticleFetch.hasError;
         });
@@ -59,6 +62,8 @@ class NewestArticleWidget extends HookWidget {
           style: context.textStyles.textSmallGreen,
         ),
       ),
+      isLoading: isLoading.value,
+      hasError: hasError.value,
     );
   }
 }

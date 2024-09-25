@@ -3,7 +3,9 @@ import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/utility/image_with_overlay.dart';
+import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/extensions/themes.dart';
+import 'package:radioaktywne/pages/ra_error_page.dart';
 
 /// Widget representing a horizontally swipeable card.
 class SwipeableCard extends HookWidget {
@@ -12,6 +14,8 @@ class SwipeableCard extends HookWidget {
     required this.items,
     required this.shadowColor,
     this.header,
+    this.isLoading = false,
+    this.hasError = false,
   });
 
   /// Cards to be displayed by this widget.
@@ -23,9 +27,16 @@ class SwipeableCard extends HookWidget {
   /// Optional header of the widget.
   final Widget? header;
 
+  /// Optional bool indicating that data is still fetching
+  final bool isLoading;
+
+  /// Optional bool indicating that data couldn't be fetched
+  final bool hasError;
+
   @override
   Widget build(BuildContext context) {
     final currentPage = useState(0);
+    final pageController = usePageController();
 
     return ColorShadowedCard(
       shadowColor: shadowColor,
@@ -33,7 +44,7 @@ class SwipeableCard extends HookWidget {
         color: context.colors.backgroundDark,
         child: header,
       ),
-      footer: Container(
+      footer: !hasError && !isLoading ? Container(
         color: context.colors.backgroundDark,
         child: Padding(
           padding: const EdgeInsets.only(top: 4),
@@ -56,26 +67,37 @@ class SwipeableCard extends HookWidget {
             }),
           ),
         ),
-      ),
-      child: Stack(
-        children: <Widget>[
-          Positioned.fill(
-            child: PageView.builder(
-              itemCount: items.length,
-              onPageChanged: (index) => currentPage.value = index,
-              itemBuilder: (context, index) {
-                final item = items.elementAt(index);
-                return GestureDetector(
-                  onTap: item.onTap,
-                  child: ImageWithOverlay(
-                    thumbnailPath: item.thumbnailPath,
-                    titleOverlay: HtmlWidget(item.title),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
+      ) : null,
+      child: Builder(
+        builder: (context) {
+          if (isLoading) {
+            return const RaProgressIndicator();
+          }
+          if (hasError) {
+            return const RaErrorPage();
+          }
+          return Stack(
+            children: <Widget>[
+              Positioned.fill(
+                child: PageView.builder(
+                  controller: pageController,
+                  itemCount: items.length,
+                  onPageChanged: (index) => currentPage.value = index,
+                  itemBuilder: (context, index) {
+                    final item = items.elementAt(index);
+                    return GestureDetector(
+                      onTap: item.onTap,
+                      child: ImageWithOverlay(
+                        thumbnailPath: item.thumbnailPath,
+                        titleOverlay: HtmlWidget(item.title),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
