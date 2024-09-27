@@ -71,7 +71,7 @@ class _RaListWidgetItem extends StatelessWidget {
       height: rowHeight,
       color: color,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
         child: item,
       ),
     );
