@@ -44,16 +44,17 @@ class RecordingsPage extends HookWidget {
           Duration(seconds: jsonData['media_details']['length'] as int)
         ),
       );
+      final thumbnailPath = element.thumbnailPath.isEmpty ? '' : await fetchSingle(
+        _singleRecordingUrl(element.thumbnailPath),
+            (jsonData) => jsonData['media_details']['sizes']['thumbnail']
+        ['source_url'] as String,
+      );
 
       pageData.add(
         element
           ..recordingPath = recordingPath
           ..duration = duration
-          ..thumbnailPath = await fetchSingle(
-            _singleRecordingUrl(element.thumbnailPath),
-            (jsonData) => jsonData['media_details']['sizes']['thumbnail']
-                ['source_url'] as String,
-          ),
+          ..thumbnailPath = thumbnailPath,
       );
     }
 
