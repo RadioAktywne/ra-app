@@ -33,7 +33,7 @@ class StreamTitleWorkaround {
         if (maybeStreamName is String) {
           if (maybeStreamName == 'Unknown') {
             _streamController.add(
-              'Radio Aktywne', // TODO: is there any way to get this from l10n?
+              'Radio Aktywne',
             );
           } else {
             _streamController.add(maybeStreamName);

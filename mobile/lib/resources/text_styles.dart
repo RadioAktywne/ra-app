@@ -9,8 +9,8 @@ class RATextStyles {
 
   TextStyle get polibudzka => TextStyle(
         fontSize: 18,
-        fontFamily: 'RadikalWUT',
-        fontWeight: FontWeight.bold,
+        fontFamily: 'Radio Canada',
+        fontWeight: FontWeight.normal,
         color: context.colors.highlightGreen,
       );
 

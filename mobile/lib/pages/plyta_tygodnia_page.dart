@@ -13,7 +13,6 @@ import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/resources/resources.dart';
 
 /// Page displaying the album of the week.
-// TODO: merge UI with `lib/pages/article_page`
 class PlytaTygodniaPage extends StatelessWidget {
   const PlytaTygodniaPage({
     super.key,

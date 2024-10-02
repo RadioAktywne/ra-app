@@ -18,7 +18,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-    // DeviceOrientation.portraitDown, // TODO: decide about this one...
   ]);
   runApp(const MainApp());
 }
@@ -44,7 +43,6 @@ class MainApp extends HookWidget {
   }
 }
 
-// TODO: decide if needs further refactor
 class MainPage extends StatelessWidget {
   const MainPage({
     super.key,
@@ -96,12 +94,10 @@ class MainPage extends StatelessWidget {
                         Expanded(
                           child: AspectRatio(
                             aspectRatio: 1,
-                            child: NewestRecordingWidget(),
+                            child: NewestRecordingWidgetMock(),
                           ),
                         ),
-                        SizedBox(
-                          width: RaPageConstraints.pagePaddingValue,
-                        ),
+                        SizedBox(width: RaPageConstraints.pagePaddingValue),
                         Expanded(
                           child: AspectRatio(
                             aspectRatio: 1,

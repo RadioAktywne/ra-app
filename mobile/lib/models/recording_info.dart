@@ -25,7 +25,7 @@ class RecordingInfo {
   MediaItem get mediaItem => MediaItem(
         id: recordingPath,
         title: title,
-        artist: 'Radio Aktywne', // TODO: use l10n
+        artist: 'Radio Aktywne',
         duration: duration,
         artUri: Uri.parse(thumbnailPath),
       );

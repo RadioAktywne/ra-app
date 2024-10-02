@@ -1,12 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:radioaktywne/components/utility/swipeable_card.dart';
 import 'package:radioaktywne/extensions/themes.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
-/// TODO: This is still a dummy widget, needs implementing fetching logic
 /// Widget representing three most recent recordings.
-class NewestRecordingWidget extends StatelessWidget {
-  const NewestRecordingWidget({
+class NewestRecordingWidgetMock extends StatelessWidget {
+  const NewestRecordingWidgetMock({
     super.key,
     this.shadowColor,
   });
@@ -19,21 +18,20 @@ class NewestRecordingWidget extends StatelessWidget {
     final defaultShadowColor = context.colors.highlightGreen;
 
     return SwipeableCard(
-      // TODO: Change this for array of real SwipeableCardItems
       items: [
         SwipeableCardItem(
           thumbnailPath: '',
-          title: 'Lorem Ipsum',
+          title: 'wersja alpha',
           onTap: () {},
         ),
         SwipeableCardItem(
           thumbnailPath: '',
-          title: 'Lorem Ipsum',
+          title: 'nie zawiera',
           onTap: () {},
         ),
         SwipeableCardItem(
           thumbnailPath: '',
-          title: 'Lorem Ipsum',
+          title: 'stron nagrań',
           onTap: () {},
         ),
       ],
