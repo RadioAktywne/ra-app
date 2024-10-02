@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:radioaktywne/components/utility/swipeable_card.dart';
 import 'package:radioaktywne/extensions/themes.dart';
-import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
 /// TODO: This is still a dummy widget, needs implementing fetching logic
 /// Widget representing three most recent recordings.
@@ -39,11 +38,7 @@ class NewestRecordingWidget extends StatelessWidget {
       ],
       shadowColor: shadowColor ?? defaultShadowColor,
       header: Padding(
-        padding: const EdgeInsets.only(
-          top: 4,
-          bottom: 4,
-          left: RaPageConstraints.headerTextPaddingLeft,
-        ),
+        padding: const EdgeInsets.all(4),
         child: Text(
           'Najnowsze nagrania',
           style: context.textStyles.textSmallGreen,

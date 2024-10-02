@@ -4,7 +4,6 @@ import 'package:radioaktywne/components/ramowka/ramowka_list.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/utility/ra_splash.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
-import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
 /// Widget representing Ramówka
@@ -31,9 +30,7 @@ class RamowkaWidget extends StatelessWidget {
     return ColorShadowedCard(
       shadowColor: shadowColor ?? defaultShadowColor,
       header: Padding(
-        padding: const EdgeInsets.only(
-          left: RaPageConstraints.headerTextPaddingLeft,
-        ),
+        padding: const EdgeInsets.only(left: 3),
         child: SizedBox(
           height: 31,
           child: RaSplash(

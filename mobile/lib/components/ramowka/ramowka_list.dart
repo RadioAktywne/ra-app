@@ -158,11 +158,12 @@ class RamowkaListItem extends StatelessWidget {
               ),
             ),
           ),
-        Text(
-          info.startTime,
-          style: context.textStyles.textSmallWhite,
-        ),
-      ],
+          Text(
+            info.startTime,
+            style: context.textStyles.textSmallWhite,
+          ),
+        ],
+      ),
     );
   }
 }

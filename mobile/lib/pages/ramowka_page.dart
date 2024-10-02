@@ -62,14 +62,9 @@ class RamowkaPage extends StatelessWidget {
             final ramowkaForDay =
                 ramowka[Day.byIndex(index)] ?? [RamowkaInfo.empty()];
             return ColorShadowedCard(
-              header: Padding(
-                padding: const EdgeInsets.only(
-                  left: RaPageConstraints.headerTextPaddingLeft,
-                ),
-                child: Text(
-                  ramowkaForDay[index].day.toL10nString(context),
-                  style: context.textStyles.textMedium,
-                ),
+              header: Text(
+                ramowkaForDay[index].day.toL10nString(context),
+                style: context.textStyles.textMedium,
               ),
               shadowColor: context.shadowColor(index),
               child: RaListWidget(
