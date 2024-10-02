@@ -36,25 +36,57 @@ class RecordingsPage extends HookWidget {
     final recordings = await fetchData(pageUrl, RecordingInfo.fromJson);
 
     final pageData = <RecordingInfo>[];
-    for (final element in recordings) {
-      final (recordingPath, duration) = await fetchSingle(
-        _singleRecordingUrl(element.recordingPath),
-        (jsonData) => (
-          jsonData['source_url'] as String,
-          Duration(seconds: jsonData['media_details']['length'] as int)
-        ),
-      );
 
+    final recordingDetails = {
+      for (final RecordingInfo recording in recordings)
+        recording.title: RecordingDetails(),
+    };
+    // using title as key isn't ideal to put it mildly, but out of all the
+    // fields in RecordingInfo I reckon this one is the least likely to be empty
+
+    final recordingFutures = recordings.map((element) {
+      Future<void> fetchRecordingPathAndDuration() async {
+        final (recordingPath, duration) = await fetchSingle(
+          _singleRecordingUrl(element.recordingPath),
+          (jsonData) => (
+            jsonData['source_url'] as String,
+            Duration(seconds: jsonData['media_details']['length'] as int)
+          ),
+        );
+        recordingDetails[element.title]?.recordingPath = recordingPath;
+        recordingDetails[element.title]?.duration = duration;
+      }
+
+      return fetchRecordingPathAndDuration();
+    });
+
+    final thumbnailFutures = recordings.map((element) {
+      Future<void> fetchThumbnail() async {
+        final thumbnailPath = element.thumbnailPath.isEmpty
+            ? ''
+            : await fetchSingle(
+                _singleRecordingUrl(element.thumbnailPath),
+                (jsonData) => jsonData['media_details']['sizes']['thumbnail']
+                    ['source_url'] as String,
+              );
+        recordingDetails[element.title]?.thumbnailPath = thumbnailPath;
+      }
+
+      return fetchThumbnail();
+    });
+
+    await Future.wait([
+      ...recordingFutures,
+      ...thumbnailFutures,
+    ]); // Await for all asynchronous calls made all at once
+
+    for (final element in recordings) {
       pageData.add(
         element
-          ..recordingPath = recordingPath
-          ..duration = duration
-          ..thumbnailPath = await fetchSingle(
-            _singleRecordingUrl(element.thumbnailPath),
-            (jsonData) => jsonData['media_details']['sizes']['thumbnail']
-                ['source_url'] as String,
-          ),
-      );
+          ..recordingPath = recordingDetails[element.title]!.recordingPath!
+          ..duration = recordingDetails[element.title]!.duration!
+          ..thumbnailPath = recordingDetails[element.title]!.thumbnailPath!,
+      ); // TODO: this looks bad with all these exclamation marks, could use a refactor at some point
     }
 
     return pageData;
@@ -79,4 +111,10 @@ class RecordingsPage extends HookWidget {
       },
     );
   }
+}
+
+class RecordingDetails {
+  String? recordingPath;
+  Duration? duration;
+  String? thumbnailPath;
 }
