@@ -102,8 +102,6 @@ class _RaPlayButtonImage extends StatelessWidget {
           AudioProcessingState.loading ||
           AudioProcessingState.buffering =>
             _RaPlayButtonImageLoading(size: size),
-          // TODO: (maybe?) Handle error state:
-          // TODO: AudioProcessingState.error => ...,
           _ => SimpleShadow(
               opacity: 0.38,
               sigma: RaPlayButton._shadowBlur * 2,

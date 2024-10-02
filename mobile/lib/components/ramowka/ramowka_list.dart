@@ -147,7 +147,7 @@ class RamowkaListItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           RaSplash(
-            onPressed: () {}, // TODO: navigation to this audition's page
+            onPressed: () {},
             child: AspectRatio(
               aspectRatio: aspectRatio(context),
               child: Text(
