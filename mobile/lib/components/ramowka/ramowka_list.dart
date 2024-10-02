@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:radioaktywne/components/ra_list_widget.dart';
 import 'package:radioaktywne/components/ramowka/fetch_ramowka.dart';
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
+import 'package:radioaktywne/components/utility/ra_splash.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/ramowka_info.dart';
@@ -145,21 +146,15 @@ class RamowkaListItem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Material(
-            color: Colors.transparent,
-            child: InkWell(
-              // TODO: Navigation to this Audycja
-              onTap: () {},
-              splashColor: context.colors.highlightGreen.withOpacity(0.3),
-              radius: 25,
-              child: AspectRatio(
-                aspectRatio: aspectRatio(context),
-                child: Text(
-                  info.title,
-                  style: context.textStyles.textSmallWhite,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
+          RaSplash(
+            onPressed: () {}, // TODO: navigation to this audition's page
+            child: AspectRatio(
+              aspectRatio: aspectRatio(context),
+              child: Text(
+                info.title,
+                style: context.textStyles.textSmallWhite,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
             ),
           ),
