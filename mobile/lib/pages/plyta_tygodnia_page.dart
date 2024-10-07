@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:radioaktywne/components/utility/custom_padding_html_widget.dart';
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
@@ -9,8 +10,10 @@ import 'package:radioaktywne/pages/ra_error_page.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
+import 'package:radioaktywne/resources/resources.dart';
 
 /// Page displaying the album of the week.
+// TODO: merge UI with `lib/pages/article_page`
 class PlytaTygodniaPage extends StatelessWidget {
   const PlytaTygodniaPage({
     super.key,
@@ -113,22 +116,19 @@ class PlytaTygodniaPage extends StatelessWidget {
             ),
             _betweenPadding,
             Container(
-              height: 31,
               color: context.colors.backgroundDark,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: _textPadding,
-                    child: SelectableText(
-                      '${plytaTygodnia.artist} - ${plytaTygodnia.title}',
-                      style: context.textStyles.textMedium.copyWith(
-                        color: context.colors.backgroundLight,
-                      ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: CustomPaddingHtmlWidget(
+                    style: context.textStyles.textMedium.copyWith(
+                      color: context.colors.backgroundLight,
                     ),
+                    htmlContent:
+                        '${plytaTygodnia.artist} - ${plytaTygodnia.title}',
                   ),
-                ],
+                ),
               ),
             ),
             _betweenPadding,
