@@ -1,5 +1,5 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radioaktywne/components/ra_playbutton.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_handler.dart';
@@ -8,6 +8,7 @@ import 'package:radioaktywne/components/ra_player/ra_player_widget.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/utility/image_with_overlay.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
+import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
 /// Widget representing what's currently played on the radio.
@@ -56,7 +57,7 @@ class TerazGramyWidget extends StatelessWidget {
                 ),
               ],
             ),
-            titleOverlayPadding: const EdgeInsets.all(8),
+            titleOverlayPadding: RaPageConstraints.textPageTitlePadding,
             child: Center(
               child: ValueListenableBuilder<MediaKind>(
                 valueListenable: audioHandler.mediaKind,
