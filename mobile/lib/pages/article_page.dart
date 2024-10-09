@@ -47,7 +47,7 @@ class ArticlePage extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: const EdgeInsets.all(8),
+                  padding: RaPageConstraints.textPageTitlePadding,
                   child: CustomPaddingHtmlWidget(
                     style: context.textStyles.textMedium.copyWith(
                       color: context.colors.backgroundLight,
