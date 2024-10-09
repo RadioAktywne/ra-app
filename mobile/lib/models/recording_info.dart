@@ -22,8 +22,8 @@ class RecordingInfo {
   final String title;
   String thumbnailPath;
   String recordingPath;
-  Duration duration;
   String description;
+  Duration duration;
 
   MediaItem get mediaItem => MediaItem(
         id: recordingPath,
@@ -42,6 +42,7 @@ RecordingInfo {
   title=$title,
   thumbnailPath=$thumbnailPath,
   recordingPath=$recordingPath,
+  description=$description,
   duration=$duration,
   description=$description,
 }''';

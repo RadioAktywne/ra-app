@@ -1,14 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
-import 'package:radioaktywne/components/ra_player/ra_player_handler.dart';
-import 'package:radioaktywne/components/ra_player/ra_player_recources.dart';
 import 'package:radioaktywne/components/utility/lazy_loaded_grid_view.dart';
 import 'package:radioaktywne/models/recording_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
-import 'package:radioaktywne/state/audio_handler_cubit.dart';
+import 'package:radioaktywne/router/ra_routes.dart';
 
 /// Allows browsing the RA recordings.
 class RecordingsPage extends HookWidget {
@@ -106,21 +104,16 @@ class RecordingsPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AudioHandlerCubit, RaPlayerHandler>(
-      builder: (context, audioHandler) {
-        return LazyLoadedGridView(
-          fetchPage: fetchPage,
-          itemBuilder: (recording) => LazyLoadedGridViewItem(
-            title: recording.title,
-            thumbnailPath: recording.thumbnailPath,
-          ),
-          // TODO: navigate to the tapped recording's page
-          onItemTap: (recording, index) => audioHandler.playMediaItem(
-            recording.mediaItem,
-            mediaKind: MediaKind.recording,
-          ),
-        );
-      },
+    return LazyLoadedGridView(
+      fetchPage: fetchPage,
+      itemBuilder: (recording) => LazyLoadedGridViewItem(
+        title: recording.title,
+        thumbnailPath: recording.thumbnailPath,
+      ),
+      onItemTap: (recording, index) => context.push(
+        RaRoutes.recordingId(recording.id),
+        extra: recording,
+      ),
     );
   }
 }

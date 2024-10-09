@@ -10,6 +10,8 @@ abstract class RaRoutes {
   static const broadcasts = '/broadcasts';
   static const about = '/about';
   static const article = '/article/:id';
+  static const recording = '/recording/:id';
 
   static String articleId(int id) => '/article/$id';
+  static String recordingId(int id) => '/recording/$id';
 }
