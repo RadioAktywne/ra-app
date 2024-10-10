@@ -5,6 +5,7 @@ class RecordingInfo {
       : id = jsonData['id'] as int,
         title = jsonData['acf']['title'] as String,
         thumbnailPath = jsonData['acf']['image'].toString(),
+        fullImagePath = jsonData['acf']['image'].toString(),
         recordingPath = jsonData['acf']['file'].toString(),
         description = jsonData['acf']['description'].toString(),
         duration = Duration.zero;
@@ -13,6 +14,7 @@ class RecordingInfo {
   final int id;
   final String title;
   String thumbnailPath;
+  String fullImagePath;
   String recordingPath;
   String description;
   Duration duration;
@@ -32,6 +34,7 @@ RecordingInfo {
   id=$id,
   title=$title,
   thumbnailPath=$thumbnailPath,
+  fullImagePath=$fullImagePath,
   recordingPath=$recordingPath,
   description=$description,
   duration=$duration,
