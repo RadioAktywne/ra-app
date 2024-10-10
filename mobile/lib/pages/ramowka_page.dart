@@ -58,18 +58,24 @@ class RamowkaPage extends StatelessWidget {
             top: RaPageConstraints.pagePaddingValue,
             bottom: context.playerPaddingValue,
           ),
+          itemCount: Day.values.length,
           itemBuilder: (context, index) {
-            final ramowkaForDay =
-                ramowka[Day.byIndex(index)] ?? [RamowkaInfo.empty()];
+            final currentDay = Day.byIndex(index);
+            final ramowkaForDay = ramowka[currentDay] ?? [RamowkaInfo.empty()];
             return ColorShadowedCard(
-              header: Text(
-                ramowkaForDay[index].day.toL10nString(context),
-                style: context.textStyles.textMedium,
+              header: Padding(
+                padding: const EdgeInsets.only(
+                  left: RaPageConstraints.headerTextPaddingLeft,
+                ),
+                child: Text(
+                  currentDay.toL10nString(context),
+                  style: context.textStyles.textMedium,
+                ),
               ),
               shadowColor: context.shadowColor(index),
               child: RaListWidget(
                 scrollPhysics: const NeverScrollableScrollPhysics(),
-                rows: ramowkaForDay.length,
+                itemCount: ramowkaForDay.length,
                 items: ramowkaForDay
                     .map(
                       (ramowkaInfo) => RamowkaListItem(
@@ -83,7 +89,6 @@ class RamowkaPage extends StatelessWidget {
           },
           separatorBuilder: (context, index) =>
               const SizedBox(height: RaPageConstraints.pagePaddingValue),
-          itemCount: Day.values.length,
         ),
       ),
     );

@@ -9,7 +9,7 @@ class RaListWidget extends StatelessWidget {
   const RaListWidget({
     super.key,
     required this.items,
-    required this.rows,
+    required this.itemCount,
     this.rowHeight = RaPageConstraints.ramowkaListRowHeight,
     this.scrollPhysics,
   });
@@ -17,8 +17,8 @@ class RaListWidget extends StatelessWidget {
   /// List of items to be displayed in each row
   final List<Widget> items;
 
-  /// Number of rows
-  final int rows;
+  /// Number of rows of the list
+  final int itemCount;
 
   /// Single row's height
   final double rowHeight;
@@ -32,12 +32,12 @@ class RaListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = rows * rowHeight;
+    final height = itemCount * rowHeight;
     return SizedBox(
       height: height,
       child: ListView.builder(
         physics: scrollPhysics,
-        itemCount: min(items.length, rows),
+        itemCount: min(items.length, itemCount),
         itemBuilder: (context, index) => _RaListWidgetItem(
           item: items[index],
           color: _color(context, index),
@@ -71,7 +71,7 @@ class _RaListWidgetItem extends StatelessWidget {
       height: rowHeight,
       color: color,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
         child: item,
       ),
     );

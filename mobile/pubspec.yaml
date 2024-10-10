@@ -1,7 +1,7 @@
 name: radioaktywne
 description: A new Flutter project.
 publish_to: 'none'
-version: 0.1.0
+version: 0.1.0+3
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -78,6 +78,7 @@ flutter:
     - assets/
     - assets/icons/
     - assets/ra_logo/
+    - assets/fonts/
   fonts:
     - family: RadikalWUT
       fonts:
@@ -85,3 +86,6 @@ flutter:
     - family: Arial
       fonts:
         - asset: assets/fonts/arial.ttf
+    - family: Radio Canada
+      fonts:
+        - asset: assets/fonts/RadioCanada-Regular.ttf
