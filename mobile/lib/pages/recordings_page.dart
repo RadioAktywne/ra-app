@@ -35,29 +35,55 @@ class RecordingsPage extends HookWidget {
     final pageUrl = _allRecordingsUrl(page);
     final recordings = await fetchData(pageUrl, RecordingInfo.fromJson);
 
-    final pageData = <RecordingInfo>[];
-    for (final element in recordings) {
-      final (recordingPath, duration) = await fetchSingle(
-        _singleRecordingUrl(element.recordingPath),
-        (jsonData) => (
-          jsonData['source_url'] as String,
-          Duration(seconds: jsonData['media_details']['length'] as int)
-        ),
-      );
+    final recordingDetails = {for (final rec in recordings) rec.id: rec};
+    // small data redundancy, should be offset by increase in search speed
 
-      pageData.add(
-        element
-          ..recordingPath = recordingPath
-          ..duration = duration
-          ..thumbnailPath = await fetchSingle(
-            _singleRecordingUrl(element.thumbnailPath),
-            (jsonData) => jsonData['media_details']['sizes']['thumbnail']
-                ['source_url'] as String,
+    final recordingFutures = recordings.map((recording) {
+      Future<void> fetchRecordingPathAndDuration() async {
+        final (recordingPath, duration) = await fetchSingle(
+          _singleRecordingUrl(recording.recordingPath),
+          (jsonData) => (
+            jsonData['source_url'] as String,
+            Duration(seconds: jsonData['media_details']['length'] as int)
           ),
-      );
-    }
+        );
 
-    return pageData;
+        recordingDetails.update(
+          recording.id,
+          (details) => details
+            ..duration = duration
+            ..recordingPath = recordingPath,
+        );
+      }
+
+      return fetchRecordingPathAndDuration();
+    });
+
+    final thumbnailFutures = recordings.map((recording) {
+      Future<void> fetchThumbnail() async {
+        final thumbnailPath = recording.thumbnailPath.isEmpty
+            ? ''
+            : await fetchSingle(
+                _singleRecordingUrl(recording.thumbnailPath),
+                (jsonData) => jsonData['media_details']['sizes']['thumbnail']
+                    ['source_url'] as String,
+              );
+
+        recordingDetails.update(
+          recording.id,
+          (details) => details..thumbnailPath = thumbnailPath,
+        );
+      }
+
+      return fetchThumbnail();
+    });
+
+    await Future.wait([
+      ...recordingFutures,
+      ...thumbnailFutures,
+    ]); // Await all asynchronous calls at the same time
+
+    return recordingDetails.values.toList();
   }
 
   @override
@@ -70,7 +96,6 @@ class RecordingsPage extends HookWidget {
             title: recording.title,
             thumbnailPath: recording.thumbnailPath,
           ),
-          // TODO: navigate to the tapped recording's page
           onItemTap: (recording, index) async => audioHandler.playMediaItem(
             recording.mediaItem,
             mediaKind: MediaKind.recording,

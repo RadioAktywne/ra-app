@@ -6,6 +6,7 @@ import 'package:radioaktywne/components/newest_article/newest_articles_fetch.dar
 import 'package:radioaktywne/components/utility/swipeable_card.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
+import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
 
 class NewestArticleWidget extends HookWidget {
@@ -56,7 +57,11 @@ class NewestArticleWidget extends HookWidget {
       ),
       shadowColor: shadowColor ?? defaultShadowColor,
       header: Padding(
-        padding: const EdgeInsets.all(4),
+        padding: const EdgeInsets.only(
+          top: 4,
+          bottom: 4,
+          left: RaPageConstraints.headerTextPaddingLeft,
+        ),
         child: Text(
           'Najnowsze artykuły',
           style: context.textStyles.textSmallGreen,
