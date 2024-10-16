@@ -35,41 +35,44 @@ class RecordingsPage extends HookWidget {
     final pageUrl = _allRecordingsUrl(page);
     final recordings = await fetchData(pageUrl, RecordingInfo.fromJson);
 
-    final pageData = <RecordingInfo>[];
+    final recordingDetails = {for (final rec in recordings) rec.id: rec};
+    // small data redundancy, should be offset by increase in search speed
 
-    final recordingDetails = {
-      for (final RecordingInfo recording in recordings)
-        recording.title: RecordingDetails(),
-    };
-    // using title as key isn't ideal to put it mildly, but out of all the
-    // fields in RecordingInfo I reckon this one is the least likely to be empty
-
-    final recordingFutures = recordings.map((element) {
+    final recordingFutures = recordings.map((recording) {
       Future<void> fetchRecordingPathAndDuration() async {
         final (recordingPath, duration) = await fetchSingle(
-          _singleRecordingUrl(element.recordingPath),
+          _singleRecordingUrl(recording.recordingPath),
           (jsonData) => (
             jsonData['source_url'] as String,
             Duration(seconds: jsonData['media_details']['length'] as int)
           ),
         );
-        recordingDetails[element.title]?.recordingPath = recordingPath;
-        recordingDetails[element.title]?.duration = duration;
+
+        recordingDetails.update(
+          recording.id,
+          (details) => details
+            ..duration = duration
+            ..recordingPath = recordingPath,
+        );
       }
 
       return fetchRecordingPathAndDuration();
     });
 
-    final thumbnailFutures = recordings.map((element) {
+    final thumbnailFutures = recordings.map((recording) {
       Future<void> fetchThumbnail() async {
-        final thumbnailPath = element.thumbnailPath.isEmpty
+        final thumbnailPath = recording.thumbnailPath.isEmpty
             ? ''
             : await fetchSingle(
-                _singleRecordingUrl(element.thumbnailPath),
+                _singleRecordingUrl(recording.thumbnailPath),
                 (jsonData) => jsonData['media_details']['sizes']['thumbnail']
                     ['source_url'] as String,
               );
-        recordingDetails[element.title]?.thumbnailPath = thumbnailPath;
+
+        recordingDetails.update(
+          recording.id,
+          (details) => details..thumbnailPath = thumbnailPath,
+        );
       }
 
       return fetchThumbnail();
@@ -78,18 +81,9 @@ class RecordingsPage extends HookWidget {
     await Future.wait([
       ...recordingFutures,
       ...thumbnailFutures,
-    ]); // Await for all asynchronous calls made all at once
+    ]); // Await all asynchronous calls at the same time
 
-    for (final element in recordings) {
-      pageData.add(
-        element
-          ..recordingPath = recordingDetails[element.title]!.recordingPath!
-          ..duration = recordingDetails[element.title]!.duration!
-          ..thumbnailPath = recordingDetails[element.title]!.thumbnailPath!,
-      ); // TODO: this looks bad with all these exclamation marks, could use a refactor at some point
-    }
-
-    return pageData;
+    return recordingDetails.values.toList();
   }
 
   @override
@@ -111,10 +105,4 @@ class RecordingsPage extends HookWidget {
       },
     );
   }
-}
-
-class RecordingDetails {
-  String? recordingPath;
-  Duration? duration;
-  String? thumbnailPath;
 }
