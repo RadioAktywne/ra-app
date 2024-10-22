@@ -24,6 +24,12 @@ class SingleRecordingPage extends StatefulWidget {
 class _SingleRecordingPageState extends State<SingleRecordingPage> {
   String _fullImagePath = '';
 
+  /// Space between things on the page.
+  static const SizedBox _emptySpace = SizedBox(height: 9);
+
+  /// Space from the top of the page.
+  static const SizedBox _spaceFromTop = SizedBox(height: 26);
+
   @override
   void initState() {
     super.initState();
@@ -56,7 +62,7 @@ class _SingleRecordingPageState extends State<SingleRecordingPage> {
         padding: RaPageConstraints.outerTextPagePadding,
         child: ListView(
           children: [
-            const SizedBox(height: 26),
+            _spaceFromTop,
             StreamBuilder<PlaybackState>(
               stream: audioHandler.playbackState,
               builder: (context, playbackStateSnapshot) {
@@ -113,7 +119,7 @@ class _SingleRecordingPageState extends State<SingleRecordingPage> {
                 );
               },
             ),
-            const SizedBox(height: 9),
+            _emptySpace,
             Container(
               color: context.colors.backgroundDark,
               child: Align(
@@ -129,7 +135,7 @@ class _SingleRecordingPageState extends State<SingleRecordingPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 9),
+            _emptySpace,
             CustomPaddingHtmlWidget(
               style: context.textStyles.textSmallGreen.copyWith(
                 color: context.colors.backgroundDark,
