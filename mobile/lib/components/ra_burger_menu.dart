@@ -31,10 +31,7 @@ class RaBurgerMenu extends HookWidget {
     (RaRoutes.recordings, 'Nagrania'),
     (RaRoutes.albumOfTheWeek, 'Płyta tygodnia'),
     (RaRoutes.articles, 'Publicystyka'),
-    (RaRoutes.radioPeople, 'Radiowcy'),
     (RaRoutes.ramowka, 'Ramówka'),
-    (RaRoutes.broadcasts, 'Audycje'),
-    (RaRoutes.about, 'O nas'),
   ];
 
   List<RaBurgerMenuItem> _makeList(BuildContext context) => List.generate(
