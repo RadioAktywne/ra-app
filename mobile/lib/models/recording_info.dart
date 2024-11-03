@@ -5,9 +5,10 @@ class RecordingInfo {
     required this.id,
     required this.title,
     required this.thumbnailPath,
+    required this.fullImagePath,
     required this.recordingPath,
-    required this.duration,
     required this.description,
+    required this.duration,
   });
 
   RecordingInfo.fromJson(Map<String, dynamic> jsonData)
