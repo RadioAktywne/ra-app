@@ -5,7 +5,9 @@ class RecordingInfo {
     required this.id,
     required this.title,
     required this.thumbnailPath,
+    required this.fullImagePath,
     required this.recordingPath,
+    required this.description,
     required this.duration,
   });
 
