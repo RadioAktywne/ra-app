@@ -1,6 +1,14 @@
 import 'package:audio_service/audio_service.dart';
 
 class RecordingInfo {
+  RecordingInfo({
+    required this.id,
+    required this.title,
+    required this.thumbnailPath,
+    required this.recordingPath,
+    required this.duration,
+  });
+
   RecordingInfo.fromJson(Map<String, dynamic> jsonData)
       : id = jsonData['id'] as int,
         title = jsonData['acf']['title'] as String,

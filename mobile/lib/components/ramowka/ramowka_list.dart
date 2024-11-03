@@ -108,7 +108,7 @@ class RamowkaList extends StatelessWidget {
         child: const RaErrorPage(),
       ),
       builder: (context, ramowkaInfoList) => RaListWidget(
-        rows: rows,
+        itemCount: rows,
         rowHeight: rowHeight,
         items: ramowkaInfoList
             .map(
