@@ -65,8 +65,11 @@ class RecordingsPage extends HookWidget {
             ? ''
             : await fetchSingle(
                 _singleRecordingUrl(recording.thumbnailPath),
-                (jsonData) => jsonData['media_details']['sizes']['thumbnail']
-                    ['source_url'] as String,
+                // Get image in 'medium_large' size if it exists, else full size
+                (jsonData) => (jsonData['media_details']['sizes']
+                        ['medium_large'] ??
+                    jsonData['media_details']['sizes']
+                        ['full'])['source_url'] as String,
               );
 
         recordingDetails.update(
