@@ -83,9 +83,7 @@ class AboutUsPage extends StatelessWidget {
                   padding: RaPageConstraints.textPageTitlePadding,
                   child: SelectableText(
                     context.l10n.aboutUs,
-                    style: context.textStyles.textMedium.copyWith(
-                      color: context.colors.backgroundLight,
-                    ),
+                    style: context.textStyles.textPlayer
                   ),
                 ),
               ),
