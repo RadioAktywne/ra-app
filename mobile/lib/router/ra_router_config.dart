@@ -4,6 +4,7 @@ import 'package:radioaktywne/components/ra_navigation_shell.dart';
 import 'package:radioaktywne/extensions/themes.dart';
 import 'package:radioaktywne/main.dart';
 import 'package:radioaktywne/models/article_info.dart';
+import 'package:radioaktywne/pages/about_us_page.dart';
 import 'package:radioaktywne/pages/article_page.dart';
 import 'package:radioaktywne/pages/article_selection_page.dart';
 import 'package:radioaktywne/pages/plyta_tygodnia_page.dart';
@@ -51,10 +52,9 @@ final raRouter = GoRouter(
           path: RaRoutes.broadcasts,
           builder: (context, state) => _DummyPage(name: state.fullPath ?? ''),
         ),
-        // TODO: Implement
         GoRoute(
           path: RaRoutes.about,
-          builder: (context, state) => _DummyPage(name: state.fullPath ?? ''),
+          builder: (context, state) => const AboutUsPage(),
         ),
         // TODO: Implement
         GoRoute(
