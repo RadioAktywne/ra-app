@@ -24,4 +24,6 @@ class _RadioAktywneApi {
   String get media => '$_api/media';
   String get recording => '$_api/recording';
   String get about => '$_api/pages';
+
+  String post(int id) => '$posts/$id';
 }

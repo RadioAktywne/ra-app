@@ -15,7 +15,7 @@ class ArticleInfo {
         title = jsonData['title']['rendered'] as String,
         content = jsonData['content']['rendered'] as String,
         thumbnail = jsonData['_embedded']['wp:featuredmedia'][0]
-            ['media_details']['sizes']['thumbnail']['source_url'] as String,
+            ['media_details']['sizes']['thumbnail']?['source_url'] as String?,
         mediumLarge = jsonData['_embedded']['wp:featuredmedia'][0]
                 ['media_details']['sizes']['medium_large']?['source_url']
             as String?,
@@ -25,7 +25,7 @@ class ArticleInfo {
   final int id;
   final String title;
   final String content;
-  final String thumbnail;
+  final String? thumbnail;
   final String? mediumLarge;
   final String fullImage;
 

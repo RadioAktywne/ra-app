@@ -138,7 +138,7 @@ _LazyLoadingController<T> _useLazyLoadingController<T>(
       }
     } on TimeoutException catch (_) {
       hasError.value = true;
-    } catch (e) {
+    } catch (_) {
       hasError.value = true;
       hasMore.value = false;
     } finally {
@@ -157,7 +157,8 @@ _LazyLoadingController<T> _useLazyLoadingController<T>(
           fetchItems();
         }
       });
-      return scrollController.dispose;
+      return;
+      // return scrollController.dispose;
     },
     [],
   );
