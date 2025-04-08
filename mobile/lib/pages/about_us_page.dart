@@ -5,7 +5,6 @@ import 'package:radioaktywne/components/utility/custom_padding_html_widget.dart'
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
-import 'package:radioaktywne/l10n/localizations_pl.dart';
 import 'package:radioaktywne/pages/ra_error_page.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
@@ -14,7 +13,7 @@ import 'package:radioaktywne/resources/resources.dart';
 
 import '../models/about_us_info.dart';
 
-/// Page displaying the album of the week.
+/// Page displaying info about us.
 class AboutUsPage extends StatelessWidget {
   const AboutUsPage({
     super.key,
