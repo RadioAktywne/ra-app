@@ -37,7 +37,6 @@ dependencies:
   # just_audio_background: ^0.0.1-beta.13
   leancode_hooks: ^0.1.1
   logging: ^1.1.1
-  oktoast: ^3.4.0
   provider: ^6.1.2
   rxdart: ^0.28.0
   simple_animations: ^5.0.2
