@@ -5,13 +5,12 @@ import 'package:radioaktywne/components/utility/custom_padding_html_widget.dart'
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
+import 'package:radioaktywne/models/about_us_info.dart';
 import 'package:radioaktywne/pages/ra_error_page.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/resources/resources.dart';
-
-import '../models/about_us_info.dart';
 
 /// Page displaying info about us.
 class AboutUsPage extends StatelessWidget {
@@ -51,10 +50,7 @@ class AboutUsPage extends StatelessWidget {
         headers: _infoHeaders,
         timeout: timeout,
       );
-
       final aboutUs = data.first;
-
-
       return aboutUs;
     } on TimeoutException catch (_) {
       return AboutUsInfo.empty();
@@ -97,7 +93,6 @@ class AboutUsPage extends StatelessWidget {
                 htmlContent:
                 aboutUs.content,
               ),
-
             ),
             SizedBox(height: context.playerPaddingValue),
           ],
