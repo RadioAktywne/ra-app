@@ -66,6 +66,7 @@ class RaBurgerMenu extends HookWidget {
       child: Drawer(
         shadowColor: Colors.transparent,
         backgroundColor: context.colors.backgroundDark,
+        shape: Border.all(style: BorderStyle.none),
         child: ListView(
           children: _makeList(context),
         ),
