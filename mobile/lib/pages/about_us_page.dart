@@ -78,7 +78,7 @@ class AboutUsPage extends StatelessWidget {
                   padding: RaPageConstraints.textPageTitlePadding,
                   child: SelectableText(
                     context.l10n.aboutUs,
-                    style: context.textStyles.textPlayer
+                    style: context.textStyles.textPlayer,
                   ),
                 ),
               ),
@@ -90,8 +90,7 @@ class AboutUsPage extends StatelessWidget {
                 style: context.textStyles.textMedium.copyWith(
                   color: context.colors.backgroundDark,
                 ),
-                htmlContent:
-                aboutUs.content,
+                htmlContent: aboutUs.content,
               ),
             ),
             SizedBox(height: context.playerPaddingValue),
