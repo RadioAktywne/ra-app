@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:radioaktywne/components/ra_navigation_shell.dart';
 import 'package:radioaktywne/extensions/themes.dart';
 import 'package:radioaktywne/main.dart';
-import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/pages/about_us_page.dart';
 import 'package:radioaktywne/pages/article_page.dart';
 import 'package:radioaktywne/pages/article_selection_page.dart';
@@ -35,8 +34,10 @@ final raRouter = GoRouter(
         ),
         GoRoute(
           path: RaRoutes.article,
+
+          /// We assume that the article ID is always provided by the caller
           builder: (context, state) =>
-              ArticlePage(article: state.extra! as ArticleInfo),
+              ArticlePage(id: int.parse(state.pathParameters['id']!)),
         ),
         // TODO: Implement
         GoRoute(

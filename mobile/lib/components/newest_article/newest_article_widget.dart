@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
@@ -41,17 +40,12 @@ class NewestArticleWidget extends HookWidget {
     final defaultShadowColor = context.colors.highlightYellow;
 
     return SwipeableCard(
-      items: articles.value.mapIndexed(
-        (index, item) {
+      items: articles.value.map(
+        (article) {
           return SwipeableCardItem(
-            thumbnailPath: item.mediumLarge ?? item.fullImage,
-            title: item.title,
-            onTap: () {
-              context.push(
-                RaRoutes.articleId(item.id),
-                extra: item,
-              );
-            },
+            thumbnailPath: article.mediumLarge ?? article.fullImage,
+            title: article.title,
+            onTap: () => context.push(RaRoutes.articleId(article.id)),
           );
         },
       ),
@@ -63,7 +57,7 @@ class NewestArticleWidget extends HookWidget {
           left: RaPageConstraints.headerTextPaddingLeft,
         ),
         child: Text(
-          'Najnowsze artykuły',
+          context.l10n.newestArticles,
           style: context.textStyles.textSmallGreen,
         ),
       ),

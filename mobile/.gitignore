@@ -49,6 +49,3 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /android/app/.cxx
-
-# Generated - l10n
-/lib/l10n/localizations*

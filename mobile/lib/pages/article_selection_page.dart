@@ -38,10 +38,8 @@ class ArticleSelectionPage extends StatelessWidget {
         title: article.title,
         thumbnailPath: article.mediumLarge ?? article.fullImage,
       ),
-      onItemTap: (article, index) => context.push(
-        RaRoutes.articleId(article.id),
-        extra: article,
-      ),
+      onItemTap: (article, index) =>
+          context.push(RaRoutes.articleId(article.id)),
     );
   }
 }

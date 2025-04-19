@@ -1,73 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:radioaktywne/components/utility/custom_padding_html_widget.dart';
-import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
-import 'package:radioaktywne/resources/ra_page_constraints.dart';
+import 'package:radioaktywne/pages/templates/html_content_with_title_and_image_page.dart';
+import 'package:radioaktywne/resources/fetch_data.dart';
+import 'package:radioaktywne/resources/ra_links.dart';
 
 /// Page displaying a single article.
 class ArticlePage extends StatelessWidget {
   const ArticlePage({
     super.key,
-    required this.article,
+    required this.id,
   });
-  final ArticleInfo article;
 
-  /// Space between things on the page.
-  static const SizedBox _emptySpace = SizedBox(height: 9);
+  final int id;
 
-  /// Space from the top of the page.
-  static const SizedBox _spaceFromTop = SizedBox(height: 26);
+  Uri get uri => Uri.https(
+        RaApi.baseUrl,
+        RaApi.endpoints.post(id),
+        {'_embed': true}.valuesToString(),
+      );
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: context.colors.backgroundLight,
-      child: Padding(
-        padding: RaPageConstraints.outerTextPagePadding,
-        child: ListView(
-          children: [
-            _spaceFromTop,
-            Image.network(
-              article.fullImage,
-              loadingBuilder: (context, child, loadingProgress) =>
-                  loadingProgress == null
-                      ? child
-                      : Container(
-                          color: context.colors.backgroundDarkSecondary,
-                          child: const RaProgressIndicator(),
-                        ),
-              errorBuilder: (_, __, ___) => Center(
-                child: Image.asset('assets/defaultMedia.png'),
-              ),
-            ),
-            _emptySpace,
-            Container(
-              color: context.colors.backgroundDark,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: RaPageConstraints.textPageTitlePadding,
-                  child: CustomPaddingHtmlWidget(
-                    style: context.textStyles.textMedium.copyWith(
-                      color: context.colors.backgroundLight,
-                    ),
-                    htmlContent: article.title,
-                  ),
-                ),
-              ),
-            ),
-            _emptySpace,
-            CustomPaddingHtmlWidget(
-              style: context.textStyles.textSmallGreen.copyWith(
-                color: context.colors.backgroundDark,
-              ),
-              htmlContent: article.content,
-            ),
-            SizedBox(height: context.playerPaddingValue),
-          ],
-        ),
-      ),
+    return HtmlContentWithTitleAndImagePage<ArticleInfo>(
+      onFetch: () async => fetchSingle(uri, ArticleInfo.fromJson),
+      defaultData: ArticleInfo.empty(),
+      hasData: (article) => article.isNotEmpty,
+      imageUrl: (article) => article.fullImage,
+      title: (article) => article.title,
+      content: (article) => article.content,
     );
   }
 }
