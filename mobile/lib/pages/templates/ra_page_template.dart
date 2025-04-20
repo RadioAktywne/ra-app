@@ -9,15 +9,13 @@ import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
 /// Template for page with an image on top, a (optional)
 /// title, and content text
-class HtmlContentWithTitleAndImagePage<T> extends StatelessWidget {
-  const HtmlContentWithTitleAndImagePage({
+class RaPageTemplate<T> extends StatelessWidget {
+  const RaPageTemplate({
     super.key,
     required this.onFetch,
     required this.defaultData,
     required this.hasData,
-    required this.imageUrl,
-    required this.title,
-    required this.content,
+    required this.itemBuilder,
   });
 
   /// Function to fetch the page data.
@@ -30,28 +28,19 @@ class HtmlContentWithTitleAndImagePage<T> extends StatelessWidget {
   /// is proper.
   final bool Function(T) hasData;
 
-  /// Function to extract imageUrl from fetched object of type T.
-  /// Image.asset is identified as the returned path starting with 'assets/'
-  /// Everything else is rendered as Image.network.
-  final String Function(T) imageUrl;
-
-  /// Function to extract title from fetched object of type T.
-  /// If empty string is returned, title block is not rendered.
-  final String Function(T) title;
-
-  /// Function to extract description from fetched object of type T.
-  final String Function(T) content;
+  /// Function that transforms fetched elements of type [T]
+  /// into [RaPageTemplateItem]s to be displayed.
+  final RaPageTemplateItem Function(T) itemBuilder;
 
   static const EdgeInsets _textPadding = EdgeInsets.symmetric(horizontal: 7);
   static const double _betweenPaddingValue = 9;
   static const double _verticalPaddingValue = 26;
 
-  Widget _makeImage(T item) {
-    final url = imageUrl(item);
+  Widget _image(String url) {
     return url.startsWith('assets/')
         ? Image.asset(url)
         : Image.network(
-            imageUrl(item),
+            url,
             loadingBuilder: (context, child, loadingProgress) =>
                 loadingProgress == null
                     ? FittedBox(
@@ -77,51 +66,69 @@ class HtmlContentWithTitleAndImagePage<T> extends StatelessWidget {
       hasData: hasData,
       loadingBuilder: (context, snapshot) => const RaProgressIndicator(),
       errorBuilder: (context) => const RaErrorPage(),
-      builder: (context, item) => Padding(
-        padding: RaPageConstraints.outerTextPagePadding,
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(
-            top: _verticalPaddingValue,
-            bottom: context.playerPaddingValue,
-          ),
-          child: Column(
-            spacing: _betweenPaddingValue,
-            children: [
-              AspectRatio(aspectRatio: 1, child: _makeImage(item)),
-              if (title(item) == '')
-                const SizedBox.shrink()
-              else
-                Container(
-                  color: context.colors.backgroundDark,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: RaPageConstraints.textPageTitlePadding,
-                      child: CustomPaddingHtmlWidget(
-                        style: context.textStyles.textMedium.copyWith(
-                          color: context.colors.backgroundLight,
+      builder: (context, item) {
+        final currentItem = itemBuilder(item);
+        return Padding(
+          padding: RaPageConstraints.outerTextPagePadding,
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(
+              top: _verticalPaddingValue,
+              bottom: context.playerPaddingValue,
+            ),
+            child: Column(
+              spacing: _betweenPaddingValue,
+              children: [
+                if (currentItem.image != null)
+                  AspectRatio(
+                    aspectRatio: 1,
+                    child: _image(currentItem.image!),
+                  ),
+                if (currentItem.title != null)
+                  Container(
+                    color: context.colors.backgroundDark,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: RaPageConstraints.textPageTitlePadding,
+                        child: CustomPaddingHtmlWidget(
+                          style: context.textStyles.textMedium.copyWith(
+                            color: context.colors.backgroundLight,
+                          ),
+                          htmlContent: currentItem.title!,
                         ),
-                        htmlContent: title(item),
                       ),
                     ),
                   ),
-                ),
-              Padding(
-                padding: _textPadding,
-                child: SelectableRegion(
-                  selectionControls: MaterialTextSelectionControls(),
-                  child: HtmlWidget(
-                    content(item),
-                    textStyle: context.textStyles.textSmallGreen.copyWith(
-                      color: context.colors.backgroundDark,
+                if (currentItem.content != null)
+                  Padding(
+                    padding: _textPadding,
+                    child: SelectableRegion(
+                      selectionControls: MaterialTextSelectionControls(),
+                      child: HtmlWidget(
+                        currentItem.content!,
+                        textStyle: context.textStyles.textSmallGreen.copyWith(
+                          color: context.colors.backgroundDark,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
+}
+
+class RaPageTemplateItem {
+  const RaPageTemplateItem({
+    this.image,
+    this.title,
+    this.content,
+  });
+
+  final String? image;
+  final String? title;
+  final String? content;
 }

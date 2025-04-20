@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/about_us_info.dart';
-import 'package:radioaktywne/pages/templates/html_content_with_title_and_image_page.dart';
+import 'package:radioaktywne/pages/templates/ra_page_template.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
 import 'package:radioaktywne/resources/resources.dart';
@@ -47,13 +47,14 @@ class AboutUsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HtmlContentWithTitleAndImagePage(
+    return RaPageTemplate(
       onFetch: _fetchAboutUs,
       defaultData: AboutUsInfo.empty(),
       hasData: (aboutUsInfo) => aboutUsInfo.isNotEmpty,
-      imageUrl: (aboutUsInfo) => 'assets/ra_logo/RA_logo.png',
-      title: (aboutUsInfo) => '',
-      content: (aboutUsInfo) => aboutUsInfo.content,
+      itemBuilder: (aboutUsInfo) => RaPageTemplateItem(
+        image: 'assets/ra_logo/RA_logo.png',
+        content: aboutUsInfo.content,
+      ),
     );
   }
 }

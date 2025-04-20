@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/plyta_tygodnia_info.dart';
-import 'package:radioaktywne/pages/templates/html_content_with_title_and_image_page.dart';
+import 'package:radioaktywne/pages/templates/ra_page_template.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
 import 'package:radioaktywne/resources/resources.dart';
@@ -63,14 +63,15 @@ class PlytaTygodniaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HtmlContentWithTitleAndImagePage(
+    return RaPageTemplate(
       onFetch: _fetchPlytaTygodnia,
       defaultData: PlytaTygodniaInfo.empty(),
       hasData: (plytaTygodnia) => plytaTygodnia.isNotEmpty,
-      imageUrl: (plytaTygodnia) => plytaTygodnia.imageTag,
-      title: (plytaTygodnia) =>
-          '${plytaTygodnia.artist} - ${plytaTygodnia.title}',
-      content: (plytaTygodnia) => plytaTygodnia.description,
+      itemBuilder: (plytaTygodnia) => RaPageTemplateItem(
+        image: plytaTygodnia.imageTag,
+        title: '${plytaTygodnia.artist} - ${plytaTygodnia.title}',
+        content: plytaTygodnia.description,
+      ),
     );
   }
 }
