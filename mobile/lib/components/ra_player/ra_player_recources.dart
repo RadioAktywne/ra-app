@@ -8,10 +8,9 @@ final radioMediaItem = MediaItem(
   artUri: Uri.parse(RaApi.logoUrl),
 );
 
-enum MediaKind {
-  radio,
-  recording;
-}
+enum MediaKind { radio, recording }
+
+enum PlayerKind { widget, page }
 
 class ProgressBarState {
   ProgressBarState({

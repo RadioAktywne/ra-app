@@ -6,10 +6,9 @@ import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
 import 'package:radioaktywne/components/ra_bottom_navigation_bar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
+import 'package:radioaktywne/components/ra_player/ra_player.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_recources.dart';
-import 'package:radioaktywne/components/ra_player/ra_player_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
-import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
 /// Represents the part of the UI that stays unchanged
@@ -99,10 +98,7 @@ class RaNavigationShell extends HookWidget {
             currentPath: state.fullPath!,
             onNavigate: burgerMenuIconController.reverse,
           ),
-          bottomSheet: const Padding(
-            padding: RaPageConstraints.outerWidgetPagePadding,
-            child: RaPlayerWidget(),
-          ),
+          bottomSheet: const RaPlayer(),
           resizeToAvoidBottomInset: false,
         ),
       ),

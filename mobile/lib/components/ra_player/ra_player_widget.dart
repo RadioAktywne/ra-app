@@ -1,14 +1,14 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
+import 'package:radioaktywne/components/ra_dropdown_icon.dart';
 import 'package:radioaktywne/components/ra_playbutton.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_handler.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_recources.dart';
+import 'package:radioaktywne/components/utility/ra_splash.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
-import 'package:radioaktywne/state/audio_handler_cubit.dart';
 import 'package:text_scroll/text_scroll.dart';
 
 /// The player widget for radio and recordings.
@@ -21,9 +21,13 @@ import 'package:text_scroll/text_scroll.dart';
 class RaPlayerWidget extends StatelessWidget {
   const RaPlayerWidget({
     super.key,
+    required this.audioHandler,
+    required this.mediaKind,
     this.animationDuration = const Duration(milliseconds: 500),
   });
 
+  final RaPlayerHandler audioHandler;
+  final MediaKind mediaKind;
   final Duration animationDuration;
 
   static const double _playerSize = 37;
@@ -32,53 +36,34 @@ class RaPlayerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AudioHandlerCubit, RaPlayerHandler>(
-      builder: (context, audioHandler) {
-        return ValueListenableBuilder<MediaKind>(
-          valueListenable: audioHandler.mediaKind,
-          builder: (context, mediaKind, _) {
-            return AnimatedContainer(
-              duration: animationDuration,
-              width: MediaQuery.of(context).size.width,
-              height: switch (mediaKind) {
-                MediaKind.radio => RaPageConstraints.radioPlayerHeight,
-                MediaKind.recording => RaPageConstraints.recordingPlayerHeight,
-              },
-              child: Stack(
-                children: [
-                  Positioned(
-                    bottom: 0,
-                    child: _SeekBar(
-                      audioHandler: audioHandler,
-                    ),
-                  ),
-                  AnimatedPositioned(
-                    duration: animationDuration,
-                    bottom: switch (mediaKind) {
-                      MediaKind.radio => 0,
-                      MediaKind.recording =>
-                        RaPageConstraints.radioPlayerHeight * 2,
-                    },
-                    left: 12,
-                    child: _BackButton(
-                      audioHandler: audioHandler,
-                    ),
-                  ),
-                  AnimatedPositioned(
-                    duration: animationDuration,
-                    bottom: switch (mediaKind) {
-                      MediaKind.radio => 0,
-                      MediaKind.recording =>
-                        RaPageConstraints.radioPlayerHeight,
-                    },
-                    child: _Player(audioHandler: audioHandler),
-                  ),
-                ],
-              ),
-            );
+    return Stack(
+      children: [
+        Positioned(
+          bottom: 0,
+          child: _SeekBar(
+            audioHandler: audioHandler,
+          ),
+        ),
+        AnimatedPositioned(
+          duration: animationDuration,
+          bottom: switch (mediaKind) {
+            MediaKind.radio => 0,
+            MediaKind.recording => RaPageConstraints.radioPlayerHeight * 2,
           },
-        );
-      },
+          left: 12,
+          child: _BackButton(
+            audioHandler: audioHandler,
+          ),
+        ),
+        AnimatedPositioned(
+          duration: animationDuration,
+          bottom: switch (mediaKind) {
+            MediaKind.radio => 0,
+            MediaKind.recording => RaPageConstraints.radioPlayerHeight,
+          },
+          child: _Player(audioHandler: audioHandler),
+        ),
+      ],
     );
   }
 }
@@ -158,7 +143,7 @@ class _BackButton extends StatelessWidget {
       height: RaPageConstraints.radioPlayerHeight / 2,
       color: context.colors.backgroundDark,
       child: GestureDetector(
-        onTap: () async => audioHandler.playMediaItem(radioMediaItem),
+        onTap: () => audioHandler.playMediaItem(radioMediaItem),
         child: Center(
           child: Text(
             context.l10n.backToRadio,
@@ -182,6 +167,7 @@ class _Player extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       color: context.colors.backgroundDarkSecondary,
       child: Row(
+        // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           PlayerPlayButton(
             audioHandler: audioHandler,
@@ -189,7 +175,16 @@ class _Player extends StatelessWidget {
           ),
           _PlayerTitle(
             audioHandler: audioHandler,
-            width: MediaQuery.of(context).size.width / 1.4,
+            width: MediaQuery.of(context).size.width / 1.65,
+          ),
+          RaSplash(
+            // TODO: go to player page (with an animation - "blow up" the container!)
+            onPressed: () => audioHandler.playerKind.value = PlayerKind.page,
+            child: const Padding(
+              padding: EdgeInsets.zero,
+              child:
+                  RaDropdownIcon(state: RaDropdownIconState.closed, size: 44),
+            ),
           ),
         ],
       ),
@@ -259,15 +254,12 @@ class PlayerPlayButton extends StatelessWidget {
 /// The display of the radio stream title.
 class _PlayerTitle extends StatelessWidget {
   const _PlayerTitle({
-    super.key,
     required this.audioHandler,
     required this.width,
-    this.textStyle,
   });
 
   final RaPlayerHandler audioHandler;
   final double width;
-  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -278,7 +270,6 @@ class _PlayerTitle extends StatelessWidget {
         final title = mediaItem?.title ?? context.l10n.noStreamTitle;
         return RaPlayerTitle(
           title: title.isNotEmpty ? title : context.l10n.noStreamTitle,
-          textStyle: textStyle,
           width: width,
         );
       },
