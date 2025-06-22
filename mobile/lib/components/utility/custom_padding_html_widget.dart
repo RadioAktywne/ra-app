@@ -3,7 +3,7 @@ import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart
 
 class CustomPaddingHtmlWidget extends StatelessWidget {
   const CustomPaddingHtmlWidget({
-    super.key,    
+    super.key,
     required this.style,
     required this.htmlContent,
   });
@@ -11,7 +11,7 @@ class CustomPaddingHtmlWidget extends StatelessWidget {
   final TextStyle style;
   final String htmlContent;
 
-  static const EdgeInsets _textPadding = EdgeInsets.symmetric(horizontal: 7);
+  static const _textPadding = EdgeInsets.symmetric(horizontal: 7);
 
   @override
   Widget build(BuildContext context) {

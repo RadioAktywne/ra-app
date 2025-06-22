@@ -19,7 +19,7 @@ class AboutUsPage extends StatelessWidget {
   final Duration timeout;
 
   /// About us info fetch details.
-  static final Uri _infoUrl = Uri.https(
+  static final _infoUrl = Uri.https(
     RaApi.baseUrl,
     RaApi.endpoints.about,
     {

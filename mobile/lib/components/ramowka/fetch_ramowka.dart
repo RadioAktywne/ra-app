@@ -9,7 +9,7 @@ import 'package:radioaktywne/resources/ra_links.dart';
 /// all of Ramowka.
 Future<Iterable<RamowkaInfo>> fetchRamowka({
   Duration timeout = const Duration(seconds: 7),
-}) async =>
+}) =>
     fetchData(
       Uri.https(
         RaApi.baseUrl,

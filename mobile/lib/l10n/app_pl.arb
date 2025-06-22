@@ -1,6 +1,8 @@
 {
     "@@locale": "pl",
     "hello": "cześć",
+    "radio": "Radio",
+    "recording": "Nagranie",
     "dataLoadError": "Wystąpił błąd podczas pobierania danych",
     "imageLoadError": "Wystąpił błąd podczas pobierania obrazu",
     "noStreamTitle": "Radio Aktywne",

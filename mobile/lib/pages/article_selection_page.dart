@@ -22,7 +22,7 @@ class ArticleSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LazyLoadedGridView(
-      fetchPage: (page) async {
+      fetchPage: (page) {
         final pageUri = Uri.https(
           RaApi.baseUrl,
           RaApi.endpoints.posts,

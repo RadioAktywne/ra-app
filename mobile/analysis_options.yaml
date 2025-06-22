@@ -3,6 +3,8 @@ include: package:leancode_lint/analysis_options.yaml
 analyzer:
   errors:
     avoid_dynamic_calls: ignore
+    comment_references: ignore
+    unsafe_variance: ignore
     unused_element: ignore
   exclude:
     - lib/l10n/localizations*.dart

@@ -100,7 +100,7 @@ class RecordingsPage extends HookWidget {
             thumbnailPath: recording.thumbnailPath,
           ),
           // TODO: navigate to the tapped recording's page
-          onItemTap: (recording, index) async => audioHandler.playMediaItem(
+          onItemTap: (recording, index) => audioHandler.playMediaItem(
             recording.mediaItem,
             mediaKind: MediaKind.recording,
           ),

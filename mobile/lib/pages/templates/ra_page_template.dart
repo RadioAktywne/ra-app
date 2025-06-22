@@ -24,15 +24,14 @@ class RaPageTemplate<T> extends StatelessWidget {
   /// Default data to be displayed before the page fully loads.
   final T defaultData;
 
-  /// Function to determine if the fetched data
-  /// is proper.
+  /// Function to determine if the fetched data is proper.
   final bool Function(T) hasData;
 
   /// Function that transforms fetched elements of type [T]
   /// into [RaPageTemplateItem]s to be displayed.
   final RaPageTemplateItem Function(T) itemBuilder;
 
-  static const EdgeInsets _textPadding = EdgeInsets.symmetric(horizontal: 7);
+  static const _textPadding = EdgeInsets.symmetric(horizontal: 7);
   static const double _betweenPaddingValue = 9;
   static const double _verticalPaddingValue = 26;
 

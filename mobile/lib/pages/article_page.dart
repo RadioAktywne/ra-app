@@ -23,7 +23,7 @@ class ArticlePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RaPageTemplate<ArticleInfo>(
-      onFetch: () async => fetchSingle(uri, ArticleInfo.fromJson),
+      onFetch: () => fetchSingle(uri, ArticleInfo.fromJson),
       defaultData: ArticleInfo.empty(),
       hasData: (article) => article.isNotEmpty,
       itemBuilder: (article) => RaPageTemplateItem(

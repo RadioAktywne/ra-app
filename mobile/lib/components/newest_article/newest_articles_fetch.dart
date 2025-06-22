@@ -5,8 +5,8 @@ import 'package:radioaktywne/resources/ra_links.dart';
 
 class NewestArticleFetch {
   Iterable<ArticleInfo> _articles = [];
-  bool _isLoading = false;
-  bool _hasError = false;
+  var _isLoading = false;
+  var _hasError = false;
 
   Iterable<ArticleInfo> get articles => _articles;
   bool get isLoading => _isLoading;

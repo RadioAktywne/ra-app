@@ -19,7 +19,7 @@ class PlytaTygodniaPage extends StatelessWidget {
   final Duration timeout;
 
   /// Plyta tygodnia info fetch details.
-  static final Uri _infoUrl = Uri.https(
+  static final _infoUrl = Uri.https(
     RaApi.baseUrl,
     RaApi.endpoints.album,
     {

@@ -12,6 +12,12 @@ class AppLocalizationsPl extends AppLocalizations {
   String get hello => 'cześć';
 
   @override
+  String get radio => 'Radio';
+
+  @override
+  String get recording => 'Nagranie';
+
+  @override
   String get dataLoadError => 'Wystąpił błąd podczas pobierania danych';
 
   @override
