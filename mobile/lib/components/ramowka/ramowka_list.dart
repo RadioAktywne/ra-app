@@ -134,22 +134,18 @@ class RamowkaListItem extends StatelessWidget {
   final RamowkaInfo info;
   final double rowHeight;
 
-  /// Calculates aspect ratio from screen width and this
-  /// widget's single row height used for max text length.
-  double aspectRatio(BuildContext context) =>
-      MediaQuery.of(context).size.width / rowHeight;
-
   @override
   Widget build(BuildContext context) {
+    assert(rowHeight != 0);
     return Padding(
       padding: const EdgeInsets.only(left: 3),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          RaSplash(
-            onPressed: () {}, // TODO: navigation to this audition's page
-            child: AspectRatio(
-              aspectRatio: aspectRatio(context),
+          Expanded(
+            flex: 6,
+            child: RaSplash(
+              onPressed: () {}, // TODO: navigation to this audition's page
               child: Text(
                 info.title,
                 style: context.textStyles.textSmallWhite,
@@ -158,9 +154,11 @@ class RamowkaListItem extends StatelessWidget {
               ),
             ),
           ),
-          Text(
-            info.startTime,
-            style: context.textStyles.textSmallWhite,
+          Flexible(
+            child: Text(
+              info.startTime,
+              style: context.textStyles.textSmallWhite,
+            ),
           ),
         ],
       ),

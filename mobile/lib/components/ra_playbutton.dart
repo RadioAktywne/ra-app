@@ -49,7 +49,8 @@ class RaPlayButton extends HookWidget {
   Widget build(BuildContext context) {
     final sizeSlider = useState(size);
 
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
       width: size + 1,
       height: size + 1,
       alignment: Alignment.center,
@@ -57,7 +58,7 @@ class RaPlayButton extends HookWidget {
         onTap: () async {
           sizeSlider.value = 0.0;
 
-          await Future<dynamic>.delayed(shrinkAnimationDuration);
+          await Future<void>.delayed(shrinkAnimationDuration);
           onPressed();
 
           sizeSlider.value = size;
@@ -163,16 +164,13 @@ class _RaPlayButtonImageLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: AlignmentDirectional.center,
-      children: [
-        ShadowedContainer(
-          width: size,
-          height: size,
-          backgroundColor: context.colors.highlightGreen,
-          shape: BoxShape.circle,
-        ),
-        Container(
+    return Center(
+      child: ShadowedContainer(
+        width: size,
+        height: size,
+        backgroundColor: context.colors.highlightGreen,
+        shape: BoxShape.circle,
+        child: Container(
           padding: EdgeInsets.all(size / 7),
           width: size,
           height: size,
@@ -181,7 +179,7 @@ class _RaPlayButtonImageLoading extends StatelessWidget {
             strokeWidth: size / 22,
           ),
         ),
-      ],
+      ),
     );
   }
 }

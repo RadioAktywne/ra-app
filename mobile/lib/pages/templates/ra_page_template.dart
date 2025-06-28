@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:radioaktywne/components/ra_image.dart';
 import 'package:radioaktywne/components/utility/custom_padding_html_widget.dart';
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
@@ -35,28 +36,6 @@ class RaPageTemplate<T> extends StatelessWidget {
   static const double _betweenPaddingValue = 9;
   static const double _verticalPaddingValue = 26;
 
-  Widget _image(String url) {
-    return url.startsWith('assets/')
-        ? Image.asset(url)
-        : Image.network(
-            url,
-            loadingBuilder: (context, child, loadingProgress) =>
-                loadingProgress == null
-                    ? FittedBox(
-                        fit: BoxFit.fitWidth,
-                        clipBehavior: Clip.hardEdge,
-                        child: child,
-                      )
-                    : Container(
-                        color: context.colors.backgroundDarkSecondary,
-                        child: const RaProgressIndicator(),
-                      ),
-            errorBuilder: (context, child, loadingProgress) => Center(
-              child: Image.asset('assets/defaultMedia.png'),
-            ),
-          );
-  }
-
   @override
   Widget build(BuildContext context) {
     return RefreshableFetchWidget(
@@ -80,7 +59,7 @@ class RaPageTemplate<T> extends StatelessWidget {
                 if (currentItem.image != null)
                   AspectRatio(
                     aspectRatio: 1,
-                    child: _image(currentItem.image!),
+                    child: RaImage(imageUrl: currentItem.image!),
                   ),
                 if (currentItem.title != null)
                   Container(

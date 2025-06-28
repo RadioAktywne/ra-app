@@ -10,6 +10,7 @@ class RaBottomNavigationBar extends StatelessWidget {
     required this.currentPath,
     this.borderWidth = 5,
     this.onNavigate,
+    this.height,
   });
 
   /// Name of the current page provided by
@@ -23,6 +24,8 @@ class RaBottomNavigationBar extends StatelessWidget {
   /// navigation to a route __different__ than
   /// the current one.
   final void Function()? onNavigate;
+
+  final double? height;
 
   // Leaving this as a reminder...
   // static const labels = <String>['home', 'mic', 'album', 'article'];
@@ -73,7 +76,9 @@ class RaBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      height: height ?? 80,
       color: context.colors.backgroundDark,
       child: SafeArea(
         child: Container(

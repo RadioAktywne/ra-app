@@ -10,7 +10,15 @@ final radioMediaItem = MediaItem(
 
 enum MediaKind { radio, recording }
 
-enum PlayerKind { widget, page }
+enum PlayerKind {
+  widget,
+  page;
+
+  PlayerKind get opposite => switch (this) {
+        widget => page,
+        page => widget,
+      };
+}
 
 class ProgressBarState {
   ProgressBarState({

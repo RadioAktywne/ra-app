@@ -108,6 +108,8 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   final playerKind = ValueNotifier<PlayerKind>(PlayerKind.widget);
 
+  void changePlayerKind() => playerKind.value = playerKind.value.opposite;
+
   Stream<bool> get playing =>
       playbackState.map((state) => state.playing).distinct();
 

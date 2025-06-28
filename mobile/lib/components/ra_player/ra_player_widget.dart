@@ -1,11 +1,16 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_dropdown_icon.dart';
+import 'package:radioaktywne/components/ra_image.dart';
 import 'package:radioaktywne/components/ra_playbutton.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_handler.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_recources.dart';
+import 'package:radioaktywne/components/ramowka/ramowka_list.dart';
+import 'package:radioaktywne/components/ramowka/ramowka_widget.dart';
 import 'package:radioaktywne/components/utility/ra_splash.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
@@ -22,12 +27,10 @@ class RaPlayerWidget extends StatelessWidget {
   const RaPlayerWidget({
     super.key,
     required this.audioHandler,
-    required this.mediaKind,
-    this.animationDuration = const Duration(milliseconds: 500),
+    this.animationDuration = const Duration(milliseconds: 400),
   });
 
   final RaPlayerHandler audioHandler;
-  final MediaKind mediaKind;
   final Duration animationDuration;
 
   static const double _playerSize = 37;
@@ -36,35 +39,221 @@ class RaPlayerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned(
-          bottom: 0,
-          child: _SeekBar(
-            audioHandler: audioHandler,
-          ),
-        ),
-        AnimatedPositioned(
-          duration: animationDuration,
-          bottom: switch (mediaKind) {
-            MediaKind.radio => 0,
-            MediaKind.recording => RaPageConstraints.radioPlayerHeight * 2,
-          },
-          left: 12,
-          child: _BackButton(
-            audioHandler: audioHandler,
-          ),
-        ),
-        AnimatedPositioned(
-          duration: animationDuration,
-          bottom: switch (mediaKind) {
-            MediaKind.radio => 0,
-            MediaKind.recording => RaPageConstraints.radioPlayerHeight,
-          },
-          child: _Player(audioHandler: audioHandler),
-        ),
-      ],
-    );
+    return ValueListenableBuilder(
+        valueListenable: audioHandler.playerKind,
+        builder: (context, playerKind, child) {
+          return ValueListenableBuilder(
+              valueListenable: audioHandler.mediaKind,
+              builder: (context, mediaKind, child) {
+                return GestureDetector(
+                  // TODO: this interferes with the click on the keyboard_arrow_down
+                  // onVerticalDragDown: (details) {
+                  //   if (playerKind == PlayerKind.page) {
+                  //     audioHandler.changePlayerKind();
+                  //   }
+                  // },
+                  child: AnimatedContainer(
+                    duration: animationDuration,
+                    color: switch (playerKind) {
+                      PlayerKind.widget =>
+                        context.colors.backgroundDarkSecondary,
+                      PlayerKind.page => context.colors.backgroundDark,
+                    },
+                    margin: switch (playerKind) {
+                      PlayerKind.page => EdgeInsets.zero,
+                      PlayerKind.widget =>
+                        RaPageConstraints.outerWidgetPagePadding,
+                    },
+                    height: switch (playerKind) {
+                      PlayerKind.widget => RaPageConstraints.radioPlayerHeight,
+                      PlayerKind.page => MediaQuery.of(context).size.height,
+                    },
+                    child: Wrap(
+                      spacing: 15,
+                      // direction: Axis.horizontal,
+                      // alignment: WrapAlignment.start,
+                      runAlignment: WrapAlignment.spaceBetween,
+                      alignment: WrapAlignment.spaceBetween,
+                      children: [
+                        AnimatedPadding(
+                          duration: animationDuration,
+                          padding: switch (playerKind) {
+                                PlayerKind.page =>
+                                  RaPageConstraints.outerWidgetPagePadding,
+                                PlayerKind.widget => EdgeInsets.zero,
+                              } +
+                              const EdgeInsets.symmetric(vertical: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  if (playerKind == PlayerKind.widget)
+                                    PlayerPlayButton(
+                                      audioHandler: audioHandler,
+                                      size: _playerSize,
+                                    ),
+                                  _PlayerTitle(
+                                    audioHandler: audioHandler,
+                                    width: MediaQuery.of(context).size.width /
+                                        1.65,
+                                    overrideTitle: switch (playerKind) {
+                                      PlayerKind.widget => null,
+                                      PlayerKind.page =>
+                                        context.mediaKindToString(
+                                            audioHandler.mediaKind.value),
+                                    },
+                                  ),
+                                ],
+                              ),
+                              RaSplash(
+                                onPressed: audioHandler.changePlayerKind,
+                                child:
+                                    RaDropdownIcon(audioHandler: audioHandler),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).height - 200,
+                          child: AnimatedOpacity(
+                            duration: animationDuration,
+                            opacity: switch (playerKind) {
+                              PlayerKind.widget => 0.0,
+                              PlayerKind.page => 1.0
+                            },
+                            child: Padding(
+                              padding:
+                                  RaPageConstraints.outerWidgetPagePadding * 2,
+                              child: ListView(
+                                children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.85,
+                                    child: AspectRatio(
+                                      aspectRatio: 1.4 / 1,
+                                      child: PlayerPlayButton(
+                                        audioHandler: audioHandler,
+                                        size: 120,
+                                      ),
+                                    ),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${context.l10n.nowPlaying}:',
+                                        style: context.textStyles.textMedium
+                                            .copyWith(
+                                          color: context.colors.backgroundLight,
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                      _PlayerTitle(
+                                        audioHandler: audioHandler,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        textStyle: context.textStyles.textMedium
+                                            .copyWith(
+                                          color: context.colors.backgroundLight,
+                                        ),
+                                        intervalSpaces: 10,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 70),
+                                  Text(
+                                    '${context.l10n.ramowka}:',
+                                    style:
+                                        context.textStyles.textMedium.copyWith(
+                                      color: context.colors.backgroundLight,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                  const RamowkaList(rows: 10),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        RaSplash(
+                          onPressed: audioHandler.changePlayerKind,
+                          child: AnimatedContainer(
+                            duration: animationDuration,
+                            height: switch (playerKind) {
+                              PlayerKind.widget => 0,
+                              PlayerKind.page => 40,
+                            },
+                            color: context.colors.backgroundDarkSecondary,
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'wróć na stronę główną', // '⮌' symbol not working
+                                    style:
+                                        context.textStyles.textMedium.copyWith(
+                                      color: context.colors.highlightGreen,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: RaPageConstraints
+                                        .outerWidgetPagePadding,
+                                    child: FittedBox(
+                                      child: Icon(
+                                        Icons.keyboard_return_outlined,
+                                        color: context.colors.highlightGreen,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    // ListView(
+                    //   // TODO: just do this with listview :D
+                    //   // TODO: make it not scrollable though! (at least in hidden mode)
+                    //   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //
+                    //
+                  ),
+                );
+              });
+        });
+    // Stack(
+    //   children: [
+    //     Positioned(
+    //       bottom: 0,
+    //       child: _SeekBar(
+    //         audioHandler: audioHandler,
+    //       ),
+    //     ),
+    //     AnimatedPositioned(
+    //       duration: animationDuration,
+    //       bottom: switch (mediaKind) {
+    //         MediaKind.radio => 0,
+    //         MediaKind.recording => RaPageConstraints.radioPlayerHeight * 2,
+    //       },
+    //       left: 12,
+    //       child: _BackButton(
+    //         audioHandler: audioHandler,
+    //       ),
+    //     ),
+    //     AnimatedPositioned(
+    //       duration: animationDuration,
+    //       bottom: switch (mediaKind) {
+    //         MediaKind.radio => 0,
+    //         MediaKind.recording => RaPageConstraints.radioPlayerHeight,
+    //       },
+    //       child: _Player(audioHandler: audioHandler),
+    //     ),
+    //   ],
+    // );
   }
 }
 
@@ -179,11 +368,11 @@ class _Player extends StatelessWidget {
           ),
           RaSplash(
             // TODO: go to player page (with an animation - "blow up" the container!)
-            onPressed: () => audioHandler.playerKind.value = PlayerKind.page,
+            onPressed: audioHandler.changePlayerKind,
             child: const Padding(
               padding: EdgeInsets.zero,
-              child:
-                  RaDropdownIcon(state: RaDropdownIconState.closed, size: 44),
+              child: Placeholder(),
+              //  RaDropdownIcon(state: RaDropdownIconState.closed),
             ),
           ),
         ],
@@ -256,10 +445,16 @@ class _PlayerTitle extends StatelessWidget {
   const _PlayerTitle({
     required this.audioHandler,
     required this.width,
+    this.overrideTitle,
+    this.textStyle,
+    this.intervalSpaces,
   });
 
   final RaPlayerHandler audioHandler;
   final double width;
+  final String? overrideTitle;
+  final TextStyle? textStyle;
+  final int? intervalSpaces;
 
   @override
   Widget build(BuildContext context) {
@@ -267,9 +462,11 @@ class _PlayerTitle extends StatelessWidget {
       stream: audioHandler.mediaItem,
       builder: (context, snapshot) {
         final mediaItem = snapshot.data;
-        final title = mediaItem?.title ?? context.l10n.noStreamTitle;
+        final title =
+            overrideTitle ?? mediaItem?.title ?? context.l10n.noStreamTitle;
         return RaPlayerTitle(
           title: title.isNotEmpty ? title : context.l10n.noStreamTitle,
+          textStyle: textStyle,
           width: width,
         );
       },
@@ -283,11 +480,13 @@ class RaPlayerTitle extends StatelessWidget {
     required this.title,
     required this.width,
     this.textStyle,
+    this.intervalSpaces,
   });
 
   final String title;
   final double width;
   final TextStyle? textStyle;
+  final int? intervalSpaces;
 
   @override
   Widget build(BuildContext context) {
@@ -297,8 +496,7 @@ class RaPlayerTitle extends StatelessWidget {
         title,
         velocity: const Velocity(pixelsPerSecond: Offset(17, 0)),
         pauseBetween: const Duration(milliseconds: 2500),
-        intervalSpaces: 6,
-        selectable: true,
+        intervalSpaces: intervalSpaces ?? 6,
         style: textStyle ?? context.textStyles.textPlayer,
       ),
     );

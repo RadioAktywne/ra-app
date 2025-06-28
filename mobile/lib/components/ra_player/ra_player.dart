@@ -19,47 +19,9 @@ class RaPlayer extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final playerState = useState(PlayerKind.widget);
     return BlocBuilder<AudioHandlerCubit, RaPlayerHandler>(
       builder: (context, audioHandler) {
-        return ValueListenableBuilder<MediaKind>(
-          valueListenable: audioHandler.mediaKind,
-          builder: (context, mediaKind, _) {
-            return ValueListenableBuilder<PlayerKind>(
-                valueListenable: audioHandler.playerKind,
-                builder: (context, playerKind, _) {
-                  return AnimatedContainer(
-                    duration: animationDuration,
-                    padding: switch (playerKind) {
-                      PlayerKind.widget =>
-                        RaPageConstraints.outerWidgetPagePadding,
-                      PlayerKind.page => EdgeInsets.zero
-                    },
-                    width: MediaQuery.of(context).size.width,
-                    // TODO: switch over playerState, then over mediaKind for RaPlayerState.widget
-                    height: switch (playerKind) {
-                      PlayerKind.widget => switch (mediaKind) {
-                          MediaKind.radio =>
-                            RaPageConstraints.radioPlayerHeight,
-                          MediaKind.recording =>
-                            RaPageConstraints.recordingPlayerHeight,
-                        },
-                      PlayerKind.page => MediaQuery.of(context).size.height,
-                    },
-                    child: switch (playerKind) {
-                      PlayerKind.widget => RaPlayerWidget(
-                          audioHandler: audioHandler,
-                          mediaKind: mediaKind,
-                        ),
-                      PlayerKind.page => RaPlayerPage(
-                          audioHandler: audioHandler,
-                          mediaKind: mediaKind,
-                        )
-                    },
-                  );
-                });
-          },
-        );
+        return RaPlayerWidget(audioHandler: audioHandler);
       },
     );
   }
