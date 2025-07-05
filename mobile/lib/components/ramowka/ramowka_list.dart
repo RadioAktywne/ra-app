@@ -21,6 +21,7 @@ class RamowkaList extends StatelessWidget {
     this.timeout = const Duration(seconds: 7),
     this.rows = 7,
     this.rowHeight = RaPageConstraints.ramowkaListRowHeight,
+    this.scrollPhysics,
   });
 
   /// Timeout for the fetching function.
@@ -31,6 +32,8 @@ class RamowkaList extends StatelessWidget {
 
   /// Single row's height
   final double rowHeight;
+
+  final ScrollPhysics? scrollPhysics;
 
   double get height => rows * rowHeight;
 
@@ -110,6 +113,7 @@ class RamowkaList extends StatelessWidget {
       builder: (context, ramowkaInfoList) => RaListWidget(
         itemCount: rows,
         rowHeight: rowHeight,
+        scrollPhysics: scrollPhysics,
         items: ramowkaInfoList
             .map(
               (ramowkaInfo) => RamowkaListItem(

@@ -54,7 +54,39 @@ class RaNavigationShell extends HookWidget {
             onPopInvokedWithResult: (didPop, result) {
               if (audioHandler.playerKind.value == PlayerKind.page) {
                 audioHandler.playerKind.value = PlayerKind.widget;
+              } else {
+                SystemNavigator.pop();
               }
+              // TODO: suggested exit dialog
+              // else {
+              //   await showAdaptiveDialog<bool>(
+              //     context: context,
+              //     builder: (context) => AlertDialog.adaptive(
+              //       title: Text(
+              //         'Czy na pewno chcesz wyjść?',
+              //         style: context.textStyles.textMedium.copyWith(
+              //           color: context.colors.backgroundDark,
+              //         ),
+              //       ),
+              //       backgroundColor: context.colors.backgroundLightSecondary,
+              //       actions: [
+              //         TextButton(
+              //           onPressed: () {
+              //             Navigator.of(context).pop();
+              //             SystemNavigator.pop();
+              //           },
+              //           child:
+              //               Text('Tak', style: context.textStyles.textMedium),
+              //         ),
+              //         TextButton(
+              //           onPressed: Navigator.of(context).pop,
+              //           child:
+              //               Text('Nie', style: context.textStyles.textMedium),
+              //         ),
+              //       ],
+              //     ),
+              //   );
+              // }
             },
             child: Scaffold(
               appBar: RaAppBar(

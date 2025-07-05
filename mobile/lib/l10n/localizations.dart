@@ -190,6 +190,12 @@ abstract class AppLocalizations {
   /// **'Wróć do radia'**
   String get backToRadio;
 
+  /// No description provided for @backToMainPage.
+  ///
+  /// In pl, this message translates to:
+  /// **'wróć na stronę główną'**
+  String get backToMainPage;
+
   /// No description provided for @aboutUs.
   ///
   /// In pl, this message translates to:

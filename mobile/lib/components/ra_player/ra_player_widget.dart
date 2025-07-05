@@ -1,16 +1,12 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_dropdown_icon.dart';
-import 'package:radioaktywne/components/ra_image.dart';
 import 'package:radioaktywne/components/ra_playbutton.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_handler.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_recources.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_list.dart';
-import 'package:radioaktywne/components/ramowka/ramowka_widget.dart';
 import 'package:radioaktywne/components/utility/ra_splash.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
@@ -40,240 +36,292 @@ class RaPlayerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-        valueListenable: audioHandler.playerKind,
-        builder: (context, playerKind, child) {
-          return ValueListenableBuilder(
-              valueListenable: audioHandler.mediaKind,
-              builder: (context, mediaKind, child) {
-                return GestureDetector(
-                  // TODO: this interferes with the click on the keyboard_arrow_down
-                  // onVerticalDragDown: (details) {
-                  //   if (playerKind == PlayerKind.page) {
-                  //     audioHandler.changePlayerKind();
-                  //   }
-                  // },
-                  child: AnimatedContainer(
-                    duration: animationDuration,
-                    color: switch (playerKind) {
-                      PlayerKind.widget =>
-                        context.colors.backgroundDarkSecondary,
-                      PlayerKind.page => context.colors.backgroundDark,
-                    },
-                    margin: switch (playerKind) {
-                      PlayerKind.page => EdgeInsets.zero,
-                      PlayerKind.widget =>
-                        RaPageConstraints.outerWidgetPagePadding,
-                    },
-                    height: switch (playerKind) {
-                      PlayerKind.widget => RaPageConstraints.radioPlayerHeight,
-                      PlayerKind.page => MediaQuery.of(context).size.height,
-                    },
-                    child: Wrap(
-                      spacing: 15,
-                      // direction: Axis.horizontal,
-                      // alignment: WrapAlignment.start,
-                      runAlignment: WrapAlignment.spaceBetween,
-                      alignment: WrapAlignment.spaceBetween,
-                      children: [
-                        AnimatedPadding(
-                          duration: animationDuration,
-                          padding: switch (playerKind) {
-                                PlayerKind.page =>
-                                  RaPageConstraints.outerWidgetPagePadding,
-                                PlayerKind.widget => EdgeInsets.zero,
-                              } +
-                              const EdgeInsets.symmetric(vertical: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  if (playerKind == PlayerKind.widget)
-                                    PlayerPlayButton(
-                                      audioHandler: audioHandler,
-                                      size: _playerSize,
-                                    ),
-                                  _PlayerTitle(
-                                    audioHandler: audioHandler,
-                                    width: MediaQuery.of(context).size.width /
-                                        1.65,
-                                    overrideTitle: switch (playerKind) {
-                                      PlayerKind.widget => null,
-                                      PlayerKind.page =>
-                                        context.mediaKindToString(
-                                            audioHandler.mediaKind.value),
-                                    },
-                                  ),
-                                ],
-                              ),
-                              RaSplash(
-                                onPressed: audioHandler.changePlayerKind,
-                                child:
-                                    RaDropdownIcon(audioHandler: audioHandler),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.sizeOf(context).height - 200,
-                          child: AnimatedOpacity(
-                            duration: animationDuration,
-                            opacity: switch (playerKind) {
-                              PlayerKind.widget => 0.0,
-                              PlayerKind.page => 1.0
-                            },
-                            child: Padding(
-                              padding:
-                                  RaPageConstraints.outerWidgetPagePadding * 2,
-                              child: ListView(
-                                children: [
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.85,
-                                    child: AspectRatio(
-                                      aspectRatio: 1.4 / 1,
-                                      child: PlayerPlayButton(
-                                        audioHandler: audioHandler,
-                                        size: 120,
-                                      ),
-                                    ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${context.l10n.nowPlaying}:',
-                                        style: context.textStyles.textMedium
-                                            .copyWith(
-                                          color: context.colors.backgroundLight,
-                                          fontWeight: FontWeight.normal,
-                                        ),
-                                      ),
-                                      _PlayerTitle(
-                                        audioHandler: audioHandler,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        textStyle: context.textStyles.textMedium
-                                            .copyWith(
-                                          color: context.colors.backgroundLight,
-                                        ),
-                                        intervalSpaces: 10,
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 70),
-                                  Text(
-                                    '${context.l10n.ramowka}:',
-                                    style:
-                                        context.textStyles.textMedium.copyWith(
-                                      color: context.colors.backgroundLight,
-                                      fontWeight: FontWeight.normal,
-                                    ),
-                                  ),
-                                  const RamowkaList(rows: 10),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        RaSplash(
-                          onPressed: audioHandler.changePlayerKind,
-                          child: AnimatedContainer(
-                            duration: animationDuration,
-                            height: switch (playerKind) {
-                              PlayerKind.widget => 0,
-                              PlayerKind.page => 40,
-                            },
-                            color: context.colors.backgroundDarkSecondary,
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'wróć na stronę główną', // '⮌' symbol not working
-                                    style:
-                                        context.textStyles.textMedium.copyWith(
-                                      color: context.colors.highlightGreen,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: RaPageConstraints
-                                        .outerWidgetPagePadding,
-                                    child: FittedBox(
-                                      child: Icon(
-                                        Icons.keyboard_return_outlined,
-                                        color: context.colors.highlightGreen,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    // ListView(
-                    //   // TODO: just do this with listview :D
-                    //   // TODO: make it not scrollable though! (at least in hidden mode)
-                    //   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //
-                    //
+      valueListenable: audioHandler.playerKind,
+      builder: (context, playerKind, _) {
+        return ValueListenableBuilder(
+          valueListenable: audioHandler.mediaKind,
+          builder: (context, mediaKind, _) {
+            return AnimatedContainer(
+              duration: animationDuration,
+              color: switch (playerKind) {
+                PlayerKind.widget => Colors.transparent,
+                PlayerKind.page => context.colors.backgroundDark,
+              },
+              margin: switch (playerKind) {
+                PlayerKind.page => EdgeInsets.zero,
+                PlayerKind.widget => RaPageConstraints.outerWidgetPagePadding,
+              },
+              height: switch (playerKind) {
+                PlayerKind.widget => switch (mediaKind) {
+                    MediaKind.radio => RaPageConstraints.radioPlayerHeight,
+                    MediaKind.recording =>
+                      RaPageConstraints.recordingPlayerHeight,
+                  },
+                PlayerKind.page => MediaQuery.sizeOf(context).height,
+              },
+              child: Wrap(
+                spacing: 15,
+                runAlignment: WrapAlignment.spaceBetween,
+                alignment: WrapAlignment.spaceBetween,
+                children: [
+                  _PlayerWidget(
+                    animationDuration: animationDuration,
+                    audioHandler: audioHandler,
+                    mediaKind: mediaKind,
+                    playerKind: playerKind,
                   ),
-                );
-              });
-        });
-    // Stack(
-    //   children: [
-    //     Positioned(
-    //       bottom: 0,
-    //       child: _SeekBar(
-    //         audioHandler: audioHandler,
-    //       ),
-    //     ),
-    //     AnimatedPositioned(
-    //       duration: animationDuration,
-    //       bottom: switch (mediaKind) {
-    //         MediaKind.radio => 0,
-    //         MediaKind.recording => RaPageConstraints.radioPlayerHeight * 2,
-    //       },
-    //       left: 12,
-    //       child: _BackButton(
-    //         audioHandler: audioHandler,
-    //       ),
-    //     ),
-    //     AnimatedPositioned(
-    //       duration: animationDuration,
-    //       bottom: switch (mediaKind) {
-    //         MediaKind.radio => 0,
-    //         MediaKind.recording => RaPageConstraints.radioPlayerHeight,
-    //       },
-    //       child: _Player(audioHandler: audioHandler),
-    //     ),
-    //   ],
-    // );
+                  AnimatedContainer(
+                    duration: animationDuration,
+                    height: switch (playerKind) {
+                      PlayerKind.widget => 1,
+                      PlayerKind.page =>
+                        MediaQuery.sizeOf(context).height - 200,
+                    },
+                    padding: RaPageConstraints.outerWidgetPagePadding * 2,
+                    child: AnimatedOpacity(
+                      duration: animationDuration,
+                      opacity: switch (playerKind) {
+                        PlayerKind.widget => 0.0,
+                        PlayerKind.page => 1.0
+                      },
+                      child: _RadioPlayerPage(
+                        animationDuration: animationDuration,
+                        audioHandler: audioHandler,
+                        playerKind: playerKind,
+                      ),
+                    ),
+                  ),
+                  _BackToMainPageButton(
+                    audioHandler: audioHandler,
+                    animationDuration: animationDuration,
+                    playerKind: playerKind,
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }
 
-class _SeekBarData {
-  const _SeekBarData({
-    required this.position,
-    required this.mediaItem,
+class _RadioPlayerPage extends StatelessWidget {
+  const _RadioPlayerPage({
+    required this.animationDuration,
+    required this.audioHandler,
+    required this.playerKind,
   });
 
-  final Duration position;
-  final MediaItem mediaItem;
+  final Duration animationDuration;
+  final RaPlayerHandler audioHandler;
+  final PlayerKind playerKind;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+        SizedBox(
+          width: MediaQuery.sizeOf(context).width * 0.9,
+          child: AspectRatio(
+            aspectRatio: 1.3 / 1,
+            child: PlayerPlayButton(
+              audioHandler: audioHandler,
+              size: 130,
+            ),
+          ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${context.l10n.nowPlaying}:',
+              style: context.textStyles.textMedium.copyWith(
+                color: context.colors.backgroundLight,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            _PlayerTitle(
+              audioHandler: audioHandler,
+              width: MediaQuery.sizeOf(context).width,
+              textStyle: context.textStyles.textMedium.copyWith(
+                color: context.colors.backgroundLight,
+              ),
+              intervalSpaces: 10,
+            ),
+          ],
+        ),
+        const SizedBox(height: 70),
+        Text(
+          '${context.l10n.ramowka}:',
+          style: context.textStyles.textMedium.copyWith(
+            color: context.colors.backgroundLight,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        const RamowkaList(
+          rows: 10,
+          scrollPhysics: NeverScrollableScrollPhysics(),
+        ),
+      ],
+    );
+  }
 }
 
-class _SeekBar extends HookWidget {
-  const _SeekBar({required this.audioHandler});
+class _BackToMainPageButton extends StatelessWidget {
+  const _BackToMainPageButton({
+    required this.audioHandler,
+    required this.animationDuration,
+    required this.playerKind,
+  });
+
+  final RaPlayerHandler audioHandler;
+  final Duration animationDuration;
+  final PlayerKind playerKind;
+
+  @override
+  Widget build(BuildContext context) {
+    return RaSplash(
+      onPressed: audioHandler.changePlayerKind,
+      child: AnimatedContainer(
+        duration: animationDuration,
+        height: switch (playerKind) {
+          PlayerKind.widget => 0,
+          PlayerKind.page => 40,
+        },
+        color: context.colors.backgroundDarkSecondary,
+        child: Center(
+          child: Row(
+            spacing: 5,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                context.l10n.backToMainPage, // '⮌' symbol not working
+                style: context.textStyles.textMedium.copyWith(
+                  color: context.colors.highlightGreen,
+                ),
+              ),
+              FittedBox(
+                child: Icon(
+                  Icons.keyboard_return_outlined,
+                  color: context.colors.highlightGreen,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PlayerWidget extends StatelessWidget {
+  const _PlayerWidget({
+    required this.animationDuration,
+    required this.audioHandler,
+    required this.playerKind,
+    required this.mediaKind,
+  });
+
+  final Duration animationDuration;
+  final RaPlayerHandler audioHandler;
+  final PlayerKind playerKind;
+  final MediaKind mediaKind;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        AnimatedContainer(
+          duration: animationDuration,
+          height: switch (mediaKind) {
+            MediaKind.radio => 0,
+            MediaKind.recording => switch (playerKind) {
+                PlayerKind.widget => RaPageConstraints.radioPlayerHeight / 2,
+                PlayerKind.page => 0
+              },
+          },
+          margin: EdgeInsets.only(
+            right: MediaQuery.sizeOf(context).width - 180,
+          ),
+          child: _BackToRadioButton(audioHandler: audioHandler),
+        ),
+        AnimatedContainer(
+          duration: animationDuration,
+          height: RaPageConstraints.radioPlayerHeight,
+          padding: switch (playerKind) {
+            PlayerKind.page => RaPageConstraints.outerWidgetPagePadding,
+            PlayerKind.widget => EdgeInsets.zero,
+          },
+          width: MediaQuery.sizeOf(context).width,
+          color: switch (playerKind) {
+            PlayerKind.widget => context.colors.backgroundDarkSecondary,
+            PlayerKind.page => context.colors.backgroundDark,
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  switch (playerKind) {
+                    PlayerKind.widget => PlayerPlayButton(
+                        audioHandler: audioHandler,
+                        size: RaPlayerWidget._playerSize,
+                      ),
+                    PlayerKind.page => const SizedBox(width: 12),
+                  },
+                  _PlayerTitle(
+                    audioHandler: audioHandler,
+                    width: MediaQuery.sizeOf(context).width / 1.65,
+                    overrideTitle: switch (playerKind) {
+                      PlayerKind.widget => null,
+                      PlayerKind.page =>
+                        context.mediaKindToString(audioHandler.mediaKind.value),
+                    },
+                  ),
+                ],
+              ),
+              RaSplash(
+                onPressed: audioHandler.changePlayerKind,
+                child: RaDropdownIcon(audioHandler: audioHandler),
+              ),
+            ],
+          ),
+        ),
+        AnimatedContainer(
+          duration: animationDuration,
+          height: switch (mediaKind) {
+            MediaKind.radio => 0,
+            MediaKind.recording => switch (playerKind) {
+                PlayerKind.widget => RaPageConstraints.radioPlayerHeight,
+                PlayerKind.page => 0
+              },
+          },
+          width: MediaQuery.sizeOf(context).width,
+          child: AnimatedOpacity(
+            duration: animationDuration,
+            opacity: switch (mediaKind) {
+              MediaKind.radio => 0.0,
+              MediaKind.recording => switch (playerKind) {
+                  PlayerKind.widget => 1.0,
+                  PlayerKind.page => 0
+                },
+            },
+            child: _RecordingSeekBar(audioHandler: audioHandler),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _RecordingSeekBar extends HookWidget {
+  const _RecordingSeekBar({required this.audioHandler});
 
   final RaPlayerHandler audioHandler;
 
   double _calculateSeekBarWidth(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.sizeOf(context).width;
     const pagePadding = RaPageConstraints.pagePaddingValue;
     return screenWidth - 2 * pagePadding;
   }
@@ -282,31 +330,29 @@ class _SeekBar extends HookWidget {
   Widget build(BuildContext context) {
     return Container(
       width: _calculateSeekBarWidth(context),
-      height: RaPageConstraints.radioPlayerHeight,
       color: context.colors.backgroundDark,
       child: Center(
         child: ValueListenableBuilder<ProgressBarState>(
           valueListenable: audioHandler.progress,
           builder: (context, progress, _) {
             return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: RaPageConstraints.pagePaddingValue,
-              ),
-              child: ProgressBar(
-                progress: progress.current,
-                total: progress.total,
-                buffered: progress.buffered,
-                thumbColor: context.colors.highlightRed,
-                thumbRadius: RaPlayerWidget._thumbRadius,
-                thumbGlowRadius: RaPlayerWidget._thumbGlowRadius,
-                bufferedBarColor: context.colors.backgroundLightSecondary,
-                baseBarColor: context.colors.backgroundLight,
-                progressBarColor: context.colors.highlightGreen,
-                thumbCanPaintOutsideBar: false,
-                timeLabelLocation: TimeLabelLocation.none,
-                onSeek: audioHandler.seek,
-              ),
-            );
+                padding: const EdgeInsets.symmetric(
+                  horizontal: RaPageConstraints.pagePaddingValue,
+                ),
+                child: ProgressBar(
+                  progress: progress.current,
+                  total: progress.total,
+                  buffered: progress.buffered,
+                  thumbColor: context.colors.highlightRed,
+                  thumbRadius: RaPlayerWidget._thumbRadius,
+                  thumbGlowRadius: RaPlayerWidget._thumbGlowRadius,
+                  bufferedBarColor: context.colors.backgroundLightSecondary,
+                  baseBarColor: context.colors.backgroundLight,
+                  progressBarColor: context.colors.highlightGreen,
+                  thumbCanPaintOutsideBar: false,
+                  timeLabelLocation: TimeLabelLocation.none,
+                  onSeek: audioHandler.seek,
+                ));
           },
         ),
       ),
@@ -314,13 +360,13 @@ class _SeekBar extends HookWidget {
   }
 }
 
-class _BackButton extends StatelessWidget {
-  const _BackButton({required this.audioHandler});
+class _BackToRadioButton extends StatelessWidget {
+  const _BackToRadioButton({required this.audioHandler});
 
   final RaPlayerHandler audioHandler;
 
   double _calculateButtonWidth(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.sizeOf(context).width;
     const padding = RaPageConstraints.pagePaddingValue * 2;
     return (screenWidth - padding) / 3;
   }
@@ -353,7 +399,7 @@ class _Player extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: RaPageConstraints.radioPlayerHeight,
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.sizeOf(context).width,
       color: context.colors.backgroundDarkSecondary,
       child: Row(
         // mainAxisAlignment: MainAxisAlignment.center,
@@ -364,7 +410,7 @@ class _Player extends StatelessWidget {
           ),
           _PlayerTitle(
             audioHandler: audioHandler,
-            width: MediaQuery.of(context).size.width / 1.65,
+            width: MediaQuery.sizeOf(context).width / 1.65,
           ),
           RaSplash(
             // TODO: go to player page (with an animation - "blow up" the container!)

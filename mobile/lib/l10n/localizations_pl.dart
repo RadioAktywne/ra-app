@@ -57,6 +57,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get backToRadio => 'Wróć do radia';
 
   @override
+  String get backToMainPage => 'wróć na stronę główną';
+
+  @override
   String get aboutUs => 'O nas';
 
   @override
