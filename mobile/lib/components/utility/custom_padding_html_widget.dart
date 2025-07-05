@@ -6,17 +6,19 @@ class CustomPaddingHtmlWidget extends StatelessWidget {
     super.key,
     required this.style,
     required this.htmlContent,
+    this.padding,
   });
 
   final TextStyle style;
   final String htmlContent;
+  final EdgeInsets? padding;
 
   static const _textPadding = EdgeInsets.symmetric(horizontal: 7);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: _textPadding,
+      padding: padding ?? _textPadding,
       child: SelectionArea(
         child: DefaultTextStyle(
           style: style,

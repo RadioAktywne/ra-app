@@ -6,9 +6,9 @@ import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
 import 'package:radioaktywne/components/ra_bottom_navigation_bar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
-import 'package:radioaktywne/components/ra_player/ra_player.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_handler.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_recources.dart';
+import 'package:radioaktywne/components/ra_player/ra_player_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
@@ -148,7 +148,7 @@ class RaNavigationShell extends HookWidget {
                   );
                 },
               ),
-              bottomSheet: const RaPlayer(),
+              bottomSheet: const RaPlayerWidget(),
               resizeToAvoidBottomInset: false,
             ),
           );
