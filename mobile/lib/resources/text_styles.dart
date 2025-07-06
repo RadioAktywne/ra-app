@@ -21,11 +21,23 @@ class RATextStyles {
         color: context.colors.highlightGreen,
       );
 
-  TextStyle get textMedium => TextStyle(
+  TextStyle get textMedium => const TextStyle(
         fontSize: 16,
         fontFamily: 'Arial',
         fontWeight: FontWeight.bold,
+      );
+
+  TextStyle get textMediumGreen => textMedium.copyWith(
         color: context.colors.highlightGreen,
+      );
+
+  TextStyle get textMediumLight => textMedium.copyWith(
+        color: context.colors.backgroundLight,
+      );
+
+  TextStyle get textMediumLightNormal => textMedium.copyWith(
+        fontWeight: FontWeight.normal,
+        color: context.colors.backgroundLight,
       );
 
   TextStyle get textSmallGreen => TextStyle(
@@ -42,7 +54,7 @@ class RATextStyles {
       textSmallGreen.copyWith(fontWeight: FontWeight.normal);
 
   TextStyle get textBurgerMenuItem =>
-      textMedium.copyWith(color: context.colors.backgroundLight);
+      textMediumGreen.copyWith(color: context.colors.backgroundLight);
   TextStyle get textBurgerMenuItemSelected =>
-      textMedium.copyWith(color: context.colors.backgroundDark);
+      textMediumGreen.copyWith(color: context.colors.backgroundDark);
 }

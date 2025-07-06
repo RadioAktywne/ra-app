@@ -69,7 +69,7 @@ class RamowkaPage extends StatelessWidget {
                 ),
                 child: Text(
                   currentDay.toL10nString(context),
-                  style: context.textStyles.textMedium,
+                  style: context.textStyles.textMediumGreen,
                 ),
               ),
               shadowColor: context.shadowColor(index),

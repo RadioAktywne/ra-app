@@ -50,8 +50,8 @@ class TerazGramyWidget extends StatelessWidget {
                     return RaPlayerTitle(
                       width: MediaQuery.sizeOf(context).width,
                       title: title,
-                      textStyle:
-                          context.textStyles.textMedium.copyWith(height: 1.5),
+                      textStyle: context.textStyles.textMediumGreen
+                          .copyWith(height: 1.5),
                     );
                   },
                 ),

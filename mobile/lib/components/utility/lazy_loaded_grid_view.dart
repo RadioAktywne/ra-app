@@ -99,7 +99,7 @@ class LazyLoadedGridView<T> extends HookWidget {
               titleOverlay: Text(
                 htmlUnescape.convert(gridItem.title),
                 // TODO: possibly context.textStyles.textSmallGreen, up to RA to decide
-                style: context.textStyles.textMedium,
+                style: context.textStyles.textMediumGreen,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 4,
               ),

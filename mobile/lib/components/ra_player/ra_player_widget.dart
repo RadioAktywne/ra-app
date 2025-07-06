@@ -130,9 +130,7 @@ class _RecordingPlayerPage extends StatelessWidget {
         _StreamTitle(
           audioHandler: audioHandler,
           width: MediaQuery.sizeOf(context).width,
-          textStyle: context.textStyles.textMedium.copyWith(
-            color: context.colors.backgroundLight,
-          ),
+          textStyle: context.textStyles.textMediumLight,
           intervalSpaces: 10,
         ),
         Row(
@@ -144,9 +142,7 @@ class _RecordingPlayerPage extends StatelessWidget {
               builder: (context, progress, child) {
                 return Text(
                   progress.current.formattedMinsAndSecs(),
-                  style: context.textStyles.textMedium.copyWith(
-                    color: context.colors.backgroundLight,
-                  ),
+                  style: context.textStyles.textMediumLightNormal,
                 );
               },
             ),
@@ -156,10 +152,7 @@ class _RecordingPlayerPage extends StatelessWidget {
             ),
             Text(
               mediaItem?.duration?.formattedMinsAndSecs() ?? '00:00',
-              // TODO: this comes up quite often, make it a separate font
-              style: context.textStyles.textMedium.copyWith(
-                color: context.colors.backgroundLight,
-              ),
+              style: context.textStyles.textMediumLightNormal,
             ),
           ],
         ),
@@ -190,9 +183,7 @@ class _RecordingPlayerPage extends StatelessWidget {
         ),
         CustomPaddingHtmlWidget(
           htmlContent: mediaItem?.extras?['description'] as String? ?? '',
-          style: context.textStyles.textMedium.copyWith(
-            color: context.colors.backgroundLight,
-          ),
+          style: context.textStyles.textMediumLight,
           padding: EdgeInsets.zero,
         ),
       ];
@@ -244,17 +235,12 @@ class _RadioPlayerPage extends StatelessWidget {
           children: [
             Text(
               '${context.l10n.nowPlaying}:',
-              style: context.textStyles.textMedium.copyWith(
-                color: context.colors.backgroundLight,
-                fontWeight: FontWeight.normal,
-              ),
+              style: context.textStyles.textMediumLightNormal,
             ),
             _StreamTitle(
               audioHandler: audioHandler,
               width: MediaQuery.sizeOf(context).width,
-              textStyle: context.textStyles.textMedium.copyWith(
-                color: context.colors.backgroundLight,
-              ),
+              textStyle: context.textStyles.textMediumLight,
               intervalSpaces: 10,
             ),
           ],
@@ -262,10 +248,7 @@ class _RadioPlayerPage extends StatelessWidget {
         const SizedBox(height: 60),
         Text(
           '${context.l10n.ramowka}:',
-          style: context.textStyles.textMedium.copyWith(
-            color: context.colors.backgroundLight,
-            fontWeight: FontWeight.normal,
-          ),
+          style: context.textStyles.textMediumLightNormal,
         ),
         const RamowkaList(
           rows: 10,
@@ -305,9 +288,7 @@ class _BackToMainPageButton extends StatelessWidget {
             children: [
               Text(
                 context.l10n.backToMainPage, // '⮌' symbol not working
-                style: context.textStyles.textMedium.copyWith(
-                  color: context.colors.highlightGreen,
-                ),
+                style: context.textStyles.textMediumGreen,
               ),
               FittedBox(
                 child: Icon(

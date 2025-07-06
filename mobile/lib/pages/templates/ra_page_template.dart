@@ -69,9 +69,7 @@ class RaPageTemplate<T> extends StatelessWidget {
                       child: Padding(
                         padding: RaPageConstraints.textPageTitlePadding,
                         child: CustomPaddingHtmlWidget(
-                          style: context.textStyles.textMedium.copyWith(
-                            color: context.colors.backgroundLight,
-                          ),
+                          style: context.textStyles.textMediumLight,
                           htmlContent: currentItem.title!,
                         ),
                       ),

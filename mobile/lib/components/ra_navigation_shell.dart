@@ -76,12 +76,12 @@ class RaNavigationShell extends HookWidget {
               //             SystemNavigator.pop();
               //           },
               //           child:
-              //               Text('Tak', style: context.textStyles.textMedium),
+              //               Text('Tak', style: context.textStyles.textMediumGreen),
               //         ),
               //         TextButton(
               //           onPressed: Navigator.of(context).pop,
               //           child:
-              //               Text('Nie', style: context.textStyles.textMedium),
+              //               Text('Nie', style: context.textStyles.textMediumGreen),
               //         ),
               //       ],
               //     ),
