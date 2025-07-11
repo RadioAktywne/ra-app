@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
@@ -136,9 +137,15 @@ _LazyLoadingController<T> _useLazyLoadingController<T>(
       } else {
         hasMore.value = false;
       }
-    } on TimeoutException catch (_) {
+    } on TimeoutException catch (e) {
+      if (kDebugMode) {
+        print('${StackTrace.current}: $e');
+      }
       hasError.value = true;
-    } catch (_) {
+    } catch (e) {
+      if (kDebugMode) {
+        print('${StackTrace.current}: $e');
+      }
       hasError.value = true;
       hasMore.value = false;
     } finally {

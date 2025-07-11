@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/about_us_info.dart';
@@ -40,7 +41,10 @@ class AboutUsPage extends StatelessWidget {
       );
       final aboutUs = data.first;
       return aboutUs;
-    } on TimeoutException catch (_) {
+    } on TimeoutException catch (e) {
+      if (kDebugMode) {
+        print('${StackTrace.current}: $e');
+      }
       return AboutUsInfo.empty();
     }
   }

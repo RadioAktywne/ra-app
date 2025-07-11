@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/plyta_tygodnia_info.dart';
@@ -56,7 +57,10 @@ class PlytaTygodniaPage extends StatelessWidget {
       );
 
       return plytaTygodnia;
-    } on TimeoutException catch (_) {
+    } on TimeoutException catch (e) {
+      if (kDebugMode) {
+        print('${StackTrace.current}: $e');
+      }
       return PlytaTygodniaInfo.empty();
     }
   }

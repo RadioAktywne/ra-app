@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 const _jsonHeaders = {
@@ -35,7 +36,10 @@ Future<Iterable<T>> fetchData<T>(
     return jsonData.map(
       (data) => fromJson(data as Map<String, dynamic>),
     );
-  } catch (_) {
+  } catch (e) {
+    if (kDebugMode) {
+      print('${StackTrace.current}: $e');
+    }
     final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
     return [fromJson(jsonData)];
   }

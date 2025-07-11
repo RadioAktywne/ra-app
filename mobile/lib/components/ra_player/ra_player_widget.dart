@@ -490,6 +490,7 @@ class _PlayButton extends StatelessWidget {
 
   final RaPlayerHandler audioHandler;
   final double size;
+
   static const padding = EdgeInsets.symmetric(
     horizontal: RaPageConstraints.pagePaddingValue,
   );

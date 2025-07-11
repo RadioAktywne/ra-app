@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:radioaktywne/components/ra_list_widget.dart';
@@ -55,7 +56,10 @@ class RamowkaList extends StatelessWidget {
       );
 
       return _completeRamowka(data, ramowka);
-    } on TimeoutException catch (_) {
+    } on TimeoutException catch (e) {
+      if (kDebugMode) {
+        print('${StackTrace.current}: $e');
+      }
       return [];
     }
   }
@@ -76,7 +80,10 @@ class RamowkaList extends StatelessWidget {
     for (var i = 0; i < times; i++) {
       try {
         ramowka.add(ramowkaTomorrow[i]);
-      } catch (_) {
+      } catch (e) {
+        if (kDebugMode) {
+          print('${StackTrace.current}: $e');
+        }
         ramowka.add(RamowkaInfo.empty());
       }
     }

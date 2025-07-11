@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
@@ -34,6 +35,9 @@ class NewestArticleFetch {
       _articles = newArticles;
       _hasError = false;
     } catch (e) {
+      if (kDebugMode) {
+        print('${StackTrace.current}: $e');
+      }
       _hasError = true;
     } finally {
       _isLoading = false;
