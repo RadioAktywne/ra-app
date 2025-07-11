@@ -124,6 +124,7 @@ class _RecordingPlayerPage extends StatelessWidget {
   final RaPlayerHandler audioHandler;
 
   List<Widget> _build(BuildContext context, MediaItem? mediaItem) => [
+        const SizedBox(height: 16),
         RaImage(
           imageUrl: mediaItem?.artUri?.toString() ?? 'assets/defaultMedia.png',
         ),
@@ -134,7 +135,7 @@ class _RecordingPlayerPage extends StatelessWidget {
           intervalSpaces: 10,
         ),
         Row(
-          spacing: 10,
+          spacing: 15,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ValueListenableBuilder(
@@ -142,7 +143,7 @@ class _RecordingPlayerPage extends StatelessWidget {
               builder: (context, progress, child) {
                 return Text(
                   progress.current.formattedMinsAndSecs(),
-                  style: context.textStyles.textMediumLightNormal,
+                  style: context.textStyles.textSmallWhite,
                 );
               },
             ),
@@ -152,7 +153,8 @@ class _RecordingPlayerPage extends StatelessWidget {
             ),
             Text(
               mediaItem?.duration?.formattedMinsAndSecs() ?? '00:00',
-              style: context.textStyles.textMediumLightNormal,
+              style: context.textStyles.textSmallWhite
+                  .copyWith(fontWeight: FontWeight.normal),
             ),
           ],
         ),
@@ -183,8 +185,9 @@ class _RecordingPlayerPage extends StatelessWidget {
         ),
         CustomPaddingHtmlWidget(
           htmlContent: mediaItem?.extras?['description'] as String? ?? '',
-          style: context.textStyles.textMediumLight,
-          padding: EdgeInsets.zero,
+          style: context.textStyles.textSmallWhite,
+          padding: const EdgeInsets.only(
+              bottom: RaPageConstraints.radioPlayerHeight),
         ),
       ];
 
