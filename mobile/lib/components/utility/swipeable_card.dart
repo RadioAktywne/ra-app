@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/utility/image_with_overlay.dart';
@@ -44,30 +44,32 @@ class SwipeableCard extends HookWidget {
         color: context.colors.backgroundDark,
         child: header,
       ),
-      footer: !hasError && !isLoading ? Container(
-        color: context.colors.backgroundDark,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(items.length, (index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 2),
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: currentPage.value == index
-                        ? context.colors.highlightGreen
-                        : Colors.white,
-                    shape: BoxShape.circle,
-                  ),
+      footer: !hasError && !isLoading
+          ? Container(
+              color: context.colors.backgroundDark,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(items.length, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: currentPage.value == index
+                              ? context.colors.highlightGreen
+                              : Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    );
+                  }),
                 ),
-              );
-            }),
-          ),
-        ),
-      ) : null,
+              ),
+            )
+          : null,
       child: Builder(
         builder: (context) {
           if (isLoading) {
