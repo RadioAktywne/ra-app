@@ -56,10 +56,10 @@ class RecordingsPage extends HookWidget {
               ..duration = duration
               ..recordingPath = recordingPath,
           );
-        } catch (e) {
+        } catch (e, stackTrace) {
           // TODO: just skip faulty audition?
           if (kDebugMode) {
-            print('${StackTrace.current}: $e');
+            print('$stackTrace: $e');
           }
         }
       }
@@ -85,10 +85,10 @@ class RecordingsPage extends HookWidget {
             recording.id,
             (details) => details..thumbnailPath = thumbnailPath,
           );
-        } catch (e) {
+        } catch (e, stackTrace) {
           // TODO: just skip faulty audition?
           if (kDebugMode) {
-            print('${StackTrace.current}: $e');
+            print('$stackTrace: $e');
           }
         }
       }

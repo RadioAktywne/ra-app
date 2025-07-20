@@ -34,9 +34,9 @@ class NewestArticleFetch {
       final newArticles = await fetchData(pageUri, ArticleInfo.fromJson);
       _articles = newArticles;
       _hasError = false;
-    } catch (e) {
+    } catch (e, stackTrace) {
       if (kDebugMode) {
-        print('${StackTrace.current}: $e');
+        print('$stackTrace: $e');
       }
       _hasError = true;
     } finally {

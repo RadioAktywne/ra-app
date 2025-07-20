@@ -20,7 +20,7 @@ class RaPageTemplate<T> extends StatelessWidget {
   });
 
   /// Function to fetch the page data.
-  final Future<T> Function() onFetch;
+  final AsyncValueGetter<T> onFetch;
 
   /// Default data to be displayed before the page fully loads.
   final T defaultData;

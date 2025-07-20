@@ -2,6 +2,7 @@
     "@@locale": "pl",
     "hello": "cześć",
     "radio": "Radio",
+    "appName": "Radio Aktywne",
     "recording": "Nagranie",
     "dataLoadError": "Wystąpił błąd podczas pobierania danych",
     "imageLoadError": "Wystąpił błąd podczas pobierania obrazu",

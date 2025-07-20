@@ -137,14 +137,14 @@ _LazyLoadingController<T> _useLazyLoadingController<T>(
       } else {
         hasMore.value = false;
       }
-    } on TimeoutException catch (e) {
+    } on TimeoutException catch (e, stackTrace) {
       if (kDebugMode) {
-        print('${StackTrace.current}: $e');
+        print('$stackTrace: $e');
       }
       hasError.value = true;
-    } catch (e) {
+    } catch (e, stackTrace) {
       if (kDebugMode) {
-        print('${StackTrace.current}: $e');
+        print('$stackTrace: $e');
       }
       hasError.value = true;
       hasMore.value = false;

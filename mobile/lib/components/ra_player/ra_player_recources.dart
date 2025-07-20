@@ -1,4 +1,6 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter/material.dart';
+import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
 
 final radioMediaItem = MediaItem(
@@ -8,7 +10,15 @@ final radioMediaItem = MediaItem(
   artUri: Uri.parse(RaApi.logoUrl),
 );
 
-enum MediaKind { radio, recording }
+enum MediaKind {
+  radio,
+  recording;
+
+  String toL10nString(BuildContext context) => switch (this) {
+        radio => context.l10n.radio,
+        recording => context.l10n.recording,
+      };
+}
 
 enum PlayerKind {
   widget,

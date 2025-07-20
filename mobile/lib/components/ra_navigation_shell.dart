@@ -113,7 +113,7 @@ class RaNavigationShell extends HookWidget {
                     semanticLabel: 'RA AppBar menu button',
                   ),
                 ),
-                text: 'Radio\nAktywne',
+                text: context.l10n.appName.split(' ').join('\n'),
                 iconPath: 'assets/ra_logo/RA_logo.svg',
                 titlePadding:
                     const EdgeInsets.only(left: 4, top: 8, bottom: 16),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/utility/ra_refresh_indicator.dart';
 
+typedef AsyncValueGetter<T> = Future<T> Function();
+
 /// A widget that can be used to easily build elements
 /// that pull data from an async source and need to be
 /// able to be refreshed.
@@ -28,7 +30,7 @@ class RefreshableFetchWidget<T> extends HookWidget {
   /// An async source of the data.
   ///
   /// Called once on initial render and once on every refresh.
-  final Future<T> Function() onFetch;
+  final AsyncValueGetter<T> onFetch;
 
   /// A builder that specifies the widget to be displayed while
   /// the data is still loading.
@@ -80,7 +82,7 @@ class RefreshableFetchWidget<T> extends HookWidget {
 /// [fetchFunction] - function for fetching and re-fetching data
 _RefreshableFetchController<T> _useRefreshableFetchController<T>(
   T defaultValue,
-  Future<T> Function() fetchFunction,
+  AsyncValueGetter<T> fetchFunction,
 ) {
   final state = useState(defaultValue);
   final future = useMemoized(fetchFunction);

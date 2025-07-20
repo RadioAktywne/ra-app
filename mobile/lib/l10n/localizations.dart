@@ -106,6 +106,12 @@ abstract class AppLocalizations {
   /// **'Radio'**
   String get radio;
 
+  /// No description provided for @appName.
+  ///
+  /// In pl, this message translates to:
+  /// **'Radio Aktywne'**
+  String get appName;
+
   /// No description provided for @recording.
   ///
   /// In pl, this message translates to:

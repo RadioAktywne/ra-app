@@ -15,6 +15,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get radio => 'Radio';
 
   @override
+  String get appName => 'Radio Aktywne';
+
+  @override
   String get recording => 'Nagranie';
 
   @override

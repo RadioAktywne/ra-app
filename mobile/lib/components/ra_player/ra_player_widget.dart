@@ -368,7 +368,7 @@ class _PlayerWidget extends StatelessWidget {
                     overrideTitle: switch (playerKind) {
                       PlayerKind.widget => null,
                       PlayerKind.page =>
-                        context.mediaKindToString(audioHandler.mediaKind.value),
+                        audioHandler.mediaKind.value.toL10nString(context),
                     },
                   ),
                 ],
