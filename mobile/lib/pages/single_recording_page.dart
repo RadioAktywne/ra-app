@@ -22,13 +22,13 @@ class SingleRecordingPage extends StatefulWidget {
 }
 
 class _SingleRecordingPageState extends State<SingleRecordingPage> {
-  String _fullImagePath = '';
+  var _fullImagePath = '';
 
   /// Space between things on the page.
-  static const SizedBox _emptySpace = SizedBox(height: 9);
+  static const _emptySpace = SizedBox(height: 9);
 
   /// Space from the top of the page.
-  static const SizedBox _spaceFromTop = SizedBox(height: 26);
+  static const _spaceFromTop = SizedBox(height: 26);
 
   @override
   void initState() {
@@ -39,8 +39,10 @@ class _SingleRecordingPageState extends State<SingleRecordingPage> {
   Future<void> _updateImageForRecording() async {
     if (widget.recording.fullImagePath.isNotEmpty) {
       final fullImagePath = await fetchSingle(
-        Uri.https(RaApi.baseUrl, '${RaApi.endpoints.media}/${widget.recording.fullImagePath}'),
-        (jsonData) => jsonData['media_details']['sizes']['full']['source_url'] as String,
+        Uri.https(RaApi.baseUrl,
+            '${RaApi.endpoints.media}/${widget.recording.fullImagePath}'),
+        (jsonData) =>
+            jsonData['media_details']['sizes']['full']['source_url'] as String,
       );
       setState(() {
         _fullImagePath = fullImagePath;
@@ -66,7 +68,8 @@ class _SingleRecordingPageState extends State<SingleRecordingPage> {
             StreamBuilder<PlaybackState>(
               stream: audioHandler.playbackState,
               builder: (context, playbackStateSnapshot) {
-                final playbackState = playbackStateSnapshot.data ?? PlaybackState();
+                final playbackState =
+                    playbackStateSnapshot.data ?? PlaybackState();
                 return StreamBuilder<MediaItem?>(
                   stream: audioHandler.mediaItem,
                   builder: (context, mediaItemSnapshot) {
@@ -81,7 +84,8 @@ class _SingleRecordingPageState extends State<SingleRecordingPage> {
 
                         final showPlayButton = !isPlayingCurrentRecording;
 
-                        final buttonPlaying = isPlayingCurrentRecording && playbackState.playing;
+                        final buttonPlaying =
+                            isPlayingCurrentRecording && playbackState.playing;
                         final buttonProcessingState = isPlayingCurrentRecording
                             ? playbackState.processingState
                             : AudioProcessingState.idle;
@@ -91,12 +95,15 @@ class _SingleRecordingPageState extends State<SingleRecordingPage> {
                           children: [
                             Image.network(
                               _fullImagePath,
-                              loadingBuilder: (context, child, loadingProgress) => loadingProgress == null
-                                  ? child
-                                  : Container(
-                                      color: context.colors.backgroundDarkSecondary,
-                                      child: const RaProgressIndicator(),
-                                    ),
+                              loadingBuilder: (context, child,
+                                      loadingProgress) =>
+                                  loadingProgress == null
+                                      ? child
+                                      : Container(
+                                          color: context
+                                              .colors.backgroundDarkSecondary,
+                                          child: const RaProgressIndicator(),
+                                        ),
                               errorBuilder: (_, __, ___) => Center(
                                 child: Image.asset('assets/defaultMedia.png'),
                               ),
@@ -104,7 +111,7 @@ class _SingleRecordingPageState extends State<SingleRecordingPage> {
                             if (showPlayButton)
                               RaPlayButton(
                                 size: 60,
-                                onPressed: () async => audioHandler.playMediaItem(
+                                onPressed: () => audioHandler.playMediaItem(
                                   widget.recording.mediaItem,
                                   mediaKind: MediaKind.recording,
                                 ),
