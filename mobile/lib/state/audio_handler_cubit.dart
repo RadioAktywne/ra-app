@@ -13,8 +13,7 @@ class AudioHandlerCubit extends Cubit<RaPlayerHandler> {
     initAudioHandler(initialMedia);
   }
 
-  static final RaPlayerHandler handler =
-      RaPlayerHandler(mediaItem: radioMediaItem);
+  static final handler = RaPlayerHandler(mediaItem: radioMediaItem);
 
   Future<void> initAudioHandler(MediaItem initialMedia) async {
     final audioService = await AudioService.init(

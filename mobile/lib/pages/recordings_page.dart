@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
@@ -40,20 +41,27 @@ class RecordingsPage extends HookWidget {
 
     final recordingFutures = recordings.map((recording) {
       Future<void> fetchRecordingPathAndDuration() async {
-        final (recordingPath, duration) = await fetchSingle(
-          _singleRecordingUrl(recording.recordingPath),
-          (jsonData) => (
-            jsonData['source_url'] as String,
-            Duration(seconds: jsonData['media_details']['length'] as int)
-          ),
-        );
+        try {
+          final (recordingPath, duration) = await fetchSingle(
+            _singleRecordingUrl(recording.recordingPath),
+            (jsonData) => (
+              jsonData['source_url'] as String,
+              Duration(seconds: jsonData['media_details']['length'] as int)
+            ),
+          );
 
-        recordingDetails.update(
-          recording.id,
-          (details) => details
-            ..duration = duration
-            ..recordingPath = recordingPath,
-        );
+          recordingDetails.update(
+            recording.id,
+            (details) => details
+              ..duration = duration
+              ..recordingPath = recordingPath,
+          );
+        } catch (e, stackTrace) {
+          // TODO: just skip faulty audition?
+          if (kDebugMode) {
+            print('$stackTrace: $e');
+          }
+        }
       }
 
       return fetchRecordingPathAndDuration();
@@ -61,21 +69,28 @@ class RecordingsPage extends HookWidget {
 
     final thumbnailFutures = recordings.map((recording) {
       Future<void> fetchThumbnail() async {
-        final thumbnailPath = recording.thumbnailPath.isEmpty
-            ? ''
-            : await fetchSingle(
-                _singleRecordingUrl(recording.thumbnailPath),
-                // Get image in 'medium_large' size if it exists, else full size
-                (jsonData) => (jsonData['media_details']['sizes']
-                        ['medium_large'] ??
-                    jsonData['media_details']['sizes']
-                        ['full'])['source_url'] as String,
-              );
+        try {
+          final thumbnailPath = recording.thumbnailPath.isEmpty
+              ? ''
+              : await fetchSingle(
+                  _singleRecordingUrl(recording.thumbnailPath),
+                  // Get image in 'medium_large' size if it exists, else full size
+                  (jsonData) => (jsonData['media_details']['sizes']
+                          ['medium_large'] ??
+                      jsonData['media_details']['sizes']
+                          ['full'])['source_url'] as String,
+                );
 
-        recordingDetails.update(
-          recording.id,
-          (details) => details..thumbnailPath = thumbnailPath,
-        );
+          recordingDetails.update(
+            recording.id,
+            (details) => details..thumbnailPath = thumbnailPath,
+          );
+        } catch (e, stackTrace) {
+          // TODO: just skip faulty audition?
+          if (kDebugMode) {
+            print('$stackTrace: $e');
+          }
+        }
       }
 
       return fetchThumbnail();
@@ -100,7 +115,7 @@ class RecordingsPage extends HookWidget {
             thumbnailPath: recording.thumbnailPath,
           ),
           // TODO: navigate to the tapped recording's page
-          onItemTap: (recording, index) async => audioHandler.playMediaItem(
+          onItemTap: (recording, index) => audioHandler.playMediaItem(
             recording.mediaItem,
             mediaKind: MediaKind.recording,
           ),

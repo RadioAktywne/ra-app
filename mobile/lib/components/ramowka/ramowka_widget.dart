@@ -45,7 +45,7 @@ class RamowkaWidget extends StatelessWidget {
                   onTap: () => context.push(RaRoutes.ramowka),
                   child: Text(
                     context.l10n.ramowka,
-                    style: context.textStyles.textMedium,
+                    style: context.textStyles.textMediumGreen,
                   ),
                 ),
                 GestureDetector(

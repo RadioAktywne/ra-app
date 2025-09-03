@@ -7,6 +7,7 @@ class RecordingInfo {
     required this.thumbnailPath,
     required this.recordingPath,
     required this.duration,
+    required this.description,
   });
 
   RecordingInfo.fromJson(Map<String, dynamic> jsonData)
@@ -14,13 +15,15 @@ class RecordingInfo {
         title = jsonData['acf']['title'] as String,
         thumbnailPath = jsonData['acf']['image'].toString(),
         recordingPath = jsonData['acf']['file'].toString(),
-        duration = Duration.zero;
+        duration = Duration.zero,
+        description = jsonData['acf']['description'] as String;
 
   final int id;
   final String title;
   String thumbnailPath;
   String recordingPath;
   Duration duration;
+  String description;
 
   MediaItem get mediaItem => MediaItem(
         id: recordingPath,
@@ -28,6 +31,7 @@ class RecordingInfo {
         artist: 'Radio Aktywne', // TODO: use l10n
         duration: duration,
         artUri: Uri.parse(thumbnailPath),
+        extras: {'description': description},
       );
 
   @override
@@ -39,6 +43,7 @@ RecordingInfo {
   thumbnailPath=$thumbnailPath,
   recordingPath=$recordingPath,
   duration=$duration,
+  description=$description,
 }''';
   }
 }

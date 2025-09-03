@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 
-void main() async {
+void main() {
   final url =
       Uri.parse('https://sandbox.api.service.nhs.uk/hello-world/hello/world');
   const headers = {

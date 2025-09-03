@@ -1,6 +1,9 @@
 {
     "@@locale": "pl",
     "hello": "cześć",
+    "radio": "Radio",
+    "appName": "Radio Aktywne",
+    "recording": "Nagranie",
     "dataLoadError": "Wystąpił błąd podczas pobierania danych",
     "imageLoadError": "Wystąpił błąd podczas pobierania obrazu",
     "noStreamTitle": "Radio Aktywne",
@@ -14,6 +17,7 @@
     "sunday": "Niedziela",
     "nowPlaying": "Teraz gramy",
     "backToRadio": "Wróć do radia",
+    "backToMainPage": "wróć na stronę główną",
     "aboutUs": "O nas",
     "newestArticles": "Najnowsze artykuły"
 }

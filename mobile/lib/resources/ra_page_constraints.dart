@@ -10,11 +10,10 @@ abstract class RaPageConstraints {
 
   static const double ramowkaListRowHeight = 22;
   static const double pagePaddingValue = 16;
-  static const EdgeInsets outerWidgetPagePadding =
+  static const outerWidgetPagePadding =
       EdgeInsets.symmetric(horizontal: pagePaddingValue);
-  static const EdgeInsets outerTextPagePadding =
-      EdgeInsets.symmetric(horizontal: 26);
-  static const EdgeInsets pagePadding = EdgeInsets.only(
+  static const outerTextPagePadding = EdgeInsets.symmetric(horizontal: 26);
+  static const pagePadding = EdgeInsets.only(
     top: pagePaddingValue,
     bottom: _radioPlayerPaddingValue,
     left: pagePaddingValue,
@@ -22,15 +21,14 @@ abstract class RaPageConstraints {
   );
 
   static const double headerTextPaddingLeft = 6;
-  static const double radioPlayerHeight = 50;
+  static const double radioPlayerHeight = 55;
   static const double _radioPlayerPaddingValue = 1.5 * radioPlayerHeight;
   static const double recordingPlayerHeight = radioPlayerHeight * 2.5;
   static const double _recordingPlayerPaddingValue =
       1.1 * recordingPlayerHeight;
 
   static const double textPageTitlePaddingValue = 8;
-  static const EdgeInsets textPageTitlePadding =
-      EdgeInsets.all(textPageTitlePaddingValue);
+  static const textPageTitlePadding = EdgeInsets.all(textPageTitlePaddingValue);
 }
 
 extension PlayerPaddingValue on BuildContext {

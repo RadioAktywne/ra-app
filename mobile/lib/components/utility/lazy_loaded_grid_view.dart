@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
@@ -99,7 +100,7 @@ class LazyLoadedGridView<T> extends HookWidget {
               titleOverlay: Text(
                 htmlUnescape.convert(gridItem.title),
                 // TODO: possibly context.textStyles.textSmallGreen, up to RA to decide
-                style: context.textStyles.textMedium,
+                style: context.textStyles.textMediumGreen,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 4,
               ),
@@ -136,9 +137,15 @@ _LazyLoadingController<T> _useLazyLoadingController<T>(
       } else {
         hasMore.value = false;
       }
-    } on TimeoutException catch (_) {
+    } on TimeoutException catch (e, stackTrace) {
+      if (kDebugMode) {
+        print('$stackTrace: $e');
+      }
       hasError.value = true;
-    } catch (_) {
+    } catch (e, stackTrace) {
+      if (kDebugMode) {
+        print('$stackTrace: $e');
+      }
       hasError.value = true;
       hasMore.value = false;
     } finally {

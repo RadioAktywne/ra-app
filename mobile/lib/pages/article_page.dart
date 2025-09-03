@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/article_info.dart';
-import 'package:radioaktywne/pages/templates/html_content_with_title_and_image_page.dart';
+import 'package:radioaktywne/pages/templates/ra_page_template.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
 
@@ -22,13 +22,15 @@ class ArticlePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HtmlContentWithTitleAndImagePage<ArticleInfo>(
-      onFetch: () async => fetchSingle(uri, ArticleInfo.fromJson),
+    return RaPageTemplate<ArticleInfo>(
+      onFetch: () => fetchSingle(uri, ArticleInfo.fromJson),
       defaultData: ArticleInfo.empty(),
       hasData: (article) => article.isNotEmpty,
-      imageUrl: (article) => article.fullImage,
-      title: (article) => article.title,
-      content: (article) => article.content,
+      itemBuilder: (article) => RaPageTemplateItem(
+        image: article.fullImage,
+        title: article.title,
+        content: article.content,
+      ),
     );
   }
 }

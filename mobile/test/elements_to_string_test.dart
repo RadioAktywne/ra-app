@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 
-void main() async {
+void main() {
   // lists
   test(
     'See if list of ints gets properly converted to'

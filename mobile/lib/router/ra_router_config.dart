@@ -99,13 +99,13 @@ class _DummyPage extends StatelessWidget {
         children: [
           Text(
             "Page `$name` doesn't (yet) exist...",
-            style: context.textStyles.textMedium,
+            style: context.textStyles.textMediumGreen,
           ),
           TextButton(
             onPressed: () => context.go(RaRoutes.home),
             child: Text(
               'Home',
-              style: context.textStyles.textMedium.copyWith(
+              style: context.textStyles.textMediumGreen.copyWith(
                 decoration: TextDecoration.underline,
                 decorationColor: context.colors.highlightGreen,
               ),

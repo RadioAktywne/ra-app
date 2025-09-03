@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:radioaktywne/components/ra_list_widget.dart';
@@ -21,6 +22,7 @@ class RamowkaList extends StatelessWidget {
     this.timeout = const Duration(seconds: 7),
     this.rows = 7,
     this.rowHeight = RaPageConstraints.ramowkaListRowHeight,
+    this.scrollPhysics,
   });
 
   /// Timeout for the fetching function.
@@ -31,6 +33,8 @@ class RamowkaList extends StatelessWidget {
 
   /// Single row's height
   final double rowHeight;
+
+  final ScrollPhysics? scrollPhysics;
 
   double get height => rows * rowHeight;
 
@@ -52,7 +56,10 @@ class RamowkaList extends StatelessWidget {
       );
 
       return _completeRamowka(data, ramowka);
-    } on TimeoutException catch (_) {
+    } on TimeoutException catch (e, stackTrace) {
+      if (kDebugMode) {
+        print('$stackTrace: $e');
+      }
       return [];
     }
   }
@@ -73,7 +80,10 @@ class RamowkaList extends StatelessWidget {
     for (var i = 0; i < times; i++) {
       try {
         ramowka.add(ramowkaTomorrow[i]);
-      } catch (_) {
+      } catch (e, stackTrace) {
+        if (kDebugMode) {
+          print('$stackTrace: $e');
+        }
         ramowka.add(RamowkaInfo.empty());
       }
     }
@@ -110,6 +120,7 @@ class RamowkaList extends StatelessWidget {
       builder: (context, ramowkaInfoList) => RaListWidget(
         itemCount: rows,
         rowHeight: rowHeight,
+        scrollPhysics: scrollPhysics,
         items: ramowkaInfoList
             .map(
               (ramowkaInfo) => RamowkaListItem(
@@ -134,22 +145,18 @@ class RamowkaListItem extends StatelessWidget {
   final RamowkaInfo info;
   final double rowHeight;
 
-  /// Calculates aspect ratio from screen width and this
-  /// widget's single row height used for max text length.
-  double aspectRatio(BuildContext context) =>
-      MediaQuery.of(context).size.width / rowHeight;
-
   @override
   Widget build(BuildContext context) {
+    assert(rowHeight != 0);
     return Padding(
       padding: const EdgeInsets.only(left: 3),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          RaSplash(
-            onPressed: () {}, // TODO: navigation to this audition's page
-            child: AspectRatio(
-              aspectRatio: aspectRatio(context),
+          Expanded(
+            flex: 6,
+            child: RaSplash(
+              onPressed: () {}, // TODO: navigation to this audition's page
               child: Text(
                 info.title,
                 style: context.textStyles.textSmallWhite,
@@ -158,9 +165,11 @@ class RamowkaListItem extends StatelessWidget {
               ),
             ),
           ),
-          Text(
-            info.startTime,
-            style: context.textStyles.textSmallWhite,
+          Flexible(
+            child: Text(
+              info.startTime,
+              style: context.textStyles.textSmallWhite,
+            ),
           ),
         ],
       ),

@@ -106,6 +106,10 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
   /// The kind of media playing currently (radio or recording)
   final mediaKind = ValueNotifier<MediaKind>(MediaKind.radio);
 
+  final playerKind = ValueNotifier<PlayerKind>(PlayerKind.widget);
+
+  void changePlayerKind() => playerKind.value = playerKind.value.opposite;
+
   Stream<bool> get playing =>
       playbackState.map((state) => state.playing).distinct();
 
@@ -145,7 +149,7 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
   }
 
   @override
-  Future<void> pause() async {
+  Future<void> pause() {
     streamTitleWorkaround.playerStopped();
     return _player.pause();
   }
@@ -161,7 +165,7 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
   }
 
   @override
-  Future<void> seek(Duration position) async {
+  Future<void> seek(Duration position) {
     return _player.seek(position);
   }
 

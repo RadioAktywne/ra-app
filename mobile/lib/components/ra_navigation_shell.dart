@@ -6,10 +6,10 @@ import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:radioaktywne/components/ra_appbar.dart';
 import 'package:radioaktywne/components/ra_bottom_navigation_bar.dart';
 import 'package:radioaktywne/components/ra_burger_menu.dart';
+import 'package:radioaktywne/components/ra_player/ra_player_handler.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_recources.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
-import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/state/audio_handler_cubit.dart';
 
 /// Represents the part of the UI that stays unchanged
@@ -41,70 +41,118 @@ class RaNavigationShell extends HookWidget {
     );
 
     return BlocProvider(
-      create: (_) => AudioHandlerCubit(
-        initialMedia: radioMediaItem,
-      ),
+      create: (_) => AudioHandlerCubit(initialMedia: radioMediaItem),
       child: AnnotatedRegion(
         value: SystemUiOverlayStyle(
           systemNavigationBarColor: context.colors.backgroundDark,
           statusBarColor: context.colors.backgroundDark,
         ),
-        child: Scaffold(
-          appBar: RaAppBar(
-            height: 75,
-            icon: Icon(
-              Icons.menu,
-              color: context.colors.highlightGreen,
-              size: 32,
-              semanticLabel: 'RA AppBar menu button',
-            ),
-            bottomSize: 5,
-            mainColor: context.colors.backgroundDark,
-            accentColor: context.colors.highlightGreen,
-            iconButton: IconButton(
-              onPressed: () =>
-                  _scaffoldKey.currentState?.isEndDrawerOpen ?? false
-                      ? _scaffoldKey.currentState?.closeEndDrawer()
-                      : _scaffoldKey.currentState?.openEndDrawer(),
-              icon: AnimatedIcon(
-                icon: AnimatedIcons.menu_close,
-                progress: burgerMenuIconController,
-                color: context.colors.highlightGreen,
-                size: 32,
-                semanticLabel: 'RA AppBar menu button',
-              ),
-            ),
-            text: 'Radio\nAktywne',
-            iconPath: 'assets/ra_logo/RA_logo.svg',
-            titlePadding: const EdgeInsets.only(left: 4, top: 8, bottom: 16),
-            imageHeight: 40,
-          ),
-          body: SafeArea(
+        child: BlocBuilder<AudioHandlerCubit, RaPlayerHandler>(
+            builder: (context, audioHandler) {
+          return PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) {
+              if (audioHandler.playerKind.value == PlayerKind.page) {
+                audioHandler.playerKind.value = PlayerKind.widget;
+              } else {
+                SystemNavigator.pop();
+              }
+              // TODO: suggested exit dialog
+              // else {
+              //   await showAdaptiveDialog<bool>(
+              //     context: context,
+              //     builder: (context) => AlertDialog.adaptive(
+              //       title: Text(
+              //         'Czy na pewno chcesz wyjść?',
+              //         style: context.textStyles.textMedium.copyWith(
+              //           color: context.colors.backgroundDark,
+              //         ),
+              //       ),
+              //       backgroundColor: context.colors.backgroundLightSecondary,
+              //       actions: [
+              //         TextButton(
+              //           onPressed: () {
+              //             Navigator.of(context).pop();
+              //             SystemNavigator.pop();
+              //           },
+              //           child:
+              //               Text('Tak', style: context.textStyles.textMediumGreen),
+              //         ),
+              //         TextButton(
+              //           onPressed: Navigator.of(context).pop,
+              //           child:
+              //               Text('Nie', style: context.textStyles.textMediumGreen),
+              //         ),
+              //       ],
+              //     ),
+              //   );
+              // }
+            },
             child: Scaffold(
-              key: _scaffoldKey,
-              backgroundColor: Colors.transparent,
-              drawerScrimColor: context.colors.drawerBackgroundOverlay,
-              onEndDrawerChanged: (isOpened) => isOpened
-                  ? burgerMenuIconController.forward()
-                  : burgerMenuIconController.reverse(),
-              endDrawer: RaBurgerMenu(
-                currentPath: state.fullPath!,
-                onNavigate: burgerMenuIconController.reverse,
+              appBar: RaAppBar(
+                height: 75,
+                icon: Icon(
+                  Icons.menu,
+                  color: context.colors.highlightGreen,
+                  size: 32,
+                  semanticLabel: 'RA AppBar menu button',
+                ),
+                bottomSize: 5,
+                mainColor: context.colors.backgroundDark,
+                accentColor: context.colors.highlightGreen,
+                iconButton: IconButton(
+                  onPressed: () =>
+                      _scaffoldKey.currentState?.isEndDrawerOpen ?? false
+                          ? _scaffoldKey.currentState?.closeEndDrawer()
+                          : _scaffoldKey.currentState?.openEndDrawer(),
+                  icon: AnimatedIcon(
+                    icon: AnimatedIcons.menu_close,
+                    progress: burgerMenuIconController,
+                    color: context.colors.highlightGreen,
+                    size: 32,
+                    semanticLabel: 'RA AppBar menu button',
+                  ),
+                ),
+                text: context.l10n.appName.split(' ').join('\n'),
+                iconPath: 'assets/ra_logo/RA_logo.svg',
+                titlePadding:
+                    const EdgeInsets.only(left: 4, top: 8, bottom: 16),
+                imageHeight: 40,
               ),
-              body: child,
+              body: SafeArea(
+                child: Scaffold(
+                  key: _scaffoldKey,
+                  backgroundColor: Colors.transparent,
+                  drawerScrimColor: context.colors.drawerBackgroundOverlay,
+                  onEndDrawerChanged: (isOpened) => isOpened
+                      ? burgerMenuIconController.forward()
+                      : burgerMenuIconController.reverse(),
+                  endDrawer: RaBurgerMenu(
+                    currentPath: state.fullPath!,
+                    onNavigate: burgerMenuIconController.reverse,
+                  ),
+                  body: child,
+                  resizeToAvoidBottomInset: false,
+                ),
+              ),
+              bottomNavigationBar: ValueListenableBuilder<PlayerKind>(
+                valueListenable: audioHandler.playerKind,
+                builder: (context, playerKind, child) {
+                  return RaBottomNavigationBar(
+                    currentPath: state.fullPath!,
+                    onNavigate: burgerMenuIconController.reverse,
+                    height: switch (playerKind) {
+                      PlayerKind.widget => 60,
+                      PlayerKind.page => 0,
+                    },
+                  );
+                },
+              ),
+              bottomSheet: const RaPlayerWidget(),
               resizeToAvoidBottomInset: false,
             ),
-          ),
-          bottomNavigationBar: RaBottomNavigationBar(
-            currentPath: state.fullPath!,
-            onNavigate: burgerMenuIconController.reverse,
-          ),
-          bottomSheet: const Padding(
-            padding: RaPageConstraints.outerWidgetPagePadding,
-            child: RaPlayerWidget(),
-          ),
-          resizeToAvoidBottomInset: false,
-        ),
+          );
+        }),
       ),
     );
   }

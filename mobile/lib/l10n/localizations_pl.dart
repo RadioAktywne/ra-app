@@ -12,6 +12,15 @@ class AppLocalizationsPl extends AppLocalizations {
   String get hello => 'cześć';
 
   @override
+  String get radio => 'Radio';
+
+  @override
+  String get appName => 'Radio Aktywne';
+
+  @override
+  String get recording => 'Nagranie';
+
+  @override
   String get dataLoadError => 'Wystąpił błąd podczas pobierania danych';
 
   @override
@@ -49,6 +58,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get backToRadio => 'Wróć do radia';
+
+  @override
+  String get backToMainPage => 'wróć na stronę główną';
 
   @override
   String get aboutUs => 'O nas';
