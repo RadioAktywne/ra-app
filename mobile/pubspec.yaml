@@ -42,6 +42,7 @@ dependencies:
   simple_animations: ^5.0.2
   simple_shadow: ^0.3.1
   text_scroll: ^0.2.0
+  url_launcher: ^6.3.2
   uuid: ^4.5.0
 
 dev_dependencies:
@@ -51,9 +52,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   freezed: ^3.0.6
-  go_router_builder: ^4.0.0
+  go_router_builder: ^4.0.1
   json_serializable: ^6.8.0
-  leancode_lint: ^17.0.0
+  leancode_lint: ^18.0.0
   mockito: ^5.3.2
 
 flutter_gen:

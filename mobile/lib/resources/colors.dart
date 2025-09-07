@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class RAColor extends Color {
   const RAColor._(super.value);
 
-  RAColor._color(Color color) : super(color.value);
+  RAColor._color(Color color) : super(color.toARGB32());
 
   RAColor alphaBlend(RAColor background) {
     return RAColor._color(Color.alphaBlend(this, background));
@@ -11,7 +11,7 @@ class RAColor extends Color {
 
   @override
   RAColor withOpacity(double opacity) {
-    return RAColor._color(super.withOpacity(opacity));
+    return RAColor._color(super.withValues(alpha: opacity));
   }
 }
 

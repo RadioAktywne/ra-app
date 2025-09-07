@@ -56,7 +56,7 @@ class AboutUsPage extends StatelessWidget {
       defaultData: AboutUsInfo.empty(),
       hasData: (aboutUsInfo) => aboutUsInfo.isNotEmpty,
       itemBuilder: (aboutUsInfo) => RaPageTemplateItem(
-        image: 'assets/ra_logo/RA_logo.png',
+        imagePath: 'assets/ra_logo/RA_logo.png',
         content: aboutUsInfo.content,
       ),
     );
