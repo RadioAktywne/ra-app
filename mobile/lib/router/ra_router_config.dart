@@ -33,7 +33,7 @@ final raRouter = GoRouter(
         GoRoute(
           path: RaRoutes.recording,
           builder: (context, state) =>
-              SingleRecordingPage(recording: state.extra! as RecordingInfo),
+              SingleRecordingPage(rec: state.extra! as RecordingInfo),
         ),
         GoRoute(
           path: RaRoutes.articles,

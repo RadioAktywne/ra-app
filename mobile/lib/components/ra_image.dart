@@ -14,9 +14,13 @@ class RaImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return imageUrl.startsWith('assets/')
-        ? Image.asset(imageUrl)
+        ? Image.asset(
+            imageUrl,
+            fit: BoxFit.cover,
+          )
         : Image.network(
             imageUrl,
+            fit: BoxFit.cover,
             loadingBuilder: (context, child, loadingProgress) =>
                 loadingProgress == null
                     ? FittedBox(
