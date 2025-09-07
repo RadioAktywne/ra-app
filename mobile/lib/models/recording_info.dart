@@ -20,6 +20,15 @@ class RecordingInfo {
         duration = Duration.zero,
         description = jsonData['acf']['description'] as String;
 
+  RecordingInfo.empty()
+      : id = -1,
+        title = '',
+        thumbnailPath = '',
+        fullImagePath = '',
+        recordingPath = '',
+        description = '',
+        duration = Duration.zero;
+
   final int id;
   final String title;
   String thumbnailPath;
@@ -36,6 +45,8 @@ class RecordingInfo {
         artUri: Uri.parse(thumbnailPath),
         extras: {'description': description},
       );
+
+  bool get isNotEmpty => id != -1;
 
   @override
   String toString() {

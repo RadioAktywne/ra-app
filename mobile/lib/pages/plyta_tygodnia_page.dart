@@ -72,7 +72,7 @@ class PlytaTygodniaPage extends StatelessWidget {
       defaultData: PlytaTygodniaInfo.empty(),
       hasData: (plytaTygodnia) => plytaTygodnia.isNotEmpty,
       itemBuilder: (plytaTygodnia) => RaPageTemplateItem(
-        image: plytaTygodnia.imageTag,
+        imagePath: plytaTygodnia.imageTag,
         title: '${plytaTygodnia.artist} - ${plytaTygodnia.title}',
         content: plytaTygodnia.description,
       ),

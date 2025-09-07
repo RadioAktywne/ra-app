@@ -37,34 +37,6 @@ class RecordingsPage extends HookWidget {
     final recordingDetails = {for (final rec in recordings) rec.id: rec};
     // small data redundancy, should be offset by increase in search speed
 
-    final recordingFutures = recordings.map((recording) {
-      Future<void> fetchRecordingPathAndDuration() async {
-        try {
-          final (recordingPath, duration) = await fetchSingle(
-            _singleRecordingUrl(recording.recordingPath),
-            (jsonData) => (
-              jsonData['source_url'] as String,
-              Duration(seconds: jsonData['media_details']['length'] as int)
-            ),
-          );
-
-          recordingDetails.update(
-            recording.id,
-            (details) => details
-              ..duration = duration
-              ..recordingPath = recordingPath,
-          );
-        } catch (e, stackTrace) {
-          // TODO: just skip faulty audition?
-          if (kDebugMode) {
-            print('$stackTrace: $e');
-          }
-        }
-      }
-
-      return fetchRecordingPathAndDuration();
-    });
-
     final thumbnailFutures = recordings.map((recording) {
       Future<void> fetchThumbnail() async {
         try {
@@ -94,10 +66,8 @@ class RecordingsPage extends HookWidget {
       return fetchThumbnail();
     });
 
-    await Future.wait([
-      ...recordingFutures,
-      ...thumbnailFutures,
-    ]); // Await all asynchronous calls at the same time
+    // Await all asynchronous calls at the same time
+    await Future.wait(thumbnailFutures);
 
     return recordingDetails.values.toList();
   }
