@@ -22,14 +22,21 @@ class SingleRecordingPage extends StatelessWidget {
 
   Future<RecordingInfo> fetchRecordingDetails() async {
     if (int.tryParse(rec.fullImagePath) != null) {
-      rec.fullImagePath = await fetchSingle(
-        Uri.https(
-          RaApi.baseUrl,
-          '${RaApi.endpoints.media}/${rec.fullImagePath}',
-        ),
-        (jsonData) =>
-            jsonData['media_details']['sizes']['full']['source_url'] as String,
-      );
+      try {
+        rec.fullImagePath = await fetchSingle(
+          Uri.https(
+            RaApi.baseUrl,
+            '${RaApi.endpoints.media}/${rec.fullImagePath}',
+          ),
+          (jsonData) => jsonData['media_details']['sizes']['full']['source_url']
+              as String,
+        );
+      } catch (e, stackTrace) {
+        rec.fullImagePath = 'assets/defaultMedia.png';
+        if (kDebugMode) {
+          print('$stackTrace: $e');
+        }
+      }
     }
     if (int.tryParse(rec.recordingPath) != null) {
       try {
