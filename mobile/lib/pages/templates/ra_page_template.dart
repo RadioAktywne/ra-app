@@ -65,6 +65,11 @@ class RaPageTemplate<T> extends StatelessWidget {
                     child: imageBuilder?.call(context, item) ??
                         RaImage(imageUrl: currentItem.imagePath!),
                   ),
+                if (currentItem.imagePath == null && imageBuilder != null)
+                  AspectRatio(
+                    aspectRatio: 1,
+                    child: imageBuilder!.call(context, item),
+                  ),
                 if (currentItem.title != null)
                   Container(
                     color: context.colors.backgroundDark,
