@@ -27,7 +27,7 @@ class ArticlePage extends StatelessWidget {
       defaultData: ArticleInfo.empty(),
       hasData: (article) => article.isNotEmpty,
       itemBuilder: (article) => RaPageTemplateItem(
-        image: article.fullImage,
+        imagePath: article.fullImage,
         title: article.title,
         content: article.content,
       ),

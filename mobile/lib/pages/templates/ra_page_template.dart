@@ -17,6 +17,7 @@ class RaPageTemplate<T> extends StatelessWidget {
     required this.defaultData,
     required this.hasData,
     required this.itemBuilder,
+    this.imageBuilder,
   });
 
   /// Function to fetch the page data.
@@ -31,6 +32,8 @@ class RaPageTemplate<T> extends StatelessWidget {
   /// Function that transforms fetched elements of type [T]
   /// into [RaPageTemplateItem]s to be displayed.
   final RaPageTemplateItem Function(T) itemBuilder;
+
+  final Widget Function(BuildContext, T)? imageBuilder;
 
   static const _textPadding = EdgeInsets.symmetric(horizontal: 7);
   static const double _betweenPaddingValue = 9;
@@ -56,10 +59,16 @@ class RaPageTemplate<T> extends StatelessWidget {
             child: Column(
               spacing: _betweenPaddingValue,
               children: [
-                if (currentItem.image != null)
+                if (currentItem.imagePath != null)
                   AspectRatio(
                     aspectRatio: 1,
-                    child: RaImage(imageUrl: currentItem.image!),
+                    child: imageBuilder?.call(context, item) ??
+                        RaImage(imageUrl: currentItem.imagePath!),
+                  ),
+                if (currentItem.imagePath == null && imageBuilder != null)
+                  AspectRatio(
+                    aspectRatio: 1,
+                    child: imageBuilder!.call(context, item),
                   ),
                 if (currentItem.title != null)
                   Container(
@@ -99,12 +108,12 @@ class RaPageTemplate<T> extends StatelessWidget {
 
 class RaPageTemplateItem {
   const RaPageTemplateItem({
-    this.image,
+    this.imagePath,
     this.title,
     this.content,
   });
 
-  final String? image;
+  final String? imagePath;
   final String? title;
   final String? content;
 }

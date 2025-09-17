@@ -60,4 +60,17 @@
             android:name="flutterEmbedding"
             android:value="2"/>
     </application>
+    <!-- URL launching in browser -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="http"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https"/>
+        </intent>
+    </queries>
 </manifest>

@@ -276,7 +276,7 @@ class _BackToMainPageButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RaSplash(
-      onPressed: audioHandler.changePlayerKind,
+      onPressed: audioHandler.switchPlayerKind,
       child: AnimatedContainer(
         duration: animationDuration,
         height: switch (playerKind) {
@@ -374,7 +374,7 @@ class _PlayerWidget extends StatelessWidget {
                 ],
               ),
               RaSplash(
-                onPressed: audioHandler.changePlayerKind,
+                onPressed: audioHandler.switchPlayerKind,
                 child: RaDropdownIcon(audioHandler: audioHandler),
               ),
             ],
@@ -529,8 +529,8 @@ class _PlayButton extends StatelessWidget {
                             MediaKind.recording => audioHandler.pause,
                           }
                         : audioHandler.play,
-                    playing: playing,
                     audioProcessingState: audioProcessingState,
+                    playing: playing,
                   );
                 },
               );

@@ -1,3 +1,6 @@
+// support deprecated "background" and "onBackground" values
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:radioaktywne/resources/colors.dart';
 

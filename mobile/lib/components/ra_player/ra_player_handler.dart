@@ -108,7 +108,7 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   final playerKind = ValueNotifier<PlayerKind>(PlayerKind.widget);
 
-  void changePlayerKind() => playerKind.value = playerKind.value.opposite;
+  void switchPlayerKind() => playerKind.value = playerKind.value.opposite;
 
   Stream<bool> get playing =>
       playbackState.map((state) => state.playing).distinct();
@@ -126,6 +126,7 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
     // when user would press 'play' for the first time, he would hear the
     // stream starting from the moment he launched the app, not when he pressed
     // 'play'.
+    await _player.stop();
     await _player.setAudioSource(AudioSource.uri(Uri.parse(_mediaItem.id)));
     switch (mediaKind.value) {
       case MediaKind.radio:
@@ -144,8 +145,12 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   @override
   Future<void> updateMediaItem(MediaItem mediaItem) async {
+    final lastMediaItem = _mediaItem;
     this.mediaItem.add(mediaItem);
     _mediaItem = mediaItem;
+    if (lastMediaItem != mediaItem) {
+      await _player.seek(Duration.zero);
+    }
   }
 
   @override
