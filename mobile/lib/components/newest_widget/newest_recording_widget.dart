@@ -37,7 +37,7 @@ class NewestRecordingWidget extends StatelessWidget {
               );
             } catch (e, stackTrace) {
               if (kDebugMode) {
-                print('$e: $stackTrace');
+                print('HANDLED: $e: $stackTrace');
               }
             }
             return recording;

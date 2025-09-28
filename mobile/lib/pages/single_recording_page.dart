@@ -34,7 +34,7 @@ class SingleRecordingPage extends StatelessWidget {
       } catch (e, stackTrace) {
         rec.fullImagePath = 'assets/defaultMedia.png';
         if (kDebugMode) {
-          print('$stackTrace: $e');
+          print('HANDLED: $stackTrace: $e');
         }
       }
     }
@@ -53,7 +53,7 @@ class SingleRecordingPage extends StatelessWidget {
       } catch (e, stackTrace) {
         // TODO: just skip faulty audition?
         if (kDebugMode) {
-          print('$stackTrace: $e');
+          print('HANDLED: $stackTrace: $e');
         }
       }
     }

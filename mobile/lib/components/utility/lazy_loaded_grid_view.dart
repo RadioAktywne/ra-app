@@ -139,12 +139,12 @@ _LazyLoadingController<T> _useLazyLoadingController<T>(
       }
     } on TimeoutException catch (e, stackTrace) {
       if (kDebugMode) {
-        print('$stackTrace: $e');
+        print('HANDLED: $stackTrace: $e');
       }
       hasError.value = true;
     } catch (e, stackTrace) {
       if (kDebugMode) {
-        print('$stackTrace: $e');
+        print('HANDLED: $stackTrace: $e');
       }
       hasError.value = true;
       hasMore.value = false;

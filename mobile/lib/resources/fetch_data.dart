@@ -38,7 +38,7 @@ Future<Iterable<T>> fetchData<T>(
     );
   } catch (e, stackTrace) {
     if (kDebugMode) {
-      print('$stackTrace: $e');
+      print('HANDLED: $stackTrace: $e');
     }
     final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
     return [fromJson(jsonData)];
