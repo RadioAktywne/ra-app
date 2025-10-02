@@ -47,8 +47,7 @@ class RaNavigationShell extends HookWidget {
           systemNavigationBarColor: context.colors.backgroundDark,
           statusBarColor: context.colors.backgroundDark,
         ),
-        child: BlocBuilder<AudioHandlerCubit, RaPlayerHandler>(
-            builder: (context, audioHandler) {
+        child: BlocBuilder<AudioHandlerCubit, RaPlayerHandler>(builder: (context, audioHandler) {
           return PopScope(
             canPop: false,
             onPopInvokedWithResult: (didPop, result) {
@@ -101,10 +100,9 @@ class RaNavigationShell extends HookWidget {
                 mainColor: context.colors.backgroundDark,
                 accentColor: context.colors.highlightGreen,
                 iconButton: IconButton(
-                  onPressed: () =>
-                      _scaffoldKey.currentState?.isEndDrawerOpen ?? false
-                          ? _scaffoldKey.currentState?.closeEndDrawer()
-                          : _scaffoldKey.currentState?.openEndDrawer(),
+                  onPressed: () => _scaffoldKey.currentState?.isEndDrawerOpen ?? false
+                      ? _scaffoldKey.currentState?.closeEndDrawer()
+                      : _scaffoldKey.currentState?.openEndDrawer(),
                   icon: AnimatedIcon(
                     icon: AnimatedIcons.menu_close,
                     progress: burgerMenuIconController,
@@ -114,9 +112,8 @@ class RaNavigationShell extends HookWidget {
                   ),
                 ),
                 text: context.l10n.appName.split(' ').join('\n'),
-                iconPath: 'assets/ra_logo/RA_logo.svg',
-                titlePadding:
-                    const EdgeInsets.only(left: 4, top: 8, bottom: 16),
+                iconPath: 'assets/RA_logo/RA_logo.svg',
+                titlePadding: const EdgeInsets.only(left: 4, top: 8, bottom: 16),
                 imageHeight: 40,
               ),
               body: SafeArea(
@@ -124,9 +121,8 @@ class RaNavigationShell extends HookWidget {
                   key: _scaffoldKey,
                   backgroundColor: Colors.transparent,
                   drawerScrimColor: context.colors.drawerBackgroundOverlay,
-                  onEndDrawerChanged: (isOpened) => isOpened
-                      ? burgerMenuIconController.forward()
-                      : burgerMenuIconController.reverse(),
+                  onEndDrawerChanged: (isOpened) =>
+                      isOpened ? burgerMenuIconController.forward() : burgerMenuIconController.reverse(),
                   endDrawer: RaBurgerMenu(
                     currentPath: state.fullPath!,
                     onNavigate: burgerMenuIconController.reverse,
