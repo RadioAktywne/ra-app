@@ -58,7 +58,7 @@ class RamowkaList extends StatelessWidget {
       return _completeRamowka(data, ramowka);
     } on TimeoutException catch (e, stackTrace) {
       if (kDebugMode) {
-        print('$stackTrace: $e');
+        print('HANDLED: $stackTrace: $e');
       }
       return [];
     }
@@ -82,7 +82,7 @@ class RamowkaList extends StatelessWidget {
         ramowka.add(ramowkaTomorrow[i]);
       } catch (e, stackTrace) {
         if (kDebugMode) {
-          print('$stackTrace: $e');
+          print('HANDLED: $stackTrace: $e');
         }
         ramowka.add(RamowkaInfo.empty());
       }

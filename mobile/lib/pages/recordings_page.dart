@@ -58,7 +58,7 @@ class RecordingsPage extends HookWidget {
         } catch (e, stackTrace) {
           // TODO: just skip faulty audition?
           if (kDebugMode) {
-            print('$stackTrace: $e');
+            print('HANDLED: $stackTrace: $e');
           }
         }
       }

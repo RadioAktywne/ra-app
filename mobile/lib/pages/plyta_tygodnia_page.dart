@@ -59,7 +59,7 @@ class PlytaTygodniaPage extends StatelessWidget {
       return plytaTygodnia;
     } on TimeoutException catch (e, stackTrace) {
       if (kDebugMode) {
-        print('$stackTrace: $e');
+        print('HANDLED: $stackTrace: $e');
       }
       return PlytaTygodniaInfo.empty();
     }

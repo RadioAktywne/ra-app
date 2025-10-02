@@ -43,7 +43,7 @@ class AboutUsPage extends StatelessWidget {
       return aboutUs;
     } on TimeoutException catch (e, stackTrace) {
       if (kDebugMode) {
-        print('$stackTrace: $e');
+        print('HANDLED: $stackTrace: $e');
       }
       return AboutUsInfo.empty();
     }
