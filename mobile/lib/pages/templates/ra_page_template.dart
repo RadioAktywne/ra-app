@@ -91,9 +91,7 @@ class RaPageTemplate<T> extends StatelessWidget {
                       selectionControls: MaterialTextSelectionControls(),
                       child: HtmlWidget(
                         currentItem.content!,
-                        textStyle: context.textStyles.textSmallGreen.copyWith(
-                          color: context.colors.backgroundDark,
-                        ),
+                        textStyle: context.textStyles.textParagraph,
                       ),
                     ),
                   ),

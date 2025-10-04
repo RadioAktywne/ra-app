@@ -40,6 +40,19 @@ class RATextStyles {
         color: context.colors.backgroundLight,
       );
 
+  TextStyle get textSmall => const TextStyle(
+        fontSize: 12,
+        fontFamily: 'Arial',
+        fontWeight: FontWeight.bold,
+      );
+
+  TextStyle get textParagraph => TextStyle(
+        fontSize: 12,
+        fontFamily: 'Arial',
+        fontWeight: FontWeight.normal,
+        color: context.colors.backgroundDark,
+      );
+
   TextStyle get textSmallGreen => TextStyle(
         fontSize: 12,
         fontFamily: 'Arial',
