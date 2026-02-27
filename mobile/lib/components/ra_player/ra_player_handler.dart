@@ -1,8 +1,10 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:logging/logging.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_recources.dart';
 import 'package:radioaktywne/components/ra_player/stream_title_workaround.dart';
+import 'package:radioaktywne/ra_logger.dart';
 
 /// An [AudioHandler] for playing a single item.
 class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
@@ -23,10 +25,8 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
     _player.icyMetadataStream.listen((event) {
       final streamName = event?.headers?.name ?? '';
       final streamTitle = event?.info?.title ?? '';
-      if (kDebugMode) {
-        print('stream name: $streamName');
-        print('stream title: $streamTitle');
-      }
+      RALogger.log(Level.INFO, 'stream name: $streamName');
+      RALogger.log(Level.INFO, 'stream title: $streamTitle');
 
       var mediaItemValue = this.mediaItem.value ?? _mediaItem;
       if (streamName.isNotEmpty) {

@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
+import 'package:logging/logging.dart';
 import 'package:radioaktywne/components/utility/color_shadowed_card.dart';
 import 'package:radioaktywne/components/utility/image_with_overlay.dart';
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/pages/ra_error_page.dart';
+import 'package:radioaktywne/ra_logger.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/resources/resources.dart';
 
@@ -138,14 +140,10 @@ _LazyLoadingController<T> _useLazyLoadingController<T>(
         hasMore.value = false;
       }
     } on TimeoutException catch (e, stackTrace) {
-      if (kDebugMode) {
-        print('HANDLED: $stackTrace: $e');
-      }
+      RALogger.log(Level.WARNING, '$stackTrace: $e');
       hasError.value = true;
     } catch (e, stackTrace) {
-      if (kDebugMode) {
-        print('HANDLED: $stackTrace: $e');
-      }
+      RALogger.log(Level.WARNING, '$stackTrace: $e');
       hasError.value = true;
       hasMore.value = false;
     } finally {

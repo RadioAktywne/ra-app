@@ -1,9 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logging/logging.dart';
 import 'package:radioaktywne/components/newest_widget/newest_widget_template.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/recording_info.dart';
+import 'package:radioaktywne/ra_logger.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
 import 'package:radioaktywne/router/ra_routes.dart';
@@ -36,9 +37,7 @@ class NewestRecordingWidget extends StatelessWidget {
                         ['full'])['source_url'] as String,
               );
             } catch (e, stackTrace) {
-              if (kDebugMode) {
-                print('HANDLED: $e: $stackTrace');
-              }
+              RALogger.log(Level.WARNING, '$stackTrace: $e');
             }
             return recording;
           },
