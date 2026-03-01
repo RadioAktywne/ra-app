@@ -67,4 +67,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get newestArticles => 'Najnowsze artykuły';
+
+  @override
+  String get newestRecordings => 'Najnowsze nagrania';
 }

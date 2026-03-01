@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
-import 'package:radioaktywne/components/newest_article/newest_article_widget.dart';
-import 'package:radioaktywne/components/newest_recording/newest_recording_widget.dart';
+import 'package:radioaktywne/components/newest_widget/newest_article_widget.dart';
+import 'package:radioaktywne/components/newest_widget/newest_recording_widget.dart';
 import 'package:radioaktywne/components/ramowka/ramowka_widget.dart';
 import 'package:radioaktywne/components/teraz_gramy/teraz_gramy_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
+import 'package:radioaktywne/ra_logger.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/router/ra_router_config.dart';
 
 Future<void> main() async {
+  RALogger.setup();
+
   /// Setup for the orientationt to stay in portrait mode.
   ///
   /// Also, in the `AndroidManifest.xml` file,
@@ -67,20 +70,20 @@ class MainPage extends StatelessWidget {
           padding: EdgeInsets.only(
             bottom: context.playerPaddingValue,
           ),
-          child: const Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   /// Ramówka widget
-                  Padding(
+                  const Padding(
                     padding: _widgetPadding,
                     child: RamowkaWidget(),
                   ),
 
                   /// Teraz Gramy widget
-                  Padding(
+                  const Padding(
                     padding: _widgetPadding,
                     child: AspectRatio(
                       aspectRatio: 1.7,
@@ -96,16 +99,20 @@ class MainPage extends StatelessWidget {
                         Expanded(
                           child: AspectRatio(
                             aspectRatio: 1,
-                            child: NewestRecordingWidget(),
+                            child: NewestRecordingWidget(
+                              shadowColor: context.colors.highlightGreen,
+                            ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: RaPageConstraints.pagePaddingValue,
                         ),
                         Expanded(
                           child: AspectRatio(
                             aspectRatio: 1,
-                            child: NewestArticleWidget(),
+                            child: NewestArticleWidget(
+                              shadowColor: context.colors.highlightYellow,
+                            ),
                           ),
                         ),
                       ],

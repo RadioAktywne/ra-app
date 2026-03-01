@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/about_us_info.dart';
 import 'package:radioaktywne/pages/templates/ra_page_template.dart';
+import 'package:radioaktywne/ra_logger.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
 import 'package:radioaktywne/resources/resources.dart';
@@ -42,9 +44,7 @@ class AboutUsPage extends StatelessWidget {
       final aboutUs = data.first;
       return aboutUs;
     } on TimeoutException catch (e, stackTrace) {
-      if (kDebugMode) {
-        print('$stackTrace: $e');
-      }
+      RALogger.log(Level.WARNING, '$stackTrace: $e');
       return AboutUsInfo.empty();
     }
   }

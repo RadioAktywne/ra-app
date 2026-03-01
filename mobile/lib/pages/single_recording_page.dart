@@ -2,6 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 import 'package:radioaktywne/components/ra_image.dart';
 import 'package:radioaktywne/components/ra_playbutton.dart';
 import 'package:radioaktywne/components/ra_player/ra_player_handler.dart';
@@ -9,6 +10,7 @@ import 'package:radioaktywne/components/ra_player/ra_player_recources.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/recording_info.dart';
 import 'package:radioaktywne/pages/templates/ra_page_template.dart';
+import 'package:radioaktywne/ra_logger.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
 import 'package:radioaktywne/resources/resources.dart';
@@ -33,9 +35,7 @@ class SingleRecordingPage extends StatelessWidget {
         );
       } catch (e, stackTrace) {
         rec.fullImagePath = 'assets/defaultMedia.png';
-        if (kDebugMode) {
-          print('$stackTrace: $e');
-        }
+        RALogger.log(Level.WARNING, '$stackTrace: $e');
       }
     }
     if (int.tryParse(rec.recordingPath) != null) {
@@ -52,9 +52,7 @@ class SingleRecordingPage extends StatelessWidget {
         rec.duration = duration;
       } catch (e, stackTrace) {
         // TODO: just skip faulty audition?
-        if (kDebugMode) {
-          print('$stackTrace: $e');
-        }
+        RALogger.log(Level.WARNING, '$stackTrace: $e');
       }
     }
     return Future.value(rec);

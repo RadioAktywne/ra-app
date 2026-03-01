@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:logging/logging.dart';
+import 'package:radioaktywne/ra_logger.dart';
 
 const _jsonHeaders = {
   'Content-type': 'application/json',
@@ -37,9 +39,7 @@ Future<Iterable<T>> fetchData<T>(
       (data) => fromJson(data as Map<String, dynamic>),
     );
   } catch (e, stackTrace) {
-    if (kDebugMode) {
-      print('$stackTrace: $e');
-    }
+    RALogger.log(Level.WARNING, '$stackTrace: $e');
     final jsonData = jsonDecode(response.body) as Map<String, dynamic>;
     return [fromJson(jsonData)];
   }

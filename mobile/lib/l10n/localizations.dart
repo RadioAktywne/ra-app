@@ -213,6 +213,12 @@ abstract class AppLocalizations {
   /// In pl, this message translates to:
   /// **'Najnowsze artykuły'**
   String get newestArticles;
+
+  /// No description provided for @newestRecordings.
+  ///
+  /// In pl, this message translates to:
+  /// **'Najnowsze nagrania'**
+  String get newestRecordings;
 }
 
 class _AppLocalizationsDelegate

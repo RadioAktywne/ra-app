@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:logging/logging.dart';
 import 'package:radioaktywne/components/ra_list_widget.dart';
 import 'package:radioaktywne/components/ramowka/fetch_ramowka.dart';
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
@@ -12,6 +13,7 @@ import 'package:radioaktywne/components/utility/refreshable_fetch_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/ramowka_info.dart';
 import 'package:radioaktywne/pages/ra_error_page.dart';
+import 'package:radioaktywne/ra_logger.dart';
 import 'package:radioaktywne/resources/day.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 
@@ -57,9 +59,7 @@ class RamowkaList extends StatelessWidget {
 
       return _completeRamowka(data, ramowka);
     } on TimeoutException catch (e, stackTrace) {
-      if (kDebugMode) {
-        print('$stackTrace: $e');
-      }
+      RALogger.log(Level.WARNING, '$stackTrace: $e');
       return [];
     }
   }
@@ -81,9 +81,7 @@ class RamowkaList extends StatelessWidget {
       try {
         ramowka.add(ramowkaTomorrow[i]);
       } catch (e, stackTrace) {
-        if (kDebugMode) {
-          print('$stackTrace: $e');
-        }
+        RALogger.log(Level.WARNING, '$stackTrace: $e');
         ramowka.add(RamowkaInfo.empty());
       }
     }
