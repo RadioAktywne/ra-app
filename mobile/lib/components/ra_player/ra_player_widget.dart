@@ -38,8 +38,7 @@ class RaPlayerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AudioHandlerCubit, RaPlayerHandler>(
-        builder: (context, audioHandler) {
+    return BlocBuilder<AudioHandlerCubit, RaPlayerHandler>(builder: (context, audioHandler) {
       return ValueListenableBuilder(
         valueListenable: audioHandler.playerKind,
         builder: (context, playerKind, _) {
@@ -59,8 +58,7 @@ class RaPlayerWidget extends StatelessWidget {
                 height: switch (playerKind) {
                   PlayerKind.widget => switch (mediaKind) {
                       MediaKind.radio => RaPageConstraints.radioPlayerHeight,
-                      MediaKind.recording =>
-                        RaPageConstraints.recordingPlayerHeight,
+                      MediaKind.recording => RaPageConstraints.recordingPlayerHeight,
                     },
                   PlayerKind.page => MediaQuery.sizeOf(context).height,
                 },
@@ -79,24 +77,19 @@ class RaPlayerWidget extends StatelessWidget {
                       duration: animationDuration,
                       height: switch (playerKind) {
                         PlayerKind.widget => 0,
-                        PlayerKind.page =>
-                          MediaQuery.sizeOf(context).height - 200,
+                        PlayerKind.page => MediaQuery.sizeOf(context).height - 200,
                       },
                       padding: RaPageConstraints.outerWidgetPagePadding * 2,
                       child: AnimatedOpacity(
                         duration: animationDuration,
-                        opacity: switch (playerKind) {
-                          PlayerKind.widget => 0.0,
-                          PlayerKind.page => 1.0
-                        },
+                        opacity: switch (playerKind) { PlayerKind.widget => 0.0, PlayerKind.page => 1.0 },
                         child: switch (mediaKind) {
                           MediaKind.radio => _RadioPlayerPage(
                               animationDuration: animationDuration,
                               audioHandler: audioHandler,
                               playerKind: playerKind,
                             ),
-                          MediaKind.recording =>
-                            _RecordingPlayerPage(audioHandler: audioHandler)
+                          MediaKind.recording => _RecordingPlayerPage(audioHandler: audioHandler)
                         },
                       ),
                     ),
@@ -153,8 +146,7 @@ class _RecordingPlayerPage extends StatelessWidget {
             ),
             Text(
               mediaItem?.duration?.formattedMinsAndSecs() ?? '00:00',
-              style: context.textStyles.textSmallWhite
-                  .copyWith(fontWeight: FontWeight.normal),
+              style: context.textStyles.textSmallWhite.copyWith(fontWeight: FontWeight.normal),
             ),
           ],
         ),
@@ -186,8 +178,7 @@ class _RecordingPlayerPage extends StatelessWidget {
         CustomPaddingHtmlWidget(
           htmlContent: mediaItem?.extras?['description'] as String? ?? '',
           style: context.textStyles.textSmallWhite,
-          padding: const EdgeInsets.only(
-              bottom: RaPageConstraints.radioPlayerHeight),
+          padding: const EdgeInsets.only(bottom: RaPageConstraints.radioPlayerHeight),
         ),
       ];
 
@@ -367,8 +358,7 @@ class _PlayerWidget extends StatelessWidget {
                     width: MediaQuery.sizeOf(context).width / 1.65,
                     overrideTitle: switch (playerKind) {
                       PlayerKind.widget => null,
-                      PlayerKind.page =>
-                        audioHandler.mediaKind.value.toL10nString(context),
+                      PlayerKind.page => audioHandler.mediaKind.value.toL10nString(context),
                     },
                   ),
                 ],
@@ -396,10 +386,7 @@ class _PlayerWidget extends StatelessWidget {
             duration: animationDuration,
             opacity: switch (mediaKind) {
               MediaKind.radio => 0.0,
-              MediaKind.recording => switch (playerKind) {
-                  PlayerKind.widget => 1.0,
-                  PlayerKind.page => 0
-                },
+              MediaKind.recording => switch (playerKind) { PlayerKind.widget => 1.0, PlayerKind.page => 0 },
             },
             child: _RecordingSeekBar(
               audioHandler: audioHandler,
@@ -473,7 +460,7 @@ class _BackToRadioButton extends StatelessWidget {
       height: RaPageConstraints.radioPlayerHeight / 2,
       color: context.colors.backgroundDark,
       child: GestureDetector(
-        onTap: () => audioHandler.playMediaItem(radioMediaItem),
+        onTap: () => audioHandler.playMediaItem(getInitialRadioMediaItem(context)),
         child: Center(
           child: Text(
             context.l10n.backToRadio,
@@ -503,12 +490,9 @@ class _PlayButton extends StatelessWidget {
     return Padding(
       padding: padding,
       child: StreamBuilder<AudioProcessingState>(
-        stream: audioHandler.playbackState
-            .map((state) => state.processingState)
-            .distinct(),
+        stream: audioHandler.playbackState.map((state) => state.processingState).distinct(),
         builder: (context, snapshot) {
-          final audioProcessingState =
-              snapshot.data ?? AudioProcessingState.idle;
+          final audioProcessingState = snapshot.data ?? AudioProcessingState.idle;
           if (audioProcessingState == AudioProcessingState.completed) {
             audioHandler
               ..seek(Duration.zero)
@@ -564,8 +548,7 @@ class _StreamTitle extends StatelessWidget {
       stream: audioHandler.mediaItem,
       builder: (context, snapshot) {
         final mediaItem = snapshot.data;
-        final title =
-            overrideTitle ?? mediaItem?.title ?? context.l10n.noStreamTitle;
+        final title = overrideTitle ?? mediaItem?.title ?? context.l10n.noStreamTitle;
         return RaPlayerTitle(
           title: title.isNotEmpty ? title : context.l10n.noStreamTitle,
           textStyle: textStyle,

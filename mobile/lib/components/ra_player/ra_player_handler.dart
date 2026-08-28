@@ -45,9 +45,7 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
     _player.positionStream.listen((position) {
       final oldState = progress.value;
       progress.value = ProgressBarState(
-        current: position == Duration.zero && oldState.current > position
-            ? oldState.current
-            : position,
+        current: position == Duration.zero && oldState.current > position ? oldState.current : position,
         buffered: oldState.buffered,
         total: oldState.total,
       );
@@ -110,8 +108,7 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   void switchPlayerKind() => playerKind.value = playerKind.value.opposite;
 
-  Stream<bool> get playing =>
-      playbackState.map((state) => state.playing).distinct();
+  Stream<bool> get playing => playbackState.map((state) => state.playing).distinct();
 
   /// export icyMetadata (may become handy at some point)
   // Stream<IcyMetadata?> get icyMetadata => _player.icyMetadataStream;
@@ -134,9 +131,7 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
       case MediaKind.recording:
         final currentPosition = progress.value.current;
         await _player.seek(
-          currentPosition >= (_mediaItem.duration ?? Duration.zero)
-              ? Duration.zero
-              : currentPosition,
+          currentPosition >= (_mediaItem.duration ?? Duration.zero) ? Duration.zero : currentPosition,
         );
         streamTitleWorkaround.playerStopped();
     }
@@ -162,7 +157,7 @@ class RaPlayerHandler extends BaseAudioHandler with SeekHandler {
   @override
   Future<void> stop() async {
     if (mediaKind.value == MediaKind.recording) {
-      await updateMediaItem(radioMediaItem);
+      await updateMediaItem(_mediaItem);
       mediaKind.value = MediaKind.radio;
     }
     streamTitleWorkaround.playerStopped();
