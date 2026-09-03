@@ -50,8 +50,7 @@ class TerazGramyWidget extends StatelessWidget {
                     return RaPlayerTitle(
                       width: MediaQuery.sizeOf(context).width,
                       title: title,
-                      textStyle: context.textStyles.textMediumGreen
-                          .copyWith(height: 1.5),
+                      textStyle: context.textStyles.textMediumGreen.copyWith(height: 1.5),
                     );
                   },
                 ),
@@ -65,8 +64,7 @@ class TerazGramyWidget extends StatelessWidget {
                   return StreamBuilder<PlaybackState>(
                     stream: audioHandler.playbackState,
                     builder: (context, snapshot) {
-                      final state = snapshot.data?.processingState ??
-                          AudioProcessingState.idle;
+                      final state = snapshot.data?.processingState ?? AudioProcessingState.idle;
                       return StreamBuilder<bool>(
                         stream: audioHandler.playing,
                         builder: (context, snapshot) {
@@ -74,11 +72,8 @@ class TerazGramyWidget extends StatelessWidget {
                           return RaPlayButton(
                             size: _buttonSize,
                             onPressed: () => switch (mediaKind) {
-                              MediaKind.radio => playing
-                                  ? audioHandler.stop()
-                                  : audioHandler.play(),
-                              MediaKind.recording =>
-                                audioHandler.playMediaItem(radioMediaItem)
+                              MediaKind.radio => playing ? audioHandler.stop() : audioHandler.play(),
+                              MediaKind.recording => audioHandler.playMediaItem(getInitialRadioMediaItem(context))
                             },
                             audioProcessingState: switch (mediaKind) {
                               MediaKind.radio => state,

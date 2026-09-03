@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:radioaktywne/resources/ra_links.dart';
 
 class StreamTitleWorkaround {
+  static const streamName = 'Radio Aktywne';
+
   StreamTitleWorkaround() {
     _streamController = StreamController<String>();
     stream = _streamController.stream;
@@ -27,13 +29,12 @@ class StreamTitleWorkaround {
     http.get(httpPackageUrl).then(
       (response) {
         final dynamic jsonData = jsonDecode(response.body);
-        final dynamic maybeStreamName =
-            jsonData['icestats']['source'][0]['title'];
+        final dynamic maybeStreamName = jsonData['icestats']['source'][0]['title'];
 
         if (maybeStreamName is String) {
           if (maybeStreamName == 'Unknown') {
             _streamController.add(
-              'Radio Aktywne', // TODO: is there any way to get this from l10n?
+              streamName,
             );
           } else {
             _streamController.add(maybeStreamName);
