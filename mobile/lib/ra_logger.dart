@@ -13,7 +13,6 @@ class RALogger {
         print('${record.level.name}: ${record.time}: ${record.message}');
       }
     });
-    logger = Logger.root;
   }
 
   static void log(Level level, String message) {
