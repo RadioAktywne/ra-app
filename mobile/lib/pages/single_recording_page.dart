@@ -1,5 +1,4 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
@@ -30,8 +29,7 @@ class SingleRecordingPage extends StatelessWidget {
             RaApi.baseUrl,
             '${RaApi.endpoints.media}/${rec.fullImagePath}',
           ),
-          (jsonData) => jsonData['media_details']['sizes']['full']['source_url']
-              as String,
+          (jsonData) => jsonData['media_details']['sizes']['full']['source_url'] as String,
         );
       } catch (e, stackTrace) {
         rec.fullImagePath = 'assets/defaultMedia.png';
@@ -41,12 +39,9 @@ class SingleRecordingPage extends StatelessWidget {
     if (int.tryParse(rec.recordingPath) != null) {
       try {
         final (recordingPath, duration) = await fetchSingle(
-          Uri.https(
-              RaApi.baseUrl, '${RaApi.endpoints.media}/${rec.recordingPath}'),
-          (jsonData) => (
-            jsonData['source_url'] as String,
-            Duration(seconds: jsonData['media_details']['length'] as int)
-          ),
+          Uri.https(RaApi.baseUrl, '${RaApi.endpoints.media}/${rec.recordingPath}'),
+          (jsonData) =>
+              (jsonData['source_url'] as String, Duration(seconds: jsonData['media_details']['length'] as int)),
         );
         rec.recordingPath = recordingPath;
         rec.duration = duration;
@@ -59,6 +54,7 @@ class SingleRecordingPage extends StatelessWidget {
   }
 
   Future<void> _playButtonAction(
+    BuildContext context,
     RaPlayerHandler audioHandler,
     MediaKind mediaKind,
     RecordingInfo recording,
@@ -75,14 +71,14 @@ class SingleRecordingPage extends StatelessWidget {
           }
         } else {
           await audioHandler.playMediaItem(
-            recording.mediaItem,
+            recording.getMediaItem(context),
             mediaKind: MediaKind.recording,
           );
         }
 
       case MediaKind.radio:
         await audioHandler.playMediaItem(
-          recording.mediaItem,
+          recording.getMediaItem(context),
           mediaKind: MediaKind.recording,
         );
     }
@@ -119,32 +115,26 @@ class SingleRecordingPage extends StatelessWidget {
               valueListenable: audioHandler.mediaKind,
               builder: (context, mediaKind, _) {
                 return StreamBuilder<AudioProcessingState>(
-                  stream: audioHandler.playbackState
-                      .map((state) => state.processingState)
-                      .distinct(),
+                  stream: audioHandler.playbackState.map((state) => state.processingState).distinct(),
                   builder: (context, snapshot) {
-                    final audioProcessingState =
-                        snapshot.data ?? AudioProcessingState.idle;
+                    final audioProcessingState = snapshot.data ?? AudioProcessingState.idle;
                     return StreamBuilder(
                       stream: audioHandler.mediaItem.stream,
                       builder: (context, snapshot) {
-                        final currentMediaItem =
-                            snapshot.data ?? radioMediaItem;
+                        final currentMediaItem = snapshot.data ?? getInitialRadioMediaItem(context);
                         return StreamBuilder<bool>(
                           stream: audioHandler.playing,
                           builder: (context, snapshot) {
                             final isPlaying = snapshot.data ?? false;
-                            final isCurrent =
-                                currentMediaItem == recording.mediaItem;
+                            final isCurrent = currentMediaItem == recording.getMediaItem(context);
                             return Center(
                               child: RaPlayButton(
                                 audioProcessingState: switch (mediaKind) {
                                   MediaKind.radio => AudioProcessingState.idle,
-                                  MediaKind.recording => isCurrent
-                                      ? audioProcessingState
-                                      : AudioProcessingState.idle,
+                                  MediaKind.recording => isCurrent ? audioProcessingState : AudioProcessingState.idle,
                                 },
                                 onPressed: () => _playButtonAction(
+                                  context,
                                   audioHandler,
                                   mediaKind,
                                   recording,

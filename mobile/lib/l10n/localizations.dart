@@ -118,6 +118,12 @@ abstract class AppLocalizations {
   /// **'Nagranie'**
   String get recording;
 
+  /// No description provided for @recordings.
+  ///
+  /// In pl, this message translates to:
+  /// **'Nagrania'**
+  String get recordings;
+
   /// No description provided for @dataLoadError.
   ///
   /// In pl, this message translates to:
@@ -199,7 +205,7 @@ abstract class AppLocalizations {
   /// No description provided for @backToMainPage.
   ///
   /// In pl, this message translates to:
-  /// **'wróć na stronę główną'**
+  /// **'Wróć na stronę główną'**
   String get backToMainPage;
 
   /// No description provided for @aboutUs.
@@ -219,6 +225,36 @@ abstract class AppLocalizations {
   /// In pl, this message translates to:
   /// **'Najnowsze nagrania'**
   String get newestRecordings;
+
+  /// No description provided for @albumOfTheWeek.
+  ///
+  /// In pl, this message translates to:
+  /// **'Płyta tygodnia'**
+  String get albumOfTheWeek;
+
+  /// No description provided for @articles.
+  ///
+  /// In pl, this message translates to:
+  /// **'Publicystyka'**
+  String get articles;
+
+  /// No description provided for @radioPeople.
+  ///
+  /// In pl, this message translates to:
+  /// **'Radiowcy'**
+  String get radioPeople;
+
+  /// No description provided for @schedule.
+  ///
+  /// In pl, this message translates to:
+  /// **'Ramówka'**
+  String get schedule;
+
+  /// No description provided for @broadcasts.
+  ///
+  /// In pl, this message translates to:
+  /// **'Audycje'**
+  String get broadcasts;
 }
 
 class _AppLocalizationsDelegate

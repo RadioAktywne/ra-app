@@ -43,7 +43,7 @@ class RaNavigationShell extends HookWidget {
     );
 
     return BlocProvider(
-      create: (_) => AudioHandlerCubit(initialMedia: radioMediaItem),
+      create: (_) => AudioHandlerCubit(initialMedia: getInitialRadioMediaItem(context)),
       child: AnnotatedRegion(
         value: SystemUiOverlayStyle(
           systemNavigationBarColor: context.colors.backgroundDark,

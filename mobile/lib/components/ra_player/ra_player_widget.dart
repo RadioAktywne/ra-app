@@ -466,7 +466,7 @@ class _BackToRadioButton extends StatelessWidget {
       height: RaPageConstraints.radioPlayerHeight / 2,
       color: context.colors.backgroundDark,
       child: GestureDetector(
-        onTap: () => audioHandler.playMediaItem(radioMediaItem),
+        onTap: () => audioHandler.playMediaItem(getInitialRadioMediaItem(context)),
         child: Center(
           child: Text(
             context.l10n.backToRadio,

@@ -21,6 +21,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get recording => 'Nagranie';
 
   @override
+  String get recordings => 'Nagrania';
+
+  @override
   String get dataLoadError => 'Wystąpił błąd podczas pobierania danych';
 
   @override
@@ -60,7 +63,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get backToRadio => 'Wróć do radia';
 
   @override
-  String get backToMainPage => 'wróć na stronę główną';
+  String get backToMainPage => 'Wróć na stronę główną';
 
   @override
   String get aboutUs => 'O nas';
@@ -70,4 +73,19 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get newestRecordings => 'Najnowsze nagrania';
+
+  @override
+  String get albumOfTheWeek => 'Płyta tygodnia';
+
+  @override
+  String get articles => 'Publicystyka';
+
+  @override
+  String get radioPeople => 'Radiowcy';
+
+  @override
+  String get schedule => 'Ramówka';
+
+  @override
+  String get broadcasts => 'Audycje';
 }

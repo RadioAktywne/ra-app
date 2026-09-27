@@ -23,14 +23,11 @@ class RamowkaInfo implements Comparable<RamowkaInfo> {
   final Day day;
 
   /// Parses time string to the required format
-  static String parseTime(String time) =>
-      time.removeTrailing('0').removeTrailing(':');
+  static String parseTime(String time) => time.removeTrailing('0').removeTrailing(':');
 
   /// Parses title string to the required format
   static String parseTitle(String title) => htmlUnescape.convert(
-        title
-            .replaceFirst('(Replay)', ' - powtórka') // TODO: use l10n
-            .replaceFirst('(Live)', ''),
+        title.replaceFirst('(Replay)', ' - powtórka').replaceFirst('(Live)', ''),
       );
 
   @override

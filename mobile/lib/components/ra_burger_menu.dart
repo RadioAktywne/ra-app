@@ -26,21 +26,34 @@ class RaBurgerMenu extends HookWidget {
   /// the current one.
   final void Function()? onNavigate;
 
-  static const _pageTitles = [
-    (RaRoutes.home, 'Radio Aktywne'),
-    (RaRoutes.recordings, 'Nagrania'),
-    (RaRoutes.albumOfTheWeek, 'Płyta tygodnia'),
-    (RaRoutes.articles, 'Publicystyka'),
-    (RaRoutes.radioPeople, 'Radiowcy'),
-    (RaRoutes.ramowka, 'Ramówka'),
-    (RaRoutes.broadcasts, 'Audycje'),
-    (RaRoutes.about, 'O nas'),
+  static const _pagePaths = [
+    RaRoutes.home,
+    RaRoutes.recordings,
+    RaRoutes.albumOfTheWeek,
+    RaRoutes.articles,
+    RaRoutes.radioPeople,
+    RaRoutes.ramowka,
+    RaRoutes.broadcasts,
+    RaRoutes.about,
   ];
 
+  String getPageTitle(BuildContext context, String path) => switch (path) {
+        RaRoutes.home => context.l10n.appName,
+        RaRoutes.recordings => context.l10n.recordings,
+        RaRoutes.albumOfTheWeek => context.l10n.albumOfTheWeek,
+        RaRoutes.articles => context.l10n.articles,
+        RaRoutes.radioPeople => context.l10n.radioPeople,
+        RaRoutes.ramowka => context.l10n.schedule,
+        RaRoutes.broadcasts => context.l10n.broadcasts,
+        RaRoutes.about => context.l10n.aboutUs,
+        String() => ''
+      };
+
   List<RaBurgerMenuItem> _makeList(BuildContext context) => List.generate(
-        _pageTitles.length,
+        _pagePaths.length,
         (index) {
-          final (pagePath, pageTitle) = _pageTitles[index];
+          final pagePath = _pagePaths[index];
+          final pageTitle = getPageTitle(context, pagePath);
 
           return RaBurgerMenuItem(
             title: pageTitle,

@@ -1,4 +1,6 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:radioaktywne/extensions/extensions.dart';
 
 class RecordingInfo {
   RecordingInfo({
@@ -37,10 +39,10 @@ class RecordingInfo {
   String description;
   Duration duration;
 
-  MediaItem get mediaItem => MediaItem(
+  MediaItem getMediaItem(BuildContext context) => MediaItem(
         id: recordingPath,
         title: title,
-        artist: 'Radio Aktywne', // TODO: use l10n
+        artist: context.l10n.noStreamTitle,
         duration: duration,
         artUri: Uri.parse(thumbnailPath),
         extras: {'description': description},
