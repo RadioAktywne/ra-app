@@ -31,6 +31,8 @@ class RaNavigationShell extends HookWidget {
   /// page.
   final GoRouterState state;
 
+  bool isPlaying = false;
+
   final _scaffoldKey = GlobalKey<ScaffoldState>(debugLabel: 'Inner scaffold');
 
   @override
@@ -144,7 +146,20 @@ class RaNavigationShell extends HookWidget {
                   );
                 },
               ),
-              bottomSheet: const RaPlayerWidget(),
+              bottomSheet: StreamBuilder(
+                stream: audioHandler.playing,
+                builder: (context, snapshot) {
+                  if (!isPlaying) {
+                    isPlaying = snapshot.data ?? false;
+                  }
+                  return ValueListenableBuilder<MediaKind>(
+                    valueListenable: audioHandler.mediaKind,
+                    builder: (context, mediaKind, _) {
+                      return RaPlayerWidget(isPlaying: isPlaying);
+                    },
+                  );
+                },
+              ),
               resizeToAvoidBottomInset: false,
             ),
           );
