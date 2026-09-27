@@ -49,7 +49,6 @@ class RaPlayerWidget extends StatelessWidget {
             builder: (context, mediaKind, _) {
               return AnimatedContainer(
                 duration: animationDuration,
-                height: isPlaying ? RaPageConstraints.radioPlayerHeight : 0,
                 child: AnimatedContainer(
                   duration: animationDuration,
                   color: switch (playerKind) {
@@ -62,8 +61,8 @@ class RaPlayerWidget extends StatelessWidget {
                   },
                   height: switch (playerKind) {
                     PlayerKind.widget => switch (mediaKind) {
-                        MediaKind.radio => RaPageConstraints.radioPlayerHeight,
-                        MediaKind.recording => RaPageConstraints.recordingPlayerHeight,
+                        MediaKind.radio => isPlaying ? RaPageConstraints.radioPlayerHeight : 0,
+                        MediaKind.recording => isPlaying ? RaPageConstraints.recordingPlayerHeight : 0,
                       },
                     PlayerKind.page => MediaQuery.sizeOf(context).height,
                   },
