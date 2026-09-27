@@ -28,9 +28,11 @@ class RaPlayerWidget extends StatelessWidget {
   const RaPlayerWidget({
     super.key,
     this.animationDuration = const Duration(milliseconds: 400),
+    required this.isPlaying,
   });
 
   final Duration animationDuration;
+  final bool isPlaying;
 
   static const double _playerButtonSize = 37;
   static const double _seekBarThumbRadius = 5;
@@ -47,58 +49,62 @@ class RaPlayerWidget extends StatelessWidget {
             builder: (context, mediaKind, _) {
               return AnimatedContainer(
                 duration: animationDuration,
-                color: switch (playerKind) {
-                  PlayerKind.widget => Colors.transparent,
-                  PlayerKind.page => context.colors.backgroundDark,
-                },
-                margin: switch (playerKind) {
-                  PlayerKind.page => EdgeInsets.zero,
-                  PlayerKind.widget => RaPageConstraints.outerWidgetPagePadding,
-                },
-                height: switch (playerKind) {
-                  PlayerKind.widget => switch (mediaKind) {
-                      MediaKind.radio => RaPageConstraints.radioPlayerHeight,
-                      MediaKind.recording => RaPageConstraints.recordingPlayerHeight,
-                    },
-                  PlayerKind.page => MediaQuery.sizeOf(context).height,
-                },
-                child: Wrap(
-                  spacing: 15,
-                  runAlignment: WrapAlignment.spaceBetween,
-                  alignment: WrapAlignment.spaceBetween,
-                  children: [
-                    _PlayerWidget(
-                      animationDuration: animationDuration,
-                      audioHandler: audioHandler,
-                      mediaKind: mediaKind,
-                      playerKind: playerKind,
-                    ),
-                    AnimatedContainer(
-                      duration: animationDuration,
-                      height: switch (playerKind) {
-                        PlayerKind.widget => 0,
-                        PlayerKind.page => MediaQuery.sizeOf(context).height - 200,
+                height: isPlaying ? RaPageConstraints.radioPlayerHeight : 0,
+                child: AnimatedContainer(
+                  duration: animationDuration,
+                  color: switch (playerKind) {
+                    PlayerKind.widget => Colors.transparent,
+                    PlayerKind.page => context.colors.backgroundDark,
+                  },
+                  margin: switch (playerKind) {
+                    PlayerKind.page => EdgeInsets.zero,
+                    PlayerKind.widget => RaPageConstraints.outerWidgetPagePadding,
+                  },
+                  height: switch (playerKind) {
+                    PlayerKind.widget => switch (mediaKind) {
+                        MediaKind.radio => RaPageConstraints.radioPlayerHeight,
+                        MediaKind.recording => RaPageConstraints.recordingPlayerHeight,
                       },
-                      padding: RaPageConstraints.outerWidgetPagePadding * 2,
-                      child: AnimatedOpacity(
-                        duration: animationDuration,
-                        opacity: switch (playerKind) { PlayerKind.widget => 0.0, PlayerKind.page => 1.0 },
-                        child: switch (mediaKind) {
-                          MediaKind.radio => _RadioPlayerPage(
-                              animationDuration: animationDuration,
-                              audioHandler: audioHandler,
-                              playerKind: playerKind,
-                            ),
-                          MediaKind.recording => _RecordingPlayerPage(audioHandler: audioHandler)
-                        },
+                    PlayerKind.page => MediaQuery.sizeOf(context).height,
+                  },
+                  child: Wrap(
+                    spacing: 15,
+                    runAlignment: WrapAlignment.spaceBetween,
+                    alignment: WrapAlignment.spaceBetween,
+                    children: [
+                      _PlayerWidget(
+                        animationDuration: animationDuration,
+                        audioHandler: audioHandler,
+                        mediaKind: mediaKind,
+                        playerKind: playerKind,
                       ),
-                    ),
-                    _BackToMainPageButton(
-                      audioHandler: audioHandler,
-                      animationDuration: animationDuration,
-                      playerKind: playerKind,
-                    ),
-                  ],
+                      AnimatedContainer(
+                        duration: animationDuration,
+                        height: switch (playerKind) {
+                          PlayerKind.widget => 0,
+                          PlayerKind.page => MediaQuery.sizeOf(context).height - 200,
+                        },
+                        padding: RaPageConstraints.outerWidgetPagePadding * 2,
+                        child: AnimatedOpacity(
+                          duration: animationDuration,
+                          opacity: switch (playerKind) { PlayerKind.widget => 0.0, PlayerKind.page => 1.0 },
+                          child: switch (mediaKind) {
+                            MediaKind.radio => _RadioPlayerPage(
+                                animationDuration: animationDuration,
+                                audioHandler: audioHandler,
+                                playerKind: playerKind,
+                              ),
+                            MediaKind.recording => _RecordingPlayerPage(audioHandler: audioHandler)
+                          },
+                        ),
+                      ),
+                      _BackToMainPageButton(
+                        audioHandler: audioHandler,
+                        animationDuration: animationDuration,
+                        playerKind: playerKind,
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
