@@ -1,3 +1,5 @@
+import 'package:radioaktywne/resources/ra_links.dart';
+
 /// Information about a single article.
 class ArticleInfo {
   /// Creates an empty [ArticleInfo] object.
@@ -14,19 +16,20 @@ class ArticleInfo {
       : id = jsonData['id'] as int,
         title = jsonData['title']['rendered'] as String,
         content = jsonData['content']['rendered'] as String,
-        thumbnail = jsonData['_embedded']['wp:featuredmedia'][0]
-            ['media_details']['sizes']['thumbnail']?['source_url'] as String?,
-        mediumLarge = jsonData['_embedded']['wp:featuredmedia'][0]
-                ['media_details']['sizes']['medium_large']?['source_url']
-            as String?,
-        fullImage = jsonData['_embedded']['wp:featuredmedia'][0]
-            ['media_details']['sizes']['full']['source_url'] as String;
+        thumbnail = (jsonData['_embedded']['wp:featuredmedia']?[0]['media_details']['sizes']['thumbnail']
+                ?['source_url'] ??
+            RaApi.defaultImageUrl) as String,
+        mediumLarge = (jsonData['_embedded']['wp:featuredmedia']?[0]['media_details']['sizes']['medium_large']
+                ?['source_url'] ??
+            RaApi.defaultImageUrl) as String,
+        fullImage = (jsonData['_embedded']['wp:featuredmedia']?[0]['media_details']['sizes']['full']['source_url'] ??
+            RaApi.defaultImageUrl) as String;
 
   final int id;
   final String title;
   final String content;
-  final String? thumbnail;
-  final String? mediumLarge;
+  final String thumbnail;
+  final String mediumLarge;
   final String fullImage;
 
   bool get isNotEmpty => title.isNotEmpty && content.isNotEmpty;
@@ -38,7 +41,7 @@ class ArticleInfo {
       title: `$title`, 
       content: `$content`,
       thumbnail: `$thumbnail`,
-      ${mediumLarge != null ? 'mediumLarge: `$mediumLarge`, ' : ''}
+      'mediumLarge: `$mediumLarge`,
       fullImage: `$fullImage`,
     }
     ''';
