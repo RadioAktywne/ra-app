@@ -8,8 +8,9 @@ abstract class RaRadio {
 
 abstract class RaApi {
   static const baseUrl = 'radioaktywne.pl';
-  static const logoUrl =
-      'https://cdn-profiles.tunein.com/s10187/images/logod.png';
+  static const logoUrl = 'https://cdn-profiles.tunein.com/s10187/images/logod.png';
+  static const defaultImageUrl =
+      'https://radioaktywne.pl/static/images/defaultMedia-34e2c65a7a52c761c5e103e1e2ea0f9f.png';
   static const endpoints = _RadioAktywneApi._();
 }
 

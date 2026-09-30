@@ -21,7 +21,7 @@ class NewestArticleWidget extends StatelessWidget {
         ArticleInfo.fromJson,
       ),
       itemBuilder: (context, article) => NewestWidgetTemplateItem(
-        thumbnailPath: article.thumbnail ?? article.fullImage,
+        thumbnailPath: article.thumbnail,
         title: article.title,
         onClick: () => context.go(RaRoutes.articleId(article.id)),
       ),

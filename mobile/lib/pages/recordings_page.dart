@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
@@ -29,8 +28,7 @@ class RecordingsPage extends HookWidget {
         },
       );
 
-  Uri _singleRecordingUrl(String id) =>
-      Uri.https(RaApi.baseUrl, '${RaApi.endpoints.media}/$id');
+  Uri _singleRecordingUrl(String id) => Uri.https(RaApi.baseUrl, '${RaApi.endpoints.media}/$id');
 
   Future<List<RecordingInfo>> fetchPage(int page) async {
     final pageUrl = _allRecordingsUrl(page);
@@ -47,10 +45,9 @@ class RecordingsPage extends HookWidget {
               : await fetchSingle(
                   _singleRecordingUrl(recording.thumbnailPath),
                   // Get image in 'medium_large' size if it exists, else full size
-                  (jsonData) => (jsonData['media_details']['sizes']
-                          ['medium_large'] ??
-                      jsonData['media_details']['sizes']
-                          ['full'])['source_url'] as String,
+                  (jsonData) => ((jsonData['media_details']['sizes']['medium_large'] ??
+                          jsonData['media_details']['sizes']['full'])['source_url'] ??
+                      RaApi.defaultImageUrl) as String,
                 );
 
           recordingDetails.update(

@@ -36,10 +36,9 @@ class ArticleSelectionPage extends StatelessWidget {
       },
       itemBuilder: (article) => LazyLoadedGridViewItem(
         title: article.title,
-        thumbnailPath: article.mediumLarge ?? article.fullImage,
+        thumbnailPath: article.mediumLarge,
       ),
-      onItemTap: (article, index) =>
-          context.push(RaRoutes.articleId(article.id)),
+      onItemTap: (article, index) => context.push(RaRoutes.articleId(article.id)),
     );
   }
 }
