@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
@@ -35,14 +34,12 @@ class AboutUsPage extends StatelessWidget {
   /// Fetch About Us from radioaktywne.pl api.
   Future<AboutUsInfo> _fetchAboutUs() async {
     try {
-      final data = await fetchData(
+      return await fetchObject(
         _infoUrl,
         AboutUsInfo.fromJson,
         headers: _infoHeaders,
         timeout: timeout,
       );
-      final aboutUs = data.first;
-      return aboutUs;
     } on TimeoutException catch (e, stackTrace) {
       RALogger.log(Level.WARNING, '$stackTrace: $e');
       return AboutUsInfo.empty();

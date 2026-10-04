@@ -49,3 +49,8 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /android/app/.cxx
+
+# Certificates
+/assets/certificates/*
+/android/app/src/main/res/raw/*
+# TODO: Add these to IOS if needed

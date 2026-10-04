@@ -32,13 +32,14 @@ class ArticleSelectionPage extends StatelessWidget {
             'per_page': perPage,
           }.valuesToString(),
         );
-        return fetchData(pageUri, ArticleInfo.fromJson, timeout: timeout);
+        return fetchList(pageUri, ArticleInfo.fromJson, timeout: timeout);
       },
       itemBuilder: (article) => LazyLoadedGridViewItem(
         title: article.title,
         thumbnailPath: article.mediumLarge,
       ),
-      onItemTap: (article, index) => context.push(RaRoutes.articleId(article.id)),
+      onItemTap: (article, index) =>
+          context.push(RaRoutes.articleId(article.id)),
     );
   }
 }

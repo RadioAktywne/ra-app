@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
@@ -42,16 +41,14 @@ class PlytaTygodniaPage extends StatelessWidget {
   /// Fetch current Plyta tygodnia from radioaktywne.pl api.
   Future<PlytaTygodniaInfo> _fetchPlytaTygodnia() async {
     try {
-      final data = await fetchData(
+      final plytaTygodnia = await fetchObject(
         _infoUrl,
         PlytaTygodniaInfo.fromJson,
         headers: _infoHeaders,
         timeout: timeout,
       );
 
-      final plytaTygodnia = data.first;
-
-      plytaTygodnia.imageTag = await fetchSingle(
+      plytaTygodnia.imageTag = await fetchObject(
         _imgUrl(plytaTygodnia.imageTag),
         (e) => (e['guid'] as Map<String, dynamic>)['rendered'] as String,
         headers: _imgHeaders,

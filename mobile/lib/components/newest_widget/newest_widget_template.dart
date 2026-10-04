@@ -107,5 +107,5 @@ Future<Iterable<T>> fetchNewest<T>(
     }.valuesToString(),
   );
 
-  return fetchData(pageUri, fromJson);
+  return fetchList(pageUri, fromJson);
 }

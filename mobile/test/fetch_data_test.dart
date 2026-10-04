@@ -12,7 +12,7 @@ void main() {
     'it into single element list of String objects',
     () async {
       expect(
-        await fetchData(
+        await fetchList(
           url,
           (e) => e['message'] as String,
           headers: headers,
@@ -25,7 +25,7 @@ void main() {
     'Fetch data from `hello world` API and bundle it into String object',
     () async {
       expect(
-        await fetchSingle(
+        await fetchObject(
           url,
           (e) => e['message'] as String,
           headers: headers,
