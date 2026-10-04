@@ -27,7 +27,7 @@ class NewestRecordingWidget extends StatelessWidget {
         Future(
           () async {
             try {
-              recording.thumbnailPath = await fetchSingle(
+              recording.thumbnailPath = await fetchObject(
                 Uri.https(RaApi.baseUrl,
                     '${RaApi.endpoints.media}/${recording.thumbnailPath}'),
                 // Get image in 'medium_large' size if it exists, else full size

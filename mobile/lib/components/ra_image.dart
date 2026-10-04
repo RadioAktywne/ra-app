@@ -1,6 +1,11 @@
+import 'dart:ui';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
+import 'package:radioaktywne/network/http.dart';
 
 class RaImage extends StatelessWidget {
   const RaImage({
@@ -18,8 +23,8 @@ class RaImage extends StatelessWidget {
             imageUrl,
             fit: BoxFit.cover,
           )
-        : Image.network(
-            imageUrl,
+        : Image(
+            image: RaNetworkImageProvider(url: imageUrl),
             fit: BoxFit.cover,
             loadingBuilder: (context, child, loadingProgress) =>
                 loadingProgress == null
@@ -37,4 +42,57 @@ class RaImage extends StatelessWidget {
             ),
           );
   }
+}
+
+class RaNetworkImageProvider extends ImageProvider<RaNetworkImageProvider> {
+  const RaNetworkImageProvider({
+    required this.url,
+  });
+
+  final String url;
+
+  @override
+  Future<RaNetworkImageProvider> obtainKey(
+    ImageConfiguration configuration,
+  ) {
+    return SynchronousFuture<RaNetworkImageProvider>(this);
+  }
+
+  @override
+  ImageStreamCompleter loadImage(
+    RaNetworkImageProvider key,
+    ImageDecoderCallback decode,
+  ) {
+    return MultiFrameImageStreamCompleter(
+      codec: _loadAsync(key, decode),
+      scale: 1,
+    );
+  }
+
+  Future<Codec> _loadAsync(
+    RaNetworkImageProvider key,
+    ImageDecoderCallback decode,
+  ) async {
+    final response = await raHttpClient.get<List<int>>(
+      key.url,
+      options: Options(
+        responseType: ResponseType.bytes,
+      ),
+    );
+
+    if (response.data == null) {
+      throw Exception('Failed to load image: ${key.url}');
+    }
+
+    final bytes = Uint8List.fromList(response.data!);
+
+    return decode(await ImmutableBuffer.fromUint8List(bytes));
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      other is RaNetworkImageProvider && other.url == url;
+
+  @override
+  int get hashCode => url.hashCode;
 }

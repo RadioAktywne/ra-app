@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:leancode_hooks/leancode_hooks.dart';
 import 'package:logging/logging.dart';
 import 'package:radioaktywne/components/utility/lazy_loaded_grid_view.dart';
+import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/models/recording_info.dart';
 import 'package:radioaktywne/ra_logger.dart';
 import 'package:radioaktywne/resources/fetch_data.dart';
@@ -25,14 +26,15 @@ class RecordingsPage extends HookWidget {
           'embed': true.toString(),
           'page': page.toString(),
           'per_page': perPage.toString(),
-        },
+        }.valuesToString(),
       );
 
-  Uri _singleRecordingUrl(String id) => Uri.https(RaApi.baseUrl, '${RaApi.endpoints.media}/$id');
+  Uri _singleRecordingUrl(String id) =>
+      Uri.https(RaApi.baseUrl, '${RaApi.endpoints.media}/$id');
 
   Future<List<RecordingInfo>> fetchPage(int page) async {
     final pageUrl = _allRecordingsUrl(page);
-    final recordings = await fetchData(pageUrl, RecordingInfo.fromJson);
+    final recordings = await fetchList(pageUrl, RecordingInfo.fromJson);
 
     final recordingDetails = {for (final rec in recordings) rec.id: rec};
     // small data redundancy, should be offset by increase in search speed
@@ -42,11 +44,13 @@ class RecordingsPage extends HookWidget {
         try {
           final thumbnailPath = recording.thumbnailPath.isEmpty
               ? ''
-              : await fetchSingle(
+              : await fetchObject(
                   _singleRecordingUrl(recording.thumbnailPath),
                   // Get image in 'medium_large' size if it exists, else full size
-                  (jsonData) => ((jsonData['media_details']['sizes']['medium_large'] ??
-                          jsonData['media_details']['sizes']['full'])['source_url'] ??
+                  (jsonData) => ((jsonData['media_details']['sizes']
+                              ['medium_large'] ??
+                          jsonData['media_details']['sizes']
+                              ['full'])['source_url'] ??
                       RaApi.defaultImageUrl) as String,
                 );
 

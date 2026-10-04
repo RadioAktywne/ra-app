@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:radioaktywne/components/ra_image.dart';
 import 'package:radioaktywne/components/utility/ra_progress_indicator.dart';
 import 'package:radioaktywne/extensions/themes.dart';
 
@@ -9,8 +10,8 @@ class ImageWithOverlay extends StatelessWidget {
     required this.thumbnailPath,
     this.child,
     this.titleOverlay,
+    this.imageBuilder,
     this.titleOverlayPadding = const EdgeInsets.all(4),
-    this.imageBuilder = Image.network,
   });
 
   /// Child widget to display centered on top of the image,
@@ -22,7 +23,7 @@ class ImageWithOverlay extends StatelessWidget {
 
   /// Function used to display the image (used mainly to be able to switch
   /// between network and local images). Defaults to network image.
-  final Image Function(String) imageBuilder;
+  final Image Function(String)? imageBuilder;
 
   /// Title to display over the image, on the bottom.
   final Widget? titleOverlay;
@@ -38,7 +39,10 @@ class ImageWithOverlay extends StatelessWidget {
           child: Container(
             color: context.colors.backgroundDarkSecondary,
             child: Image(
-              image: imageBuilder(thumbnailPath).image,
+              image: (imageBuilder ??
+                      (url) => Image(image: RaNetworkImageProvider(url: url)))
+                  .call(thumbnailPath)
+                  .image,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) => Image.asset(
                 'assets/defaultMedia.png',

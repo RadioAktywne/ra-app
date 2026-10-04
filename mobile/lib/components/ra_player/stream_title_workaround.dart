@@ -1,17 +1,16 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:radioaktywne/network/http.dart';
 import 'package:radioaktywne/resources/ra_links.dart';
 
 class StreamTitleWorkaround {
-  static const streamName = 'Radio Aktywne';
-
   StreamTitleWorkaround() {
     _streamController = StreamController<String>();
     stream = _streamController.stream;
     _fetchStatusJson(); // Fetch stream title asap to avoid placeholders
   }
+
+  static const streamName = 'Radio Aktywne';
 
   late StreamController<String> _streamController;
   late Stream<String> stream;
@@ -26,10 +25,10 @@ class StreamTitleWorkaround {
   );
 
   void _fetchStatusJson() {
-    http.get(httpPackageUrl).then(
+    raHttpClient.getUri<Map<String, dynamic>>(httpPackageUrl).then(
       (response) {
-        final dynamic jsonData = jsonDecode(response.body);
-        final dynamic maybeStreamName = jsonData['icestats']['source'][0]['title'];
+        final dynamic maybeStreamName =
+            response.data!['icestats']['source'][0]['title'];
 
         if (maybeStreamName is String) {
           if (maybeStreamName == 'Unknown') {

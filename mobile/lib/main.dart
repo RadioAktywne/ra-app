@@ -7,6 +7,7 @@ import 'package:radioaktywne/components/ramowka/ramowka_widget.dart';
 import 'package:radioaktywne/components/teraz_gramy/teraz_gramy_widget.dart';
 import 'package:radioaktywne/extensions/extensions.dart';
 import 'package:radioaktywne/l10n/localizations.dart';
+import 'package:radioaktywne/network/http.dart';
 import 'package:radioaktywne/ra_logger.dart';
 import 'package:radioaktywne/resources/ra_page_constraints.dart';
 import 'package:radioaktywne/router/ra_router_config.dart';
@@ -14,11 +15,14 @@ import 'package:radioaktywne/router/ra_router_config.dart';
 Future<void> main() async {
   RALogger.setup();
 
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await initRAHttp();
+
   /// Setup for the orientationt to stay in portrait mode.
   ///
   /// Also, in the `AndroidManifest.xml` file,
   /// added a line: `android:screenOrientation="portrait"`
-  WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     // DeviceOrientation.portraitDown, // TODO: decide about this one...
