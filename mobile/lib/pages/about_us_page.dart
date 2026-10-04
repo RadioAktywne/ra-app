@@ -33,17 +33,13 @@ class AboutUsPage extends StatelessWidget {
 
   /// Fetch About Us from radioaktywne.pl api.
   Future<AboutUsInfo> _fetchAboutUs() async {
-    try {
-      return await fetchObject(
-        _infoUrl,
-        AboutUsInfo.fromJson,
-        headers: _infoHeaders,
-        timeout: timeout,
-      );
-    } on TimeoutException catch (e, stackTrace) {
-      RALogger.log(Level.WARNING, '$stackTrace: $e');
-      return AboutUsInfo.empty();
-    }
+    final data = await fetchList(
+      _infoUrl,
+      AboutUsInfo.fromJson,
+      headers: _infoHeaders,
+      timeout: timeout,
+    );
+    return data.first;
   }
 
   @override

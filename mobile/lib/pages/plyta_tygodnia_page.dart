@@ -41,12 +41,13 @@ class PlytaTygodniaPage extends StatelessWidget {
   /// Fetch current Plyta tygodnia from radioaktywne.pl api.
   Future<PlytaTygodniaInfo> _fetchPlytaTygodnia() async {
     try {
-      final plytaTygodnia = await fetchObject(
+      final data = await fetchList(
         _infoUrl,
         PlytaTygodniaInfo.fromJson,
         headers: _infoHeaders,
         timeout: timeout,
       );
+      final plytaTygodnia = data.first;
 
       plytaTygodnia.imageTag = await fetchObject(
         _imgUrl(plytaTygodnia.imageTag),
