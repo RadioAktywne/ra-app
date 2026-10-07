@@ -18,9 +18,11 @@ class ArticleInfo {
         content = jsonData['content']['rendered'] as String,
         thumbnail = (jsonData['_embedded']['wp:featuredmedia']?[0]['media_details']['sizes']['thumbnail']
                 ?['source_url'] ??
+            jsonData['_embedded']['wp:featuredmedia']?[0]['media_details']['sizes']['full']['source_url'] ??
             RaApi.defaultImageUrl) as String,
         mediumLarge = (jsonData['_embedded']['wp:featuredmedia']?[0]['media_details']['sizes']['medium_large']
                 ?['source_url'] ??
+            jsonData['_embedded']['wp:featuredmedia']?[0]['media_details']['sizes']['full']['source_url'] ??
             RaApi.defaultImageUrl) as String,
         fullImage = (jsonData['_embedded']['wp:featuredmedia']?[0]['media_details']['sizes']['full']['source_url'] ??
             RaApi.defaultImageUrl) as String;
