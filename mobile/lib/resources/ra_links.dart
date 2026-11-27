@@ -1,8 +1,8 @@
 abstract class RaRadio {
   static const radioPort = 443;
-  static const baseUrl = 'listen.radioaktywne.pl:$radioPort';
-  static const status = 'status-json.xsl';
-  static const radioStream = 'raogg';
+  static const baseUrl = 'radioaktywne.pl:$radioPort';
+  static const status = 'listen/status-json.xsl';
+  static const radioStream = 'listen/raogg';
   // TODO: add low-fi radio stream (ramp3)
 }
 
